@@ -8,8 +8,6 @@ Execute the following in a terminal:
 ```sh
 # Clone to the home directory and symlink to ~/.config
 git clone https://github.com/rezarajan/dotfiles.git ~/ \
-&& cd ~/dotfiles \
-&& git submodule update --init --recursive \
 && find ~/dotfiles -type f -exec ln -s {} ~/.config/ \;
 ```
 *Please note that these config files are designed for use with Arch Linux installs with [Hyprland](https://wiki.hyprland.org/).*
