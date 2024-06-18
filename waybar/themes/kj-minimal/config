@@ -24,8 +24,8 @@
     // Modules Left
     "modules-left": [
         "custom/appmenu",
-        "group/links",
-        "group/settings",
+        //"group/links",
+        //"group/settings",
         "wlr/taskbar",
         "hyprland/window",
         "custom/empty"
@@ -38,14 +38,14 @@
 
     // Modules Right    
     "modules-right": [
-        "custom/updates",
+        //"custom/updates",
         "pulseaudio",
         "bluetooth",
         "battery", 
         "network",
-        "group/hardware",
-        "custom/cliphist",
-        "idle_inhibitor",
+        //"group/hardware",
+        //"custom/cliphist",
+        //"idle_inhibitor",
         "tray",
         "custom/exit",
         "clock"

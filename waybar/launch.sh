@@ -25,7 +25,7 @@ sleep 0.2
 # ----------------------------------------------------- 
 # Default theme: /THEMEFOLDER;/VARIATION
 # ----------------------------------------------------- 
-themestyle="/ml4w;/ml4w/light"
+themestyle="kj-minimal;kj-minimal/light"
 
 # ----------------------------------------------------- 
 # Get current theme information from .cache/.themestyle.sh
@@ -41,7 +41,7 @@ IFS=';' read -ra arrThemes <<< "$themestyle"
 echo "Theme: ${arrThemes[0]}"
 
 if [ ! -f ~/dotfiles/waybar/themes${arrThemes[1]}/style.css ]; then
-    themestyle="/ml4w;/ml4w/light"
+    themestyle="kj-minimal;kj-minimal/light"
 fi
 
 # ----------------------------------------------------- 
