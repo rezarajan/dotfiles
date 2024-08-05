@@ -45,7 +45,7 @@
         "network",
         //"group/hardware",
         //"custom/cliphist",
-        //"idle_inhibitor",
+        "idle_inhibitor",
         "tray",
         "custom/exit",
         "clock"
