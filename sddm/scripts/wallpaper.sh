@@ -25,14 +25,13 @@ echo "File /etc/sddm.conf.d/sddm.conf updated."
 
 current_wallpaper=$(cat "$cache_file")
 extension="${current_wallpaper##*.}"
-
-sudo cp $current_wallpaper /usr/share/sddm/themes/sugar-candy/Backgrounds/current_wallpaper.$extension
-echo "Current wallpaper copied into /usr/share/sddm/themes/sugar-candy/Backgrounds/"
+sudo cp $current_wallpaper /usr/share/sddm/themes/eucalyptus-drop/Backgrounds/current_wallpaper.$extension
+echo "Current wallpaper copied into /usr/share/sddm/themes/eucalyptus-drop/Backgrounds/"
 new_wall=$(echo $current_wallpaper | sed "s|$HOME/wallpaper/||g")
-sudo cp $HOME/dotfiles/sddm/theme.conf /usr/share/sddm/themes/sugar-candy/
-sudo sed -i 's/CURRENTWALLPAPER/'"current_wallpaper.$extension"'/' /usr/share/sddm/themes/sugar-candy/theme.conf
+sudo cp $HOME/dotfiles/sddm/theme.conf /usr/share/sddm/themes/eucalyptus-drop/
+sudo sed -i 's/CURRENTWALLPAPER/'"current_wallpaper.$extension"'/' /usr/share/sddm/themes/eucalyptus-drop/theme.conf
 
-echo "File theme.conf updated in /usr/share/sddm/themes/sugar-candy/"
+echo "File theme.conf updated in /usr/share/sddm/themes/eucalyptus-drop/"
 
 echo "DONE! Please logout to test sddm."
 sleep 3

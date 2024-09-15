@@ -280,7 +280,8 @@ themes {
 // Default: default
 //
 // theme "default"
-theme "dracula"
+// theme "dracula"
+theme "catppuccin-frappe"
 
 // The name of the default layout to load on startup
 // Default: "default"

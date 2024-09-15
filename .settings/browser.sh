@@ -1,1 +1,1 @@
-chromium
+zen-browser
