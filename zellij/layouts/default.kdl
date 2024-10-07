@@ -1,8 +1,12 @@
 layout {
-    pane split_direction="horizontal" {
-        pane split_direction="vertical" {
-            children
+    tab name="nvim" focus=true{
+        pane command="nvim"
+        pane size=1 borderless=true {
+            plugin location="zellij:compact-bar"
         }
+    }
+    tab name="term" {
+        pane
         pane size=1 borderless=true {
             plugin location="zellij:compact-bar"
         }
