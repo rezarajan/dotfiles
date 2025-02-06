@@ -1,14 +1,1 @@
-layout {
-    tab name="nvim" focus=true{
-        pane command="nvim"
-        pane size=1 borderless=true {
-            plugin location="zellij:compact-bar"
-        }
-    }
-    tab name="term" {
-        pane
-        pane size=1 borderless=true {
-            plugin location="zellij:compact-bar"
-        }
-    }
-}
+/nix/store/8ldnv8jva2b86z0mmciiqlsl43da1933-home-manager-files/.config/zellij/layouts/default.kdl
