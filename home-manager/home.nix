@@ -4,7 +4,7 @@
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
   home.username = "cascadura";
-  home.homeDirectory = "/var/home/cascadura";
+  home.homeDirectory = "/home/cascadura";
 
   # This value determines the Home Manager release that your configuration is
   # compatible with. This helps avoid breakage when a new Home Manager release
@@ -42,7 +42,6 @@
     pkgs.kubernetes-helm
     pkgs.gnum4
     pkgs.minikube
-    pkgs.mpv
     pkgs.neovim
     pkgs.postgresql_17
     pkgs.syncplay
@@ -195,9 +194,18 @@
   #  /etc/profiles/per-user/cascadura/etc/profile.d/hm-session-vars.sh
   #
   home.sessionVariables = {
-    # EDITOR = "emacs";
     EDITOR = "nvim";
   };
+
+  # These paths get added to the PATH (but only works on .bashrc for now)
+  home.sessionPath = [
+    "$HOME/.local/bin"
+  ];
+
+  home.shellAliases = {
+    k = "kubectl";
+  };
+
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
@@ -206,7 +214,7 @@
   # They can be installed via pkgs.<pkgname> instead in home.packages
   programs.zsh.enable = true;
   programs.zsh.initExtra = ''
-   alias k=kubectl
+    PATH=$HOME/.local/bin:$PATH
   '';
   programs.zoxide.enable = true;
   # programs.kitty.enable = true;
