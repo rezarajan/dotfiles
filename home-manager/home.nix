@@ -1,6 +1,12 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, nixgl, ... }:
 
 {
+  # Configure nixGL
+  nixGL.packages = nixgl.packages;
+  # see: https://mynixos.com/home-manager/option/nixGL.defaultWrapper
+  # NOTE: for nvidia, the --impure option must be passed to home-manager switch
+  nixGL.defaultWrapper = "nvidia"; # options one of "mesa", "mesaPrime", "nvidia", "nvidiaPrime"
+
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
   home.username = "cascadura";
@@ -209,6 +215,18 @@
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
+  programs.mpv = {
+    enable = true;
+    package = config.lib.nixGL.wrap pkgs.mpv; # use nixGL
+  };
+  programs.ghostty = {
+    enable = true;
+    package = config.lib.nixGL.wrap pkgs.ghostty; # use nixGL
+    settings = {
+      theme = "catppuccin-mocha";
+      command = "${pkgs.zsh.outPath}/bin/zsh";
+    };
+  };
 
   # Enable some packages. This is a convenience feature
   # They can be installed via pkgs.<pkgname> instead in home.packages
@@ -217,11 +235,6 @@
     PATH=$HOME/.local/bin:$PATH
   '';
   programs.zoxide.enable = true;
-  # programs.kitty.enable = true;
-  # programs.kitty.themeFile = "ayu"; # From kitty-themes github
-  # programs.kitty.extraConfig = "shell zsh";
-  # programs.kitty.font.package = pkgs.nerd-fonts.fira-code;
-  # programs.kitty.font.name = "FiraCode";
   programs.starship.enable = true;
   programs.zellij.enable = true;
   programs.go.enable = true;
