@@ -47,6 +47,7 @@
     pkgs.kubectl
     pkgs.kubernetes-helm
     pkgs.gnum4
+    (config.lib.nixGL.wrap pkgs.libreoffice-qt6-fresh) # use nixGL
     pkgs.minikube
     pkgs.neovim
     pkgs.postgresql_17
@@ -223,7 +224,7 @@
     enable = true;
     package = config.lib.nixGL.wrap pkgs.ghostty; # use nixGL
     settings = {
-      theme = "catppuccin-mocha";
+      theme = "catppuccin-frappe";
       command = "${pkgs.zsh.outPath}/bin/zsh";
     };
   };
