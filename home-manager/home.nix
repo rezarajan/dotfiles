@@ -48,6 +48,7 @@
     pkgs.kubernetes-helm
     pkgs.gnum4
     (config.lib.nixGL.wrap pkgs.libreoffice-qt6-fresh) # use nixGL
+    (config.lib.nixGL.wrap pkgs.localsend)
     pkgs.minikube
     pkgs.neovim
     pkgs.postgresql_17
