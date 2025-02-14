@@ -53,16 +53,17 @@
     pkgs.postgresql_17
     pkgs.syncplay
     pkgs.teleport.client
-    # (pkgs.python312.withPackages (python-pkgs: with python-pkgs; [
-    #   # select Python packages here
-    #   pandas
-    #   numpy
-    #   matplotlib
-    #   seaborn
-    #   notebook
-    #   requests
-    # ]))
+    (pkgs.python312.withPackages (python-pkgs: with python-pkgs; [
+      # select Python packages here
+      pandas
+      numpy
+      matplotlib
+      seaborn
+      notebook
+      requests
+    ]))
     pkgs.uv
+    (config.lib.nixGL.wrap pkgs.zed-editor)
     pkgs.zjstatus
   ];
 
