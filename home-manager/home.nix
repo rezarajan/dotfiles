@@ -1,6 +1,8 @@
 { config, lib, pkgs, nixgl, ... }:
 
 {
+  nixpkgs.config.allowUnfree = true;
+
   # Configure nixGL
   nixGL.packages = nixgl.packages;
   # see: https://mynixos.com/home-manager/option/nixGL.defaultWrapper
@@ -52,6 +54,7 @@
     (config.lib.nixGL.wrap pkgs.localsend)
     pkgs.minikube
     pkgs.neovim
+    (config.lib.nixGL.wrap pkgs.obsidian)
     pkgs.postgresql_17
     pkgs.syncplay
     pkgs.teleport.client
@@ -205,6 +208,7 @@
   #
   home.sessionVariables = {
     EDITOR = "nvim";
+    NIXOS_OZONE_WL = "1"; # hint Electron apps to use Wayland
   };
 
   # These paths get added to the PATH (but only works on .bashrc for now)
@@ -216,6 +220,9 @@
     k = "kubectl";
   };
 
+
+  # Display Manager
+  # wayland.windowManager.hyprland.enable = true;
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
