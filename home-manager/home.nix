@@ -55,6 +55,7 @@
     pkgs.minikube
     pkgs.neovim
     (config.lib.nixGL.wrap pkgs.obsidian)
+    (config.lib.nixGL.wrap pkgs.obs-studio)
     pkgs.postgresql_17
     pkgs.syncplay
     pkgs.teleport.client
