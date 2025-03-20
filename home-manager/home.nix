@@ -47,6 +47,8 @@
     pkgs.binutils
     pkgs.cargo
     (config.lib.nixGL.wrap pkgs.foliate)
+    pkgs.hugo
+    pkgs.k9s
     pkgs.kubectl
     pkgs.kubernetes-helm
     pkgs.gnum4
@@ -56,6 +58,7 @@
     pkgs.neovim
     (config.lib.nixGL.wrap pkgs.obsidian)
     (config.lib.nixGL.wrap pkgs.obs-studio)
+    pkgs.pandoc
     pkgs.postgresql_17
     pkgs.syncplay
     pkgs.teleport.client
