@@ -60,6 +60,7 @@
     (config.lib.nixGL.wrap pkgs.obs-studio)
     pkgs.pandoc
     pkgs.postgresql_17
+    pkgs.rofi-wayland
     pkgs.syncplay
     pkgs.teleport.client
     (pkgs.python312.withPackages (python-pkgs: with python-pkgs; [
