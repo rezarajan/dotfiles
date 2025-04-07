@@ -46,6 +46,7 @@
     pkgs.ani-cli
     pkgs.binutils
     pkgs.cargo
+    (config.lib.nixGL.wrap pkgs.discord-canary)
     (config.lib.nixGL.wrap pkgs.foliate)
     pkgs.hugo
     pkgs.k9s
