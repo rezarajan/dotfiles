@@ -52,6 +52,7 @@
     pkgs.k9s
     pkgs.kubectl
     pkgs.kubernetes-helm
+    (config.lib.nixGL.wrap pkgs.gpu-screen-recorder)
     pkgs.gnum4
     (config.lib.nixGL.wrap pkgs.libreoffice-qt6-fresh) # use nixGL
     (config.lib.nixGL.wrap pkgs.localsend)
@@ -63,7 +64,7 @@
     pkgs.postgresql_17
     pkgs.rofi-wayland
     pkgs.syncplay
-    pkgs.teleport.client
+    pkgs.teleport
     (pkgs.python312.withPackages (python-pkgs: with python-pkgs; [
       # select Python packages here
       pandas
