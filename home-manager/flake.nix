@@ -8,8 +8,13 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # nixgl = {
+    #   url = "github:nix-community/nixGL";
+    # };
+    # NOTE: Use this PR for compat with new nvidia-open drivers
     nixgl = {
-      url = "github:nix-community/nixGL";
+      url = "github:nix-community/nixGL/pull/187/head";
+
     };
     zjstatus = {
       url = "github:dj95/zjstatus";
@@ -32,6 +37,8 @@
     in {
       homeConfigurations."cascadura" = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
+        # Optionally use extraSpecialArgs
+        # to pass through arguments to home.nix
         extraSpecialArgs = { inherit nixgl; };
 
         # Specify your home configuration modules here, for example,
@@ -41,9 +48,6 @@
             nixpkgs.overlays = [ overlays.pkgs ];
           })
         ];
-
-        # Optionally use extraSpecialArgs
-        # to pass through arguments to home.nix
       };
     };
 }

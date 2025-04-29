@@ -7,7 +7,8 @@
   nixGL.packages = nixgl.packages;
   # see: https://mynixos.com/home-manager/option/nixGL.defaultWrapper
   # NOTE: for nvidia, the --impure option must be passed to home-manager switch
-  nixGL.defaultWrapper = "mesa"; # options one of "mesa", "mesaPrime", "nvidia", "nvidiaPrime"
+  # nixGL.defaultWrapper = "nvidia"; # options one of "mesa", "mesaPrime", "nvidia", "nvidiaPrime"
+  # nixGL.installScripts = [ "nvidiaPrime" ];
 
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
@@ -46,36 +47,37 @@
     pkgs.ani-cli
     pkgs.binutils
     pkgs.cargo
-    (config.lib.nixGL.wrap pkgs.discord-canary)
-    (config.lib.nixGL.wrap pkgs.foliate)
+    # (config.lib.nixGL.wrap pkgs.discord-canary)
+    # (config.lib.nixGL.wrap pkgs.foliate)
     pkgs.hugo
     pkgs.k9s
     pkgs.kubectl
     pkgs.kubernetes-helm
-    (config.lib.nixGL.wrap pkgs.gpu-screen-recorder)
+    pkgs.gpu-screen-recorder
     pkgs.gnum4
-    (config.lib.nixGL.wrap pkgs.libreoffice-qt6-fresh) # use nixGL
-    (config.lib.nixGL.wrap pkgs.localsend)
+    # (config.lib.nixGL.wrap pkgs.libreoffice-qt6-fresh) # use nixGL
+    # (config.lib.nixGL.wrap pkgs.localsend)
     pkgs.minikube
     pkgs.neovim
-    (config.lib.nixGL.wrap pkgs.obsidian)
-    (config.lib.nixGL.wrap pkgs.obs-studio)
+    # (config.lib.nixGL.wrap pkgs.obsidian)
+    # (config.lib.nixGL.wrap pkgs.obs-studio)
     pkgs.pandoc
     pkgs.postgresql_17
+    pkgs.ripgrep
     pkgs.rofi-wayland
     pkgs.syncplay
     pkgs.teleport
-    (pkgs.python312.withPackages (python-pkgs: with python-pkgs; [
-      # select Python packages here
-      pandas
-      numpy
-      matplotlib
-      seaborn
-      notebook
-      requests
-    ]))
+    # (pkgs.python312.withPackages (python-pkgs: with python-pkgs; [
+    #   # select Python packages here
+    #   pandas
+    #   numpy
+    #   matplotlib
+    #   seaborn
+    #   notebook
+    #   requests
+    # ]))
     pkgs.uv
-    (config.lib.nixGL.wrap pkgs.zed-editor)
+    # (config.lib.nixGL.wrap pkgs.zed-editor)
     pkgs.zjstatus
   ];
 
@@ -233,10 +235,10 @@
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
-  programs.mpv = {
-    enable = true;
-    package = config.lib.nixGL.wrap pkgs.mpv; # use nixGL
-  };
+  # programs.mpv = {
+  #   enable = true;
+  #   package = config.lib.nixGL.wrap pkgs.mpv; # use nixGL
+  # };
   programs.ghostty = {
     enable = true;
     package = config.lib.nixGL.wrap pkgs.ghostty; # use nixGL
@@ -249,7 +251,7 @@
   # Enable some packages. This is a convenience feature
   # They can be installed via pkgs.<pkgname> instead in home.packages
   programs.zsh.enable = true;
-  programs.zsh.initExtra = ''
+  programs.zsh.initContent = ''
     PATH=$HOME/.local/bin:$PATH
   '';
   programs.zoxide.enable = true;
