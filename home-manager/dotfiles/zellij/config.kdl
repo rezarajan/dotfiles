@@ -349,6 +349,9 @@ default_layout "default"
 //
 layout_dir "/home/cascadura/.config/zellij/layouts"
 
+// Disable startup tips
+show_startup_tips false
+
 // The folder in which Zellij will look for themes
 //
 // theme_dir "/path/to/my/theme_dir"

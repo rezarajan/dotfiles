@@ -94,10 +94,9 @@
     #   org.gradle.daemon.idletimeout=3600000
     # '';
 
-    # Zellij config
+
     ".config/zellij/config.kdl".source = dotfiles/zellij/config.kdl;
-    ".config/zellij/layouts/default.kdl".source = pkgs.substituteAll {
-        src = dotfiles/zellij/layouts/default.kdl;
+    ".config/zellij/layouts/default.kdl".source = pkgs.replaceVars dotfiles/zellij/layouts/default.kdl {
         zjstatus = "${pkgs.zjstatus}";
       };
     };
