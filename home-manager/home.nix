@@ -25,7 +25,7 @@
 
   # The home.packages option allows you to install Nix packages into your
   # environment.
-  home.packages = [
+  home.packages = 
     # # Adds the 'hello' command to your environment. It prints a friendly
     # # "Hello, world!" when run.
     # pkgs.hello
@@ -43,42 +43,48 @@
     # (pkgs.writeShellScriptBin "my-hello" ''
     #   echo "Hello, ${config.home.username}!"
     # '')
-    pkgs.ani-cli
-    pkgs.binutils
-    pkgs.cargo
-    (config.lib.nixGL.wrap pkgs.discord-canary)
-    (config.lib.nixGL.wrap pkgs.foliate)
-    pkgs.hugo
-    pkgs.k9s
-    pkgs.kubectl
-    pkgs.kubernetes-helm
-    (config.lib.nixGL.wrap pkgs.gpu-screen-recorder)
-    pkgs.gnum4
-    # (config.lib.nixGL.wrap pkgs.libreoffice-qt6-fresh) # use nixGL
-    (config.lib.nixGL.wrap pkgs.localsend)
-    pkgs.minikube
-    pkgs.neovim
-    (config.lib.nixGL.wrap pkgs.obsidian)
-    # (config.lib.nixGL.wrap pkgs.obs-studio)
-    pkgs.pandoc
-    pkgs.postgresql_17
-    pkgs.ripgrep
-    pkgs.rofi-wayland
-    pkgs.syncplay
-    pkgs.teleport
-    # (pkgs.python312.withPackages (python-pkgs: with python-pkgs; [
-    #   # select Python packages here
-    #   pandas
-    #   numpy
-    #   matplotlib
-    #   seaborn
-    #   notebook
-    #   requests
-    # ]))
-    pkgs.uv
-    (config.lib.nixGL.wrap pkgs.zed-editor)
-    pkgs.zjstatus
-  ];
+
+    let
+      # Graphical Packages
+      graphical-pkgs = [
+        pkgs.calibre
+        pkgs.discord-canary
+        pkgs.gpu-screen-recorder
+        pkgs.localsend
+        pkgs.obsidian
+        # pkgs.libreoffice-qt6-fresh
+        # pkgs.obs-studio
+        # pkgs.zed-editor
+      ];
+
+      # Dev Tools
+      dev-tools = [
+        pkgs.binutils
+        pkgs.cargo
+        pkgs.hugo
+        pkgs.k9s
+        pkgs.kubectl
+        pkgs.kubernetes-helm
+        pkgs.gnum4
+        pkgs.minikube
+        pkgs.neovim
+        # pkgs.pandoc
+        pkgs.postgresql_17
+        pkgs.ripgrep
+        pkgs.teleport
+        pkgs.uv
+        pkgs.zjstatus
+      ];
+
+      # Personal Packages
+      personal = [
+        pkgs.ani-cli
+        pkgs.syncplay
+        # pkgs.rofi-wayland
+      ];
+    in
+      # Wraps graphical packages with nixGL for non-NixOS systems
+      (map config.lib.nixGL.wrap graphical-pkgs) ++ dev-tools ++ personal;
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
   # plain files is through 'home.file'.
