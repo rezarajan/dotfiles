@@ -1,36 +1,36 @@
 {
     "label" : "lock",
-    "action" : "$HOME/dotfiles/hypr/scripts/lock.sh",
+    "action" : "hyprlock",
     "text" : "Lock",
     "keybind" : "l"
 }
 {
     "label" : "hibernate",
-    "action" : "sleep 1; systemctl hibernate",
+    "action" : "systemctl hibernate",
     "text" : "Hibernate",
     "keybind" : "h"
 }
 {
     "label" : "logout",
-    "action" : "$HOME/dotfiles/hypr/scripts/exit.sh",
-    "text" : "Exit",
+    "action" : "hyprctl dispatch exit",
+    "text" : "Logout",
     "keybind" : "e"
 }
 {
     "label" : "shutdown",
-    "action" : "$HOME/dotfiles/hypr/scripts/shutdown.sh",
+    "action" : "systemctl poweroff",
     "text" : "Shutdown",
     "keybind" : "s"
 }
 {
     "label" : "suspend",
-    "action" : "$HOME/dotfiles/hypr/scripts/suspend.sh",
+    "action" : "systemctl suspend",
     "text" : "Suspend",
     "keybind" : "u"
 }
 {
     "label" : "reboot",
-    "action" : "$HOME/dotfiles/hypr/scripts/reboot.sh",
+    "action" : "systemctl reboot",
     "text" : "Reboot",
     "keybind" : "r"
 }

@@ -1,97 +1,51 @@
-/*
-          _                         _    
-__      _| | ___   __ _  ___  _   _| |_  
-\ \ /\ / / |/ _ \ / _` |/ _ \| | | | __| 
- \ V  V /| | (_) | (_| | (_) | |_| | |_  
-  \_/\_/ |_|\___/ \__, |\___/ \__,_|\__| 
-                  |___/                  
- 
-by Stephan Raabe (2023) 
------------------------------------------------------ 
-*/
-
-/* -----------------------------------------------------
- * Import Pywal colors 
- * ----------------------------------------------------- */
-@import '../../.cache/wal/colors-wlogout.css';
-
-/* -----------------------------------------------------
- * General 
- * ----------------------------------------------------- */
-
 * {
-    font-family: "Fira Sans Semibold", FontAwesome, Roboto, Helvetica, Arial, sans-serif;
 	background-image: none;
-	transition: 20ms;
 	box-shadow: none;
 }
 
 window {
-	background: url("../../.cache/blurred_wallpaper.png");
-	background-size: cover;
+	background-color: rgba(48, 52, 70, 0.90);
 }
 
 button {
-	color: #FFFFFF;
-    font-size:20px;
-
-    background-repeat: no-repeat;
+	border-radius: 0;
+	border-color: #ca9ee6;
+	text-decoration-color: #c6d0f5;
+	color: #c6d0f5;
+	background-color: #292c3c;
+	border-style: solid;
+	border-width: 1px;
+	background-repeat: no-repeat;
 	background-position: center;
 	background-size: 25%;
-
-	border-style: solid;
-	background-color: rgba(12, 12, 12, 0.3);
-	border: 3px solid #FFFFFF;
-
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
-button:focus,
-button:active,
-button:hover {
-    color: @color11;
-	background-color: rgba(12, 12, 12, 0.5);
-	border: 3px solid @color11;
+button:focus, button:active, button:hover {
+	/* 20% Overlay 2, 80% mantle */
+	background-color: rgb(63, 66, 85);
+	outline-style: none;
 }
-
-/* 
------------------------------------------------------ 
-Buttons
------------------------------------------------------ 
-*/
 
 #lock {
-	margin: 10px;
-	border-radius: 20px;
-	background-image: image(url("icons/lock.png"));
+    background-image: url("/home/cascadura/.config/wlogout/icons/lock.svg");
 }
 
 #logout {
-	margin: 10px;
-	border-radius: 20px;
-	background-image: image(url("icons/logout.png"));
+    background-image: url("/home/cascadura/.config/wlogout/icons/logout.svg");
 }
 
 #suspend {
-	margin: 10px;
-	border-radius: 20px;
-	background-image: image(url("icons/suspend.png"));
+    background-image: url("/home/cascadura/.config/wlogout/icons/suspend.svg");
 }
 
 #hibernate {
-	margin: 10px;
-	border-radius: 20px;
-	background-image: image(url("icons/hibernate.png"));
+    background-image: url("/home/cascadura/.config/wlogout/icons/hibernate.svg");
 }
 
 #shutdown {
-	margin: 10px;
-	border-radius: 20px;
-	background-image: image(url("icons/shutdown.png"));
+    background-image: url("/home/cascadura/.config/wlogout/icons/shutdown.svg");
 }
 
 #reboot {
-	margin: 10px;
-	border-radius: 20px;
-	background-image: image(url("icons/reboot.png"));
+    background-image: url("/home/cascadura/.config/wlogout/icons/reboot.svg");
 }
