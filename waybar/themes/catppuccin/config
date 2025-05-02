@@ -38,8 +38,8 @@
     "clock": {
         "timezone": "America/New_York",
         "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-        "format-alt": " {:%d/%m/%Y}",
-        "format": " {:%H:%M}"
+        "format-alt": "{:%d/%m/%Y}",
+        "format": "{:%H:%M}"
     },
     "backlight": {
         "device": "intel_backlight",
@@ -51,11 +51,11 @@
             "warning": 30,
             "critical": 15
         },
-        "format": "{icon}",
-        "format-charging": "",
-        "format-plugged": "",
-        "format-alt": "{icon}",
-        "format-icons": ["", "",  "", "", "", "", "", "", "", "", "", ""]
+        "format": "{icon} {capacity}%",
+        "format-charging": "󰂄",
+        "format-plugged": " {capacity}%",
+        "format-alt": "{icon} {time}",
+        "format-icons": ["󰁺", "󰁻",  "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"]
     },
     "pulseaudio": {
         // "scroll-step": 1, // %, can be a float
@@ -74,6 +74,6 @@
     "custom/power": {
         "tooltip": false,
         "on-click": "wlogout &",
-        "format": "襤"
+        "format": "⏻"
     }
 }

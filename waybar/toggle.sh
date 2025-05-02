@@ -1,15 +1,12 @@
 #!/bin/bash
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-TOGGLE_FILE="$HOME/.cache/waybar-disabled"
-LAUNCH_SCRIPT="$SCRIPT_DIR/launch.sh"
 
-# Toggle Waybar
-if [ -f "$TOGGLE_FILE" ]; then
-    rm "$TOGGLE_FILE"
+# Check if Waybar is running
+if pgrep -x "waybar" > /dev/null; then
+    # If Waybar is running, kill it
+    pkill waybar
 else
-    touch "$TOGGLE_FILE"
+    # If Waybar is not running, start it with the desired config and style
+    waybar -c ~/.config/waybar/themes/catppuccin/config -s ~/.config/waybar/themes/catppuccin/style.css
 fi
-
-# Refresh Waybar
-$LAUNCH_SCRIPT
