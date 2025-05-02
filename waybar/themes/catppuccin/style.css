@@ -18,11 +18,6 @@
   background-color: @surface0;
   margin-left: 1rem;
 }
-#workspaces button {
-    margin:4px 5px 4px 0px;
-    padding:0px 4px 0px 4px;
-    color: @textcolor3;
-}
 
 #workspaces button {
   color: @lavender;
@@ -45,6 +40,7 @@
   background-color: @overlay1;
 }
 
+#window,
 #custom-music,
 #tray,
 #backlight,
@@ -90,9 +86,11 @@
   margin-left: 1rem;
 }
 
+#window,
 #custom-music {
   color: @mauve;
   border-radius: 1rem;
+  margin-left: 1rem;
 }
 
 #custom-lock {

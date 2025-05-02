@@ -3,8 +3,8 @@
     "position": "top", // Waybar position (top|bottom|left|right)
     // "width": 1280, // Waybar width
     // Choose the order of the modules
-    "modules-left": ["hyprland/workspaces"],
-    "modules-center": ["custom/music"],
+    "modules-left": ["hyprland/window"],
+    "modules-center": ["hyprland/workspaces"],
     "modules-right": ["pulseaudio", "backlight", "battery", "clock", "tray", "custom/lock", "custom/power"],
     "hyprland/workspaces": {
       "on-scroll-up": "hyprctl dispatch workspace r-1",
@@ -22,6 +22,13 @@
         "*": 3
       }
     },
+    "hyprland/window": {
+      "max-length": 60,
+      "rewrite": {
+        "(.*) - Chromium": "$1",
+    },
+    "separate-outputs": true
+  },
     "tray": {
         "icon-size": 21,
         "spacing": 10
@@ -68,12 +75,13 @@
     },
     "custom/lock": {
         "tooltip": false,
-        "on-click": "hyprlock",
+        "on-click": "hypridle",
         "format": "",
+        "format-alt": "",
     },
     "custom/power": {
         "tooltip": false,
-        "on-click": "wlogout &",
-        "format": "⏻"
+        "on-click": "wlogout",
+        "format": "󰣇"
     }
 }
