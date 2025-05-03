@@ -1,0 +1,18 @@
+@import "catppuccin-mocha"
+
+* {
+    bg0:    @base;
+    bg1:    @surface0;
+    bg2:    @surface1;
+    bg3:    @surface2;
+    fg0:    @text;
+    fg1:    @overlay0;
+    fg2:    @overlay1;
+    fg3:    @overlay2;
+}
+
+@import "template/rounded-template.rasi"
+
+element selected {
+    text-color: @bg1;
+}
