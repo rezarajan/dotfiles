@@ -44,6 +44,8 @@
 #custom-music,
 #tray,
 #backlight,
+#network,
+#bluetooth,
 #clock,
 #battery,
 #pulseaudio,
@@ -88,7 +90,7 @@
 
 #window,
 #custom-music {
-  color: @mauve;
+  color: @text;
   border-radius: 1rem;
   margin-left: 1rem;
 }
