@@ -1,16 +1,23 @@
 # Dotfiles
 
-This project is a modified version of the [dotfiles](https://https://gitlab.com/stephan-raabe/dotfiles) project, originally created by [Stephan Raabe](https://gitlab.com/stephan-raabe). Though the files may diverge greatly from the original repository over time, I would still like to express my gratitude toward Stephan, for providing an intutivie framework from which I was able to bootstrap my own configs.
+Welcome to my dotfiles! For the most part, everything is plug-and-play (except Hyprland as of writing). Simply link the respective module to the .config directory of your home folder.
 
-## Getting Started
-
-Execute the following in a terminal:
 ```sh
-# Clone to the home directory and symlink to ~/.config
-git clone https://github.com/rezarajan/dotfiles.git ~/ \
-&& find ~/dotfiles -type f -exec ln -s {} ~/.config/ \;
+ln -s /absolute/path/to/module /home/<username>/.config/
 ```
-*Please note that these config files are designed for use with Arch Linux installs with [Hyprland](https://wiki.hyprland.org/).*
 
-## License
-See the [LICENSE](LICENSE) file for license rights and limitations (GNU GPLv3).
+# Home-Manager
+
+This repo now focuses on using home-manager as the primary way to bootstrap common tools and configurations. Each dotfile module is provided as its own nix module, which then places the configurations in the correct location (usually ~/.config). It also uses the nixpkgs version of the binaries and substitutes the correct paths in the dotfile modules.
+
+```sh
+# Bootstrap
+nix run home-manager/master -- init --switch
+```
+
+## TODO
+
+- [ ] Move all pre-existing modules to home-manager
+- [x] Move nixGL configuration to its own module
+- [ ] Refactor packages code to include common modules and further customizations
+    - *This is useful when deploying to diffent machines for personal or development use*
