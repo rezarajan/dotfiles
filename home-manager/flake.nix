@@ -27,13 +27,22 @@
   outputs = { nixpkgs, home-manager, nixgl, zjstatus, ghostty, ... }:
     let
       system = "x86_64-linux";
-      pkgs = nixpkgs.legacyPackages.${system};
-      overlays = {
-        pkgs = final: prev: {
+      pkgs = import nixpkgs {
+        inherit system;
+        overlays = [
+          (final: prev: {
             zjstatus = zjstatus.packages.${prev.system}.default;
             ghostty = ghostty.packages.${prev.system}.default;
-        };
+          })
+        ];
       };
+      # pkgs = nixpkgs.legacyPackages.${system};
+      # overlays = {
+      #   pkgs = final: prev: {
+      #       zjstatus = zjstatus.packages.${prev.system}.default;
+      #       ghostty = ghostty.packages.${prev.system}.default;
+      #   };
+      # };
     in {
       homeConfigurations."cascadura" = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
@@ -44,9 +53,12 @@
         # Specify your home configuration modules here, for example,
         modules = [
           ./home.nix
-          ({
-            nixpkgs.overlays = [ overlays.pkgs ];
-          })
+          ./nixgl.nix
+          ./pkgs.nix 
+          ./dotfiles/default.nix
+          # ({
+          #   nixpkgs.overlays = [ overlays.pkgs ];
+          # })
         ];
       };
     };

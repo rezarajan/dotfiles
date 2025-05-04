@@ -1,15 +1,6 @@
 { config, lib, pkgs, nixgl, ... }:
 
 {
-  nixpkgs.config.allowUnfree = true;
-
-  # Configure nixGL
-  nixGL.packages = nixgl.packages;
-  # see: https://mynixos.com/home-manager/option/nixGL.defaultWrapper
-  # NOTE: for nvidia, the --impure option must be passed to home-manager switch
-  nixGL.defaultWrapper = "mesa"; # options one of "mesa", "mesaPrime", "nvidia", "nvidiaPrime"
-  nixGL.installScripts = [ "mesa" ];
-
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
   home.username = "cascadura";
@@ -23,68 +14,8 @@
   # release notes.
   home.stateVersion = "24.11"; # Please read the comment before changing.
 
-  # The home.packages option allows you to install Nix packages into your
-  # environment.
-  home.packages = 
-    # # Adds the 'hello' command to your environment. It prints a friendly
-    # # "Hello, world!" when run.
-    # pkgs.hello
-
-    # # It is sometimes useful to fine-tune packages, for example, by applying
-    # # overrides. You can do that directly here, just don't forget the
-    # # parentheses. Maybe you want to install Nerd Fonts with a limited number of
-    # # fonts?
-    # pkgs.nerd-fonts.fira-code
-    # pkgs.nerd-fonts.fira-mono
-
-    # # You can also create simple shell scripts directly inside your
-    # # configuration. For example, this adds a command 'my-hello' to your
-    # # environment:
-    # (pkgs.writeShellScriptBin "my-hello" ''
-    #   echo "Hello, ${config.home.username}!"
-    # '')
-
-    let
-      # Graphical Packages
-      graphical-pkgs = [
-        pkgs.calibre
-        pkgs.discord-canary
-        pkgs.gpu-screen-recorder
-        pkgs.localsend
-        pkgs.obsidian
-        # pkgs.libreoffice-qt6-fresh
-        # pkgs.obs-studio
-        # pkgs.zed-editor
-      ];
-
-      # Dev Tools
-      dev-tools = [
-        pkgs.binutils
-        pkgs.cargo
-        pkgs.hugo
-        pkgs.k9s
-        pkgs.kubectl
-        pkgs.kubernetes-helm
-        pkgs.gnum4
-        pkgs.minikube
-        pkgs.neovim
-        # pkgs.pandoc
-        pkgs.postgresql_17
-        pkgs.ripgrep
-        pkgs.teleport
-        pkgs.uv
-        pkgs.zjstatus
-      ];
-
-      # Personal Packages
-      personal = [
-        pkgs.ani-cli
-        pkgs.syncplay
-        # pkgs.rofi-wayland
-      ];
-    in
-      # Wraps graphical packages with nixGL for non-NixOS systems
-      (map config.lib.nixGL.wrap graphical-pkgs) ++ dev-tools ++ personal;
+  # see pkgs.nix
+  home.packages = [];
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
   # plain files is through 'home.file'.
@@ -99,12 +30,6 @@
     #   org.gradle.console=verbose
     #   org.gradle.daemon.idletimeout=3600000
     # '';
-
-
-    ".config/zellij/config.kdl".source = dotfiles/zellij/config.kdl;
-    ".config/zellij/layouts/default.kdl".source = pkgs.replaceVars dotfiles/zellij/layouts/default.kdl {
-        zjstatus = "${pkgs.zjstatus}";
-      };
     };
 
   # Home Manager can also manage your environment variables through
@@ -143,28 +68,4 @@
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
-  # programs.mpv = {
-  #   enable = true;
-  #   package = config.lib.nixGL.wrap pkgs.mpv; # use nixGL
-  # };
-  programs.ghostty = {
-    enable = true;
-    package = config.lib.nixGL.wrap pkgs.ghostty; # use nixGL
-    settings = {
-      theme = "catppuccin-frappe";
-      command = "${pkgs.zsh.outPath}/bin/zsh";
-    };
-  };
-
-  # Enable some packages. This is a convenience feature
-  # They can be installed via pkgs.<pkgname> instead in home.packages
-  programs.zsh.enable = true;
-  programs.zsh.initContent = ''
-    PATH=$HOME/.local/bin:$PATH
-  '';
-  programs.zoxide.enable = true;
-  programs.starship.enable = true;
-  programs.zellij.enable = true;
-  programs.go.enable = true;
-  programs.yazi.enable = true;
 }

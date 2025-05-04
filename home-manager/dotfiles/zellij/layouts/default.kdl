@@ -7,7 +7,7 @@ layout {
         }
       }
       pane size=1 borderless=true {
-          plugin location="file:@zjstatus@/bin/zjstatus.wasm" {
+          plugin location="file:@zjstatus@" {
           // -- Catppuccin Macchiato --
           color_rosewater "#f4dbd6"
           color_flamingo "#f0c6c6"

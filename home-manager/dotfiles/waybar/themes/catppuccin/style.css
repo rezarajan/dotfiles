@@ -1,0 +1,118 @@
+@import "mocha.css";
+
+* {
+  font-family: FantasqueSansMono Nerd Font;
+  font-size: 14px;
+  min-height: 0;
+}
+
+#waybar {
+  background: transparent;
+  color: @text;
+  margin: 5px 5px;
+}
+
+#workspaces {
+  border-radius: 2rem;
+  margin: 5px;
+  background-color: @surface0;
+}
+
+#workspaces button {
+  color: @lavender;
+  border: 0px;
+  border-radius: 1rem;
+  margin: 4px 4px 4px 4px;
+  padding: 0px 1rem;
+  background-color: @surface1;
+  transition: all 0.25s ease-in-out;
+}
+
+#workspaces button.active {
+  color: @sky;
+  border-radius: 1rem;
+  min-width: 1.25rem;
+  background-color: @surface2;
+}
+
+#workspaces button:hover {
+  color: @sapphire;
+  border-radius: 1rem;
+  background-color: @surface2;
+}
+
+#window,
+#custom-music,
+#tray,
+#backlight,
+#network,
+#bluetooth,
+#clock,
+#battery,
+#pulseaudio,
+#custom-lock,
+#custom-power {
+  background-color: @surface0;
+  padding: 0.5rem 1rem;
+  margin: 5px 0;
+}
+
+/* Hides window title on empty workspaces */
+window#waybar.empty #window {
+  background: transparent
+}
+
+#clock {
+  color: @blue;
+  border-radius: 0px 1rem 1rem 0px;
+  margin-right: 1rem;
+}
+
+#battery {
+  color: @green;
+}
+
+#battery.charging {
+  color: @green;
+}
+
+#battery.warning:not(.charging) {
+  color: @red;
+}
+
+#backlight {
+  color: @yellow;
+}
+
+#backlight, #battery {
+    border-radius: 0;
+}
+
+#pulseaudio {
+  color: @maroon;
+  border-radius: 1rem 0px 0px 1rem;
+  margin-left: 1rem;
+}
+
+#window,
+#custom-music {
+  color: @text;
+  border-radius: 1rem;
+  margin-left: 1rem;
+}
+
+#custom-lock {
+    border-radius: 1rem 0px 0px 1rem;
+    color: @lavender;
+}
+
+#custom-power {
+    margin-right: 1rem;
+    border-radius: 0px 1rem 1rem 0px;
+    color: @red;
+}
+
+#tray {
+  margin-right: 1rem;
+  border-radius: 1rem;
+}

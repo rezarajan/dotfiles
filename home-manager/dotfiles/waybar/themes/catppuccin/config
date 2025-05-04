@@ -1,0 +1,123 @@
+{
+    "layer": "top", // Waybar at top layer
+    "position": "top", // Waybar position (top|bottom|left|right)
+
+    // Choose the order of the modules
+    "modules-left": ["hyprland/window"],
+    "modules-center": ["hyprland/workspaces"],
+    "modules-right": ["pulseaudio", "backlight", "bluetooth", "network", "battery", "clock", "tray", "custom/lock", "custom/power"],
+
+    "hyprland/workspaces": {
+      "on-scroll-up": "hyprctl dispatch workspace r-1",
+      "on-scroll-down": "hyprctl dispatch workspace r+1",
+      "on-click": "activate",
+      "active-only": false,
+      "all-outputs": true,
+      "format": "{}",
+      "format-icons": {
+        "urgent": "",
+        "active": "",
+        "default": ""
+      },
+      "persistent-workspaces": {
+        "*": 3
+      }
+    },
+
+    "hyprland/window": {
+      "max-length": 60,
+      "rewrite": {
+        "(.*) - Chromium": "$1",
+      },
+      "separate-outputs": true
+    },
+
+    "tray": {
+        "icon-size": 21,
+        "spacing": 10
+    },
+
+    "custom/music": {
+        "format": "  {}",
+        "escape": true,
+        "interval": 5,
+        "tooltip": false,
+        "exec": "playerctl metadata --format='{{ title }}'",
+        "on-click": "playerctl play-pause",
+        "max-length": 50
+    },
+
+    "clock": {
+        "timezone": "America/New_York",
+        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+        "format-alt": "{:%d/%m/%Y}",
+        "format": "{:%H:%M}"
+    },
+
+    "backlight": {
+        "device": "intel_backlight",
+        "format": "{icon}",
+        "format-icons": ["", "", "", "", "", "", "", "", ""]
+    },
+
+    "battery": {
+        "states": {
+            "warning": 30,
+            "critical": 15
+        },
+        "format": "{icon} {capacity}%",
+        "format-charging": "󰂄",
+        "format-plugged": " {capacity}%",
+        "format-alt": "{icon} {time}",
+        "format-icons": ["󰁺", "󰁻",  "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"]
+    },
+
+    "pulseaudio": {
+        // "scroll-step": 1, // %, can be a float
+        "format": "{icon} {volume}%",
+        "format-muted": "",
+        "format-icons": {
+            "default": ["", "", " "]
+        },
+        "on-click": "pavucontrol"
+    },
+
+    "network": {
+            //"interface": "wl01",
+            "format": "{ifname}",
+            "format-wifi": "",
+            "format-ethernet": "{ifname} ",
+            "format-disconnected": "", //An empty format will hide the module.
+            "format-disconnected": "",
+            "tooltip-format": "{ifname}",
+            "tooltip-format-wifi": "{essid} ({signalStrength}%)",
+            "tooltip-format-ethernet": "{ifname} ",
+            "tooltip-format-disconnected": "Disconnected",
+	    "on-click": "networkmanager_dmenu",
+            "max-length": 50
+      },
+
+      "bluetooth": {
+            // "controller": "controller1", // specify the alias of the controller if there are more than 1 on the system
+            "format": "",
+            "format-disabled": "󰂲", // an empty format will hide the module
+            "format-connected": " {num_connections} connected",
+            "tooltip-format": "{controller_alias}\t{controller_address}",
+            "tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{device_enumerate}",
+            "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
+	    "on-click": "networkmanager_dmenu", // use `rfkill toggle bluetooth` to toggle state instead
+      },
+
+    "custom/lock": {
+        "tooltip": false,
+        "on-click": "hypridle",
+        "format": "",
+        "format-alt": "",
+    },
+
+    "custom/power": {
+        "tooltip": false,
+        "on-click": "wlogout",
+        "format": "󰣇"
+    }
+}
