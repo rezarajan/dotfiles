@@ -53,7 +53,7 @@
     enable = true;
     package = config.lib.nixGL.wrap pkgs.ghostty; # use nixGL
     settings = {
-      theme = "catppuccin-frappe";
+      theme = "catppuccin-mocha";
       command = "${pkgs.zsh.outPath}/bin/zsh";
     };
   };
