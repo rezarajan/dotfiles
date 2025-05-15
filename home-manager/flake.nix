@@ -36,13 +36,6 @@
           })
         ];
       };
-      # pkgs = nixpkgs.legacyPackages.${system};
-      # overlays = {
-      #   pkgs = final: prev: {
-      #       zjstatus = zjstatus.packages.${prev.system}.default;
-      #       ghostty = ghostty.packages.${prev.system}.default;
-      #   };
-      # };
     in {
       homeConfigurations."cascadura" = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
@@ -56,9 +49,6 @@
           ./nixgl.nix
           ./pkgs.nix 
           ./dotfiles/default.nix
-          # ({
-          #   nixpkgs.overlays = [ overlays.pkgs ];
-          # })
         ];
       };
     };

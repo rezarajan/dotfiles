@@ -6,7 +6,7 @@
     let
       # Graphical Packages
       graphical-pkgs = [
-        # pkgs.calibre
+        pkgs.calibre
         pkgs.discord-canary
         pkgs.gpu-screen-recorder
         pkgs.localsend
