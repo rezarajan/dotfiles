@@ -39,7 +39,6 @@
       personal = [
         pkgs.ani-cli
         pkgs.syncplay
-        # pkgs.rofi-wayland
       ];
     in
       # Wraps graphical packages with nixGL for non-NixOS systems
