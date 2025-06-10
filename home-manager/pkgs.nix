@@ -39,6 +39,7 @@
       personal = [
         pkgs.ani-cli
         pkgs.syncplay
+        # pkgs.uxplay
       ];
     in
       # Wraps graphical packages with nixGL for non-NixOS systems
