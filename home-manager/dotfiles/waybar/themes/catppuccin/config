@@ -28,6 +28,7 @@
       "max-length": 60,
       "rewrite": {
         "(.*) - Chromium": "$1",
+        "(.*) — Zen Browser": "$1",
       },
       "separate-outputs": true
     },
