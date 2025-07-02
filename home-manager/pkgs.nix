@@ -26,6 +26,7 @@
         pkgs.kubectl
         pkgs.kubernetes-helm
         pkgs.gnum4
+        pkgs.jq
         pkgs.minikube
         pkgs.neovim
         # pkgs.pandoc
