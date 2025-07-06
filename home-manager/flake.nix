@@ -14,7 +14,6 @@
     # NOTE: Use this PR for compat with new nvidia-open drivers
     nixgl = {
       url = "github:nix-community/nixGL/pull/187/head";
-
     };
     zjstatus = {
       url = "github:dj95/zjstatus";

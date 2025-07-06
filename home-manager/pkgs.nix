@@ -11,7 +11,7 @@
         pkgs.gpu-screen-recorder
         pkgs.localsend
         pkgs.obsidian
-        pkgs.thunderbird
+        # pkgs.thunderbird
         # pkgs.libreoffice-qt6-fresh
         # pkgs.obs-studio
         # pkgs.zed-editor
