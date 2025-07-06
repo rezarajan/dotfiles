@@ -53,7 +53,10 @@
   # };
   programs.ghostty = {
     enable = true;
-    package = config.lib.nixGL.wrap pkgs.ghostty; # use nixGL
+    # package = config.lib.nixGL.wrap pkgs.ghostty; # use nixGL
+    package = pkgs.writeShellScriptBin "ghostty" '' # use locally installed ghostty, but with autoconfigured settings
+      exec /usr/bin/ghostty "$@"
+    '';
     settings = {
       theme = "catppuccin-mocha";
       command = "${pkgs.zsh.outPath}/bin/zsh";
