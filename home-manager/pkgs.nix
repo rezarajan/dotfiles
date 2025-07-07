@@ -40,7 +40,10 @@
       # Personal Packages
       personal = [
         pkgs.ani-cli
+        # pkgs.cdparanoia
+        # pkgs.python313Packages.pycdio
         pkgs.syncplay
+        pkgs.whipper # cd audio ripper
         # pkgs.uxplay
       ];
     in
