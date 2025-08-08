@@ -1,0 +1,151 @@
+[ColorEffects:Disabled]
+ChangeSelectionColor=
+Color=49,50,68
+ColorAmount=0
+ColorEffect=0
+ContrastAmount=0.45
+ContrastEffect=1
+Enable=
+IntensityAmount=0.1
+IntensityEffect=2
+
+[ColorEffects:Inactive]
+ChangeSelectionColor=true
+Color=108,112,134
+ColorAmount=0.025
+ColorEffect=2
+ContrastAmount=0.1
+ContrastEffect=2
+Enable=true
+IntensityAmount=0
+IntensityEffect=0
+
+[Colors:Button]
+BackgroundAlternate=69,71,90
+BackgroundNormal=69,71,90
+DecorationFocus=203,166,247
+DecorationHover=203,166,247
+ForegroundActive=116,199,236
+ForegroundInactive=186,194,222
+ForegroundLink=137,180,250
+ForegroundNegative=243,139,168
+ForegroundNeutral=249,226,175
+ForegroundNormal=205,214,244
+ForegroundPositive=166,227,161
+ForegroundVisited=137,180,250
+
+[Colors:Complementary]
+BackgroundAlternate=24,24,37
+BackgroundNormal=30,30,46
+DecorationFocus=203,166,247
+DecorationHover=203,166,247
+ForegroundActive=203,166,247
+ForegroundInactive=186,194,222
+ForegroundLink=203,166,247
+ForegroundNegative=243,139,168
+ForegroundNeutral=249,226,175
+ForegroundNormal=205,214,244
+ForegroundPositive=166,227,161
+ForegroundVisited=147,153,178
+
+[Colors:Selection]
+BackgroundAlternate=69,71,90
+BackgroundNormal=203,166,247
+DecorationFocus=203,166,247
+DecorationHover=203,166,247
+ForegroundActive=116,199,236
+ForegroundInactive=186,194,222
+ForegroundLink=137,180,250
+ForegroundNegative=243,139,168
+ForegroundNeutral=249,226,175
+ForegroundNormal=255,255,255
+ForegroundPositive=166,227,161
+ForegroundVisited=137,180,250
+
+[Colors:Tooltip]
+BackgroundAlternate=69,71,90
+BackgroundNormal=16,16,25
+DecorationFocus=203,166,247
+DecorationHover=203,166,247
+ForegroundActive=116,199,236
+ForegroundInactive=186,194,222
+ForegroundLink=137,180,250
+ForegroundNegative=243,139,168
+ForegroundNeutral=249,226,175
+ForegroundNormal=205,214,244
+ForegroundPositive=166,227,161
+ForegroundVisited=137,180,250
+
+[Colors:View]
+BackgroundAlternate=37,37,56
+BackgroundNormal=34,34,51
+DecorationFocus=203,166,247
+DecorationHover=203,166,247
+ForegroundActive=116,199,236
+ForegroundInactive=186,194,222
+ForegroundLink=137,180,250
+ForegroundNegative=243,139,168
+ForegroundNeutral=249,226,175
+ForegroundNormal=205,214,244
+ForegroundPositive=166,227,161
+ForegroundVisited=137,180,250
+
+[Colors:Window]
+BackgroundAlternate=24,24,37
+BackgroundNormal=30,30,46
+DecorationFocus=203,166,247
+DecorationHover=203,166,247
+ForegroundActive=116,199,236
+ForegroundInactive=186,194,222
+ForegroundLink=137,180,250
+ForegroundNegative=243,139,168
+ForegroundNeutral=249,226,175
+ForegroundNormal=205,214,244
+ForegroundPositive=166,227,161
+ForegroundVisited=137,180,250
+
+[DirSelect Dialog]
+DirSelectDialog Size=840,582
+History Items[$e]=file:$HOME/git/rezarajan/obsidian,file:$HOME/git/obsidian,file:$HOME/Documents/calibre,file:$HOME/Documents,file:$HOME/git/mainline,file:$HOME/git/dotfiles,file:$HOME/git,file:$HOME/Videos
+Splitter State=\x00\x00\x00\xff\x00\x00\x00\x01\x00\x00\x00\x02\x00\x00\x00\x8b\x00\x00\x02\xa8\x00\xff\xff\xff\xff\x01\x00\x00\x00\x01\x00
+
+[General]
+BrowserApplication=chromium.desktop
+ColorSchemeHash=a39b84f6ed7d4fb513a3fd246200a0f476144686
+TerminalApplication=ghostty
+TerminalService=com.mitchellh.ghostty.desktop
+XftAntialias=true
+XftHintStyle=hintfull
+XftSubPixel=vbgr
+font=DejaVu Sans Mono,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1
+
+[KDE]
+LookAndFeelPackage=org.kde.breezedark.desktop
+
+[KFileDialog Settings]
+Allow Expansion=false
+Automatically select filename extension=true
+Breadcrumb Navigation=false
+Decoration position=2
+LocationCombo Completionmode=5
+PathCombo Completionmode=5
+Show Bookmarks=false
+Show Full Path=false
+Show Inline Previews=true
+Show Preview=false
+Show Speedbar=true
+Show hidden files=false
+Sort by=Date
+Sort directories first=true
+Sort hidden files last=false
+Sort reversed=true
+Speedbar Width=140
+View Style=DetailTree
+
+[WM]
+activeBackground=30,30,46
+activeBlend=30,30,46
+activeForeground=205,214,244
+inactiveBackground=30,30,46
+inactiveBlend=30,30,46
+inactiveForeground=186,194,222

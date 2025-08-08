@@ -21,6 +21,7 @@
       dev-tools = [
         pkgs.binutils
         pkgs.cargo
+        pkgs.glow
         pkgs.hugo
         pkgs.k9s
         pkgs.kubectl
