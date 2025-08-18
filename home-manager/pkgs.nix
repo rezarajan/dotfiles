@@ -30,6 +30,7 @@
         pkgs.jq
         pkgs.minikube
         pkgs.neovim
+        pkgs.nodejs_24
         # pkgs.pandoc
         pkgs.postgresql_17
         pkgs.ripgrep
