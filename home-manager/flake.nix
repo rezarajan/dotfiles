@@ -18,12 +18,9 @@
     zjstatus = {
       url = "github:dj95/zjstatus";
     };
-    ghostty = {
-      url = "github:ghostty-org/ghostty";
-    };
   };
 
-  outputs = { nixpkgs, home-manager, nixgl, zjstatus, ghostty, ... }:
+  outputs = { nixpkgs, home-manager, nixgl, zjstatus, ... }:
     let
       system = "x86_64-linux";
       pkgs = import nixpkgs {
@@ -31,7 +28,6 @@
         overlays = [
           (final: prev: {
             zjstatus = zjstatus.packages.${prev.system}.default;
-            ghostty = ghostty.packages.${prev.system}.default;
           })
         ];
       };
