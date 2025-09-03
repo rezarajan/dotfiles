@@ -36,7 +36,6 @@
         pkgs.ripgrep
         pkgs.teleport
         pkgs.uv
-        pkgs.zjstatus
       ];
 
       # Personal Packages
