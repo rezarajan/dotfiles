@@ -41,6 +41,7 @@
       # Personal Packages
       personal = [
         pkgs.ani-cli
+        pkgs.imagemagick
         pkgs.syncplay
         pkgs.whipper # cd audio ripper
         # pkgs.uxplay
