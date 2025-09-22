@@ -36,7 +36,7 @@
         # pkgs.pandoc
         pkgs.postgresql_17
         pkgs.ripgrep
-        pkgs.tailscale
+        # pkgs.tailscale
         pkgs.teleport
         pkgs.uv
       ];
