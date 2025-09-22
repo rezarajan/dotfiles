@@ -21,7 +21,9 @@
       dev-tools = [
         pkgs.binutils
         pkgs.cargo
-        pkgs.glow
+        pkgs.crane
+        pkgs.dive
+        # pkgs.glow
         pkgs.hugo
         pkgs.k9s
         pkgs.kubectl
@@ -34,6 +36,7 @@
         # pkgs.pandoc
         pkgs.postgresql_17
         pkgs.ripgrep
+        pkgs.tailscale
         pkgs.teleport
         pkgs.uv
       ];
