@@ -4,45 +4,46 @@ layout {
             // plugin location="file:@zjstatus@.wasm" {
             plugin location="https://github.com/dj95/zjstatus/releases/latest/download/zjstatus.wasm" {
 
-                format_left   "{mode}#[bg=#181926] {tabs}"
+                format_left   "{mode}#[bg=#eff1f5] {tabs}"
                 format_center ""
-                format_right  "#[bg=#181926,fg=#89b4fa]#[bg=#89b4fa,fg=#1e2030,bold] #[bg=#363a4f,fg=#89b4fa,bold] {session} #[bg=#181926,fg=#363a4f,bold]"
+                format_right  "#[bg=#eff1f5,fg=#1e66f5]#[bg=#1e66f5,fg=#eff1f5,bold] #[bg=#dce0e8,fg=#1e66f5,bold] {session} #[bg=#eff1f5,fg=#dce0e8,bold]"
                 format_space  ""
                 format_hide_on_overlength "true"
                 format_precedence "crl"
 
                 border_enabled  "false"
                 border_char     "─"
-                border_format   "#[fg=#6C7086]{char}"
+                border_format   "#[fg=#4c4f69]{char}"
                 border_position "top"
 
-                mode_normal        "#[bg=#a6da95,fg=#181926,bold] NORMAL#[bg=#181926,fg=#a6da95]█"
-                mode_locked        "#[bg=#6e738d,fg=#181926,bold] LOCKED #[bg=#181926,fg=#6e738d]█"
-                mode_resize        "#[bg=#f38ba8,fg=#181926,bold] RESIZE#[bg=#181926,fg=#f38ba8]█"
-                mode_pane          "#[bg=#89b4fa,fg=#181926,bold] PANE#[bg=#181926,fg=#89b4fa]█"
-                mode_tab           "#[bg=#b4befe,fg=#181926,bold] TAB#[bg=#181926,fg=#b4befe]█"
-                mode_scroll        "#[bg=#f9e2af,fg=#181926,bold] SCROLL#[bg=#181926,fg=#f9e2af]█"
-                mode_enter_search  "#[bg=#8aadf4,fg=#181926,bold] ENT-SEARCH#[bg=#181926,fg=#8aadf4]█"
-                mode_search        "#[bg=#8aadf4,fg=#181926,bold] SEARCHARCH#[bg=#181926,fg=#8aadf4]█"
-                mode_rename_tab    "#[bg=#b4befe,fg=#181926,bold] RENAME-TAB#[bg=#181926,fg=#b4befe]█"
-                mode_rename_pane   "#[bg=#89b4fa,fg=#181926,bold] RENAME-PANE#[bg=#181926,fg=#89b4fa]█"
-                mode_session       "#[bg=#74c7ec,fg=#181926,bold] SESSION#[bg=#181926,fg=#74c7ec]█"
-                mode_move          "#[bg=#f5c2e7,fg=#181926,bold] MOVE#[bg=#181926,fg=#f5c2e7]█"
-                mode_prompt        "#[bg=#8aadf4,fg=#181926,bold] PROMPT#[bg=#181926,fg=#8aadf4]█"
-                mode_tmux          "#[bg=#f5a97f,fg=#181926,bold] TMUX#[bg=#181926,fg=#f5a97f]█"
+                // mode colors
+                mode_normal        "#[bg=#40a02b,fg=#eff1f5,bold] NORMAL#[bg=#eff1f5,fg=#40a02b]█"
+                mode_locked        "#[bg=#6c7086,fg=#eff1f5,bold] LOCKED #[bg=#eff1f5,fg=#6c7086]█"
+                mode_resize        "#[bg=#ea76cb,fg=#eff1f5,bold] RESIZE#[bg=#eff1f5,fg=#ea76cb]█"
+                mode_pane          "#[bg=#1e66f5,fg=#eff1f5,bold] PANE#[bg=#eff1f5,fg=#1e66f5]█"
+                mode_tab           "#[bg=#7287fd,fg=#eff1f5,bold] TAB#[bg=#eff1f5,fg=#7287fd]█"
+                mode_scroll        "#[bg=#df8e1d,fg=#eff1f5,bold] SCROLL#[bg=#eff1f5,fg=#df8e1d]█"
+                mode_enter_search  "#[bg=#04a5e5,fg=#eff1f5,bold] ENT-SEARCH#[bg=#eff1f5,fg=#04a5e5]█"
+                mode_search        "#[bg=#04a5e5,fg=#eff1f5,bold] SEARCHARCH#[bg=#eff1f5,fg=#04a5e5]█"
+                mode_rename_tab    "#[bg=#7287fd,fg=#eff1f5,bold] RENAME-TAB#[bg=#eff1f5,fg=#7287fd]█"
+                mode_rename_pane   "#[bg=#1e66f5,fg=#eff1f5,bold] RENAME-PANE#[bg=#eff1f5,fg=#1e66f5]█"
+                mode_session       "#[bg=#209fb5,fg=#eff1f5,bold] SESSION#[bg=#eff1f5,fg=#209fb5]█"
+                mode_move          "#[bg=#ea76cb,fg=#eff1f5,bold] MOVE#[bg=#eff1f5,fg=#ea76cb]█"
+                mode_prompt        "#[bg=#04a5e5,fg=#eff1f5,bold] PROMPT#[bg=#eff1f5,fg=#04a5e5]█"
+                mode_tmux          "#[bg=#fe640b,fg=#eff1f5,bold] TMUX#[bg=#eff1f5,fg=#fe640b]█"
 
                 // formatting for inactive tabs
-                tab_normal              "#[bg=#181926,fg=#89b4fa]█#[bg=#89b4fa,fg=#1e2030,bold]{index} #[bg=#363a4f,fg=#89b4fa,bold] {name}{floating_indicator}#[bg=#181926,fg=#363a4f,bold]█"
-                tab_normal_fullscreen   "#[bg=#181926,fg=#89b4fa]█#[bg=#89b4fa,fg=#1e2030,bold]{index} #[bg=#363a4f,fg=#89b4fa,bold] {name}{fullscreen_indicator}#[bg=#181926,fg=#363a4f,bold]█"
-                tab_normal_sync         "#[bg=#181926,fg=#89b4fa]█#[bg=#89b4fa,fg=#1e2030,bold]{index} #[bg=#363a4f,fg=#89b4fa,bold] {name}{sync_indicator}#[bg=#181926,fg=#363a4f,bold]█"
+                tab_normal              "#[bg=#eff1f5,fg=#1e66f5]█#[bg=#1e66f5,fg=#eff1f5,bold]{index} #[bg=#dce0e8,fg=#1e66f5,bold] {name}{floating_indicator}#[bg=#eff1f5,fg=#dce0e8,bold]█"
+                tab_normal_fullscreen   "#[bg=#eff1f5,fg=#1e66f5]█#[bg=#1e66f5,fg=#eff1f5,bold]{index} #[bg=#dce0e8,fg=#1e66f5,bold] {name}{fullscreen_indicator}#[bg=#eff1f5,fg=#dce0e8,bold]█"
+                tab_normal_sync         "#[bg=#eff1f5,fg=#1e66f5]█#[bg=#1e66f5,fg=#eff1f5,bold]{index} #[bg=#dce0e8,fg=#1e66f5,bold] {name}{sync_indicator}#[bg=#eff1f5,fg=#dce0e8,bold]█"
 
                 // formatting for the current active tab
-                tab_active              "#[bg=#181926,fg=#fab387]█#[bg=#fab387,fg=#1e2030,bold]{index} #[bg=#363a4f,fg=#fab387,bold] {name}{floating_indicator}#[bg=#181926,fg=#363a4f,bold]█"
-                tab_active_fullscreen   "#[bg=#181926,fg=#fab387]█#[bg=#fab387,fg=#1e2030,bold]{index} #[bg=#363a4f,fg=#fab387,bold] {name}{fullscreen_indicator}#[bg=#181926,fg=#363a4f,bold]█"
-                tab_active_sync         "#[bg=#181926,fg=#fab387]█#[bg=#fab387,fg=#1e2030,bold]{index} #[bg=#363a4f,fg=#fab387,bold] {name}{sync_indicator}#[bg=#181926,fg=#363a4f,bold]█"
+                tab_active              "#[bg=#eff1f5,fg=#df8e1d]█#[bg=#df8e1d,fg=#eff1f5,bold]{index} #[bg=#dce0e8,fg=#df8e1d,bold] {name}{floating_indicator}#[bg=#eff1f5,fg=#dce0e8,bold]█"
+                tab_active_fullscreen   "#[bg=#eff1f5,fg=#df8e1d]█#[bg=#df8e1d,fg=#eff1f5,bold]{index} #[bg=#dce0e8,fg=#df8e1d,bold] {name}{fullscreen_indicator}#[bg=#eff1f5,fg=#dce0e8,bold]█"
+                tab_active_sync         "#[bg=#eff1f5,fg=#df8e1d]█#[bg=#df8e1d,fg=#eff1f5,bold]{index} #[bg=#dce0e8,fg=#df8e1d,bold] {name}{sync_indicator}#[bg=#eff1f5,fg=#dce0e8,bold]█"
 
                 // separator between the tabs
-                tab_separator           "#[bg=#181926] "
+                tab_separator           "#[bg=#eff1f5] "
 
                 // indicators
                 tab_sync_indicator       " "
@@ -50,7 +51,7 @@ layout {
                 tab_floating_indicator   " 󰹙"
 
                 command_git_branch_command     "git rev-parse --abbrev-ref HEAD"
-                command_git_branch_format      "#[fg=blue] {stdout} "
+                command_git_branch_format      "#[fg=#1e66f5] {stdout} "
                 command_git_branch_interval    "10"
                 command_git_branch_rendermode  "static"
 

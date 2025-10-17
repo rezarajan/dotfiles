@@ -64,7 +64,7 @@
       exec /usr/bin/ghostty "$@"
     '';
     settings = {
-      theme = "catppuccin-mocha";
+      theme = "catppuccin-latte";
       command = "${pkgs.zsh.outPath}/bin/zsh";
     };
   };
