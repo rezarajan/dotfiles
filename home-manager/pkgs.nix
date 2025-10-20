@@ -32,6 +32,7 @@
         pkgs.jq
         pkgs.minikube
         pkgs.neovim
+        pkgs.nixd
         pkgs.nodejs_24
         # pkgs.pandoc
         pkgs.postgresql_17
