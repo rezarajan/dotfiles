@@ -105,7 +105,7 @@ vim.opt.number = true
 vim.opt.relativenumber = true
 
 -- Enable mouse mode, can be useful for resizing splits for example!
-vim.opt.mouse = 'a'
+vim.opt.mouse = ''
 
 -- Don't show the mode, since it's already in the status line
 vim.opt.showmode = false
@@ -844,7 +844,7 @@ require('lazy').setup({
     name = 'catppuccin',
     priority = 1000,
     init = function()
-      vim.cmd.colorscheme 'catppuccin-mocha'
+      vim.cmd.colorscheme 'catppuccin-latte'
     end,
   },
 
