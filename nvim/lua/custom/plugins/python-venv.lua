@@ -8,7 +8,6 @@ return {
     'nvim-telescope/telescope.nvim',
     'mfussenegger/nvim-dap-python',
   },
-  branch = 'regexp',
   opts = {
     -- Auto select venv when entering Python files
     auto_refresh = true,
