@@ -157,7 +157,8 @@ Home Manager manages:
 home-manager/
 ├── home.nix          # Main configuration
 ├── pkgs.nix          # Package definitions (if exists)
-└── modules/          # Custom modules (if exists)
+├── nixgl.nix         # Graphics-based packages (required for non nix-os installs)
+└── dotfiles/         # Customizations to installed packages
 ```
 
 ### Configuration Example
