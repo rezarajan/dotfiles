@@ -213,6 +213,9 @@ vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper win
 -- Custom keymaps that extend the defaults above
 require 'custom.keymaps'
 
+-- Load coding keymaps (LSP symbols, diagnostics, debugging)
+require('custom.coding-keymaps').setup()
+
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 
