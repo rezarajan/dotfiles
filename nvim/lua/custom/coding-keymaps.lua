@@ -9,18 +9,19 @@ function M.setup_lsp_keymaps(event)
     vim.keymap.set('n', keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
   end
 
-  -- Symbol navigation (extends kickstart defaults)
-  map('<leader>ss', require('telescope.builtin').lsp_document_symbols, '[S]earch [S]ymbols in document')
-  map('<leader>sS', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[S]earch [S]ymbols in workspace')
+  -- Symbol navigation (non-conflicting with kickstart defaults)
+  -- Use <leader>s prefix for LSP symbols
+  map('<leader>sy', require('telescope.builtin').lsp_document_symbols, '[S]earch s[Y]mbols in document')
+  map('<leader>sY', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[S]earch s[Y]mbols in workspace')
   
   -- Class and function navigation
   map('<leader>sc', function()
     require('telescope.builtin').lsp_document_symbols({ symbols = { 'class', 'struct' } })
   end, '[S]earch [C]lasses')
   
-  map('<leader>sf', function()
+  map('<leader>sm', function()
     require('telescope.builtin').lsp_document_symbols({ symbols = { 'function', 'method' } })
-  end, '[S]earch [F]unctions')
+  end, '[S]earch [M]ethods/functions')
   
   map('<leader>si', function()
     require('telescope.builtin').lsp_document_symbols({ symbols = { 'interface', 'enum' } })
