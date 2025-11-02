@@ -2,7 +2,11 @@
 --  I promise not to create any merge conflicts in this directory :)
 --
 -- See the kickstart.nvim README for more information
-return {
+
+-- Load colorscheme from separate file
+local colorscheme = require 'custom.colorscheme'
+
+return vim.list_extend(colorscheme, {
   {
     'stevearc/oil.nvim',
     opts = {
@@ -69,4 +73,4 @@ return {
       vim.g.loaded_netrwPlugin = 1
     end,
   },
-}
+})
