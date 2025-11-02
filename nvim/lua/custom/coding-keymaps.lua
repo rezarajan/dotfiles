@@ -68,6 +68,16 @@ end
 
 -- Code navigation helpers
 function M.setup_navigation_keymaps()
+  -- Show methods of the class under cursor
+  vim.keymap.set('n', '<leader>cm', function()
+    -- Get the word under cursor (class name)
+    local class_name = vim.fn.expand('<cword>')
+    require('telescope.builtin').lsp_document_symbols({ 
+      symbols = { 'method', 'function' },
+      default_text = class_name,
+    })
+  end, { desc = '[C]lass [M]ethods (under cursor)' })
+  
   -- Quick jump to next/previous function
   vim.keymap.set('n', ']f', function()
     require('telescope.builtin').lsp_document_symbols({ 
