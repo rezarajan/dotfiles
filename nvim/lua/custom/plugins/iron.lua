@@ -25,25 +25,27 @@ return {
                 -- Try ipython first, fall back to python
                 local ipython = venv .. '/bin/ipython'
                 if vim.fn.executable(ipython) == 1 then
-                  return { ipython, '--no-autoindent', '--colors=NoColor' }
+                  return { ipython, '--no-autoindent' }
                 else
                   return { venv .. '/bin/python' }
                 end
               else
                 -- Try system ipython first
                 if vim.fn.executable 'ipython' == 1 then
-                  return { 'ipython', '--no-autoindent', '--colors=NoColor' }
+                  return { 'ipython', '--no-autoindent' }
                 else
                   return { 'python3' }
                 end
               end
             end,
             format = require('iron.fts.common').bracketed_paste_python,
+            block_dividers = { '# %%', '#%%' },
+            env = { PYTHON_BASIC_REPL = '1' },
           },
         },
         -- How the repl window will be displayed
         -- Opens in a vertical split on the right side with 40% of screen width
-        repl_open_cmd = require('iron.view').right('40%'),
+        repl_open_cmd = require('iron.view').right '40%',
       },
       -- Iron doesn't set keymaps by default anymore.
       -- You can set them here or manually add keymaps to the features you want
