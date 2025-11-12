@@ -4,6 +4,7 @@ let
   # Import all dotfile modules
   dotfileModules = [
     ./zellij/default.nix
+    ./yazi/default.nix
     # ./waybar/default.nix
     # Add more here...
   ];
