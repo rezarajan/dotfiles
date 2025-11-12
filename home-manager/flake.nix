@@ -22,12 +22,11 @@
 
   outputs = { nixpkgs, home-manager, nixgl, zjstatus, ... }:
     let
-      system = "x86_64-linux";
       pkgs = import nixpkgs {
-        inherit system;
+	inherit (builtins) currentSystem;
         overlays = [
           (final: prev: {
-            zjstatus = zjstatus.packages.${prev.system}.default;
+            zjstatus = zjstatus.packages.${prev.stdenv.hostPlatform.system}.default;
           })
         ];
       };
