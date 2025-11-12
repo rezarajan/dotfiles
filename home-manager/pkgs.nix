@@ -23,6 +23,7 @@
         pkgs.cargo
         pkgs.crane
         pkgs.dive
+        pkgs.charm-freeze
         # pkgs.glow
         pkgs.hugo
         pkgs.k9s
@@ -40,6 +41,7 @@
         # pkgs.tailscale
         pkgs.teleport
         pkgs.uv
+        pkgs.vhs
       ];
 
       # Personal Packages
