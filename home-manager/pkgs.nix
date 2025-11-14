@@ -24,6 +24,7 @@
         pkgs.crane
         pkgs.dive
         pkgs.charm-freeze
+	pkgs.fluxcd
         # pkgs.glow
         pkgs.hugo
         pkgs.k9s
