@@ -1,46 +1,61 @@
--- Custom colorscheme configuration
--- This file is loaded after plugins are set up
+local M = {}
 
-return {
+----------------------------------------------------------------------
+-- 1. Plugin specifications (lazy.nvim)
+--    These get imported from your "plugins" folder the Kickstart way
+----------------------------------------------------------------------
+
+M.plugins = {
   {
     'catppuccin/nvim',
     name = 'catppuccin',
-    priority = 1000, -- Load before other plugins
+    priority = 1000,
     config = function()
-      -- You can customize catppuccin here if needed
-      -- require('catppuccin').setup({
-      --   flavour = 'latte', -- latte, frappe, macchiato, mocha
-      --   transparent_background = false,
-      --   term_colors = true,
-      -- })
-      
-      vim.cmd.colorscheme 'catppuccin-latte'
+      require('catppuccin').setup {
+        float = {
+          transparent = false, -- enable transparent floating windows
+          solid = false, -- use solid styling for floating windows, see |winborder|
+        },
+      }
     end,
   },
-  
-  -- Alternative themes (commented out)
-  -- Uncomment to switch themes
-  
-  -- {
-  --   'folke/tokyonight.nvim',
-  --   priority = 1000,
-  --   config = function()
-  --     require('tokyonight').setup({
-  --       style = 'night', -- storm, moon, night, day
-  --       styles = {
-  --         comments = { italic = false },
-  --       },
-  --     })
-  --     vim.cmd.colorscheme 'tokyonight-night'
-  --   end,
-  -- },
-  
-  -- {
-  --   'ellisonleao/gruvbox.nvim',
-  --   priority = 1000,
-  --   config = function()
-  --     vim.o.background = 'dark' -- or 'light'
-  --     vim.cmd.colorscheme 'gruvbox'
-  --   end,
-  -- },
+
+  {
+    'folke/tokyonight.nvim',
+    name = 'tokyonight',
+    priority = 1000,
+    lazy = true,
+    config = function()
+      require('tokyonight').setup {}
+    end,
+  },
+
+  {
+    'ellisonleao/gruvbox.nvim',
+    name = 'gruvbox',
+    priority = 1000,
+    lazy = true,
+  },
 }
+
+----------------------------------------------------------------------
+-- 2. Generic API (works with ANY theme)
+----------------------------------------------------------------------
+
+-- Safely apply a colorscheme
+function M.apply(name)
+  local ok = pcall(vim.cmd.colorscheme, name)
+  if not ok then
+    vim.notify('Colorscheme not found: ' .. name, vim.log.levels.ERROR)
+  end
+end
+
+-- Convenience loader: vendor + variant
+-- Example: M.set("catppuccin", "frappe")
+--          M.set("tokyonight", "night")
+function M.set(theme, variant)
+  local scheme = variant and (theme .. '-' .. variant) or theme
+  M.apply(scheme)
+end
+
+return M
