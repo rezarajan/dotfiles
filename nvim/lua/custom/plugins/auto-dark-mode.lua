@@ -6,7 +6,7 @@ return {
     opts = {
       set_dark_mode = function()
         vim.api.nvim_set_option_value('background', 'dark', {})
-        colors.apply 'catppuccin-mocha'
+        colors.apply 'catppuccin-frappe'
       end,
       set_light_mode = function()
         vim.api.nvim_set_option_value('background', 'light', {})
