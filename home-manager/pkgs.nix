@@ -7,9 +7,9 @@
       # Graphical Packages
       graphical-pkgs = [
         pkgs.calibre
-        pkgs.discord-canary
+        # pkgs.discord-canary
         pkgs.gpu-screen-recorder
-        pkgs.localsend
+        # pkgs.localsend
         pkgs.obsidian
         # pkgs.thunderbird
         # pkgs.libreoffice-qt6-fresh
