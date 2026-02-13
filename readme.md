@@ -135,9 +135,16 @@ cd ~/git/dotfiles
 git subtree pull --prefix nvim https://github.com/nvim-lua/kickstart.nvim.git master --squash
 ```
 
+Or use the provided script:
+
+```sh
+cd ~/git/dotfiles
+./scripts/update-nvim-subtree.sh
+``
+
 Your customizations in `lua/custom/` are preserved automatically!
 
-See [nvim/README-CUSTOM.md](nvim/README-CUSTOM.md) for detailed information.
+See [nvim/CUSTOMIZING.md](nvim/CUSTOMIZING.md) for detailed information.
 
 ---
 
