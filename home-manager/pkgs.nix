@@ -70,7 +70,7 @@
     };
   };
 
-  programs.zsh.enable = true;
+  programs.zsh.enable = false;
   programs.zsh.initContent = ''
     PATH=$HOME/.local/bin:$PATH
   '';
