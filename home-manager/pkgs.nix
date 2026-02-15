@@ -40,6 +40,7 @@
         pkgs.postgresql_17
         pkgs.ripgrep
         # pkgs.tailscale
+        pkgs.tree-sitter
         pkgs.teleport
         pkgs.uv
         pkgs.vhs
