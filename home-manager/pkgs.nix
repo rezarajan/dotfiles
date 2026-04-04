@@ -24,7 +24,7 @@
         pkgs.crane
         pkgs.dive
         pkgs.charm-freeze
-	pkgs.fluxcd
+        pkgs.fluxcd
         # pkgs.glow
         pkgs.hugo
         pkgs.k9s
@@ -49,6 +49,7 @@
       # Personal Packages
       personal = [
         pkgs.ani-cli
+        pkgs.ani-skip
         pkgs.imagemagick
         pkgs.syncplay
         pkgs.whipper # cd audio ripper
