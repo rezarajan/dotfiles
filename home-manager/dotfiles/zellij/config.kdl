@@ -435,3 +435,4 @@ load_plugins {
 // Default: false
 //
 // disable_session_metadata true
+cursor_style "line"
