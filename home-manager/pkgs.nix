@@ -8,7 +8,7 @@
       graphical-pkgs = [
         pkgs.calibre
         # pkgs.discord-canary
-        pkgs.gpu-screen-recorder
+        # pkgs.gpu-screen-recorder
         # pkgs.localsend
         pkgs.obsidian
         # pkgs.thunderbird
@@ -19,12 +19,14 @@
 
       # Dev Tools
       dev-tools = [
+        # pkgs.aria2
         pkgs.binutils
         pkgs.cargo
         pkgs.crane
         pkgs.dive
         pkgs.charm-freeze
         pkgs.fluxcd
+        # pkgs.fzf
         # pkgs.glow
         pkgs.hugo
         pkgs.k9s
@@ -48,12 +50,13 @@
 
       # Personal Packages
       personal = [
-        pkgs.ani-cli
+        # pkgs.ani-cli
         pkgs.ani-skip
         pkgs.imagemagick
         pkgs.syncplay
-        pkgs.whipper # cd audio ripper
         # pkgs.uxplay
+        # pkgs.whipper # cd audio ripper
+        # pkgs.yt-dlp
       ];
     in
       # Wraps graphical packages with nixGL for non-NixOS systems
@@ -78,7 +81,6 @@
   '';
   programs.zoxide.enable = true;
   programs.starship.enable = true;
-  programs.zellij.enable = true;
   programs.go.enable = true;
   programs.yazi.enable = true;
 }

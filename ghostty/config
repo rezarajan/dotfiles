@@ -1,3 +1,31 @@
 theme = light:Catppuccin Latte,dark:Catppuccin Frappe
 window-height = 36
 window-width = 120
+
+# ------------------------------------------------------------
+# Ghostty pane management without arrow keys
+# ------------------------------------------------------------
+
+# Vim-style pane navigation
+# Mental model: Ctrl+W, then h/j/k/l, like Vim window movement.
+keybind = ctrl+w>h=goto_split:left
+keybind = ctrl+w>j=goto_split:down
+keybind = ctrl+w>k=goto_split:up
+keybind = ctrl+w>l=goto_split:right
+
+# Vim-style split creation
+# Ctrl+W, v = vertical split: panes side-by-side
+# Ctrl+W, s = horizontal split: panes stacked
+keybind = ctrl+w>v=new_split:right
+keybind = ctrl+w>s=new_split:down
+
+# Useful extras
+keybind = ctrl+w>z=toggle_split_zoom
+keybind = ctrl+w>q=close_surface
+keybind = ctrl+w>e=equalize_splits
+
+# Optional: resize panes with Vim directions
+keybind = ctrl+w>shift+h=resize_split:left,20
+keybind = ctrl+w>shift+j=resize_split:down,20
+keybind = ctrl+w>shift+k=resize_split:up,20
+keybind = ctrl+w>shift+l=resize_split:right,20

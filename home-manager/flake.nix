@@ -15,18 +15,16 @@
     nixgl = {
       url = "github:nix-community/nixGL/pull/187/head";
     };
-    zjstatus = {
-      url = "github:dj95/zjstatus";
-    };
   };
 
-  outputs = { nixpkgs, home-manager, nixgl, zjstatus, ... }:
+  outputs = { nixpkgs, home-manager, nixgl, ... }:
     let
+      system = "x86_64-linux"; # 🔧 change if needed
       pkgs = import nixpkgs {
-	inherit (builtins) currentSystem;
+        inherit system;
+
         overlays = [
           (final: prev: {
-            zjstatus = zjstatus.packages.${prev.stdenv.hostPlatform.system}.default;
           })
         ];
       };
