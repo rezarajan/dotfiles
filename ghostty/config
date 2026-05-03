@@ -31,3 +31,6 @@ keybind = ctrl+w>shift+h=resize_split:left,20
 keybind = ctrl+w>shift+j=resize_split:down,20
 keybind = ctrl+w>shift+k=resize_split:up,20
 keybind = ctrl+w>shift+l=resize_split:right,20
+
+# Shaders
+custom-shader = shaders/cursor-warp.glsl
