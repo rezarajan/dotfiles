@@ -22,6 +22,7 @@
         # pkgs.aria2
         pkgs.binutils
         pkgs.cargo
+        pkgs.phpPackages.composer
         pkgs.crane
         pkgs.dive
         pkgs.charm-freeze
@@ -39,6 +40,7 @@
         pkgs.nixd
         pkgs.nodejs_24
         # pkgs.pandoc
+        pkgs.php
         pkgs.postgresql_17
         pkgs.ripgrep
         # pkgs.tailscale
