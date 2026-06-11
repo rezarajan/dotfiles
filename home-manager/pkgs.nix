@@ -21,6 +21,7 @@
       dev-tools = [
         # pkgs.aria2
         pkgs.binutils
+        pkgs.bun
         pkgs.cargo
         pkgs.phpPackages.composer
         pkgs.crane
@@ -36,6 +37,7 @@
         pkgs.gnum4
         pkgs.just
         pkgs.jq
+        pkgs.laravel
         pkgs.minikube
         pkgs.neovim
         pkgs.nixd
