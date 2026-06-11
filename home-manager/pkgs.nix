@@ -34,6 +34,7 @@
         pkgs.kubectl
         pkgs.kubernetes-helm
         pkgs.gnum4
+        pkgs.just
         pkgs.jq
         pkgs.minikube
         pkgs.neovim
