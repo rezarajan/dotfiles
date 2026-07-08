@@ -10,7 +10,7 @@
         # pkgs.discord-canary
         # pkgs.gpu-screen-recorder
         # pkgs.localsend
-        pkgs.obsidian
+        # pkgs.obsidian
         # pkgs.thunderbird
         # pkgs.libreoffice-qt6-fresh
         # pkgs.obs-studio
@@ -44,7 +44,7 @@
         pkgs.nodejs_24
         # pkgs.pandoc
         pkgs.php
-        pkgs.postgresql_17
+        pkgs.postgresql_18
         pkgs.ripgrep
         # pkgs.tailscale
         pkgs.tree-sitter
