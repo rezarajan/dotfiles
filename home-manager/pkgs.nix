@@ -24,6 +24,7 @@
         pkgs.bun
         pkgs.cargo
         pkgs.phpPackages.composer
+        pkgs.codex
         pkgs.crane
         pkgs.dive
         pkgs.charm-freeze
