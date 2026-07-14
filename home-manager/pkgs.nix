@@ -23,6 +23,7 @@
         pkgs.binutils
         pkgs.bun
         pkgs.cargo
+        pkgs.claude-code
         pkgs.phpPackages.composer
         pkgs.codex
         pkgs.crane
