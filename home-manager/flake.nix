@@ -39,7 +39,8 @@
         modules = [
           ./home.nix
           ./nixgl.nix
-          ./pkgs.nix 
+          ./pkgs.nix
+          ./desktop/kde-gruvbox.nix
           ./dotfiles/default.nix
         ];
       };

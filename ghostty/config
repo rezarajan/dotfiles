@@ -1,4 +1,5 @@
-theme = light:Catppuccin Latte,dark:Catppuccin Frappe
+# theme = light:Catppuccin Latte,dark:Catppuccin Frappe
+theme = Gruvbox Material Dark
 window-height = 36
 window-width = 120
 window-padding-x = 8

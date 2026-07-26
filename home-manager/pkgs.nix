@@ -31,9 +31,11 @@
         pkgs.charm-freeze
         pkgs.fluxcd
         # pkgs.fzf
+        pkgs.gh
         # pkgs.glow
         pkgs.hugo
         pkgs.k9s
+        pkgs.kind
         pkgs.kubectl
         pkgs.kubernetes-helm
         pkgs.gnum4
