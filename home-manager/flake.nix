@@ -33,7 +33,9 @@
         inherit pkgs;
         # Optionally use extraSpecialArgs
         # to pass through arguments to home.nix
-        extraSpecialArgs = { inherit nixgl; };
+        extraSpecialArgs = {
+          inherit nixgl;
+        };
 
         # Specify your home configuration modules here, for example,
         modules = [

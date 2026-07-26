@@ -6,6 +6,10 @@
   home.username = "cascadura";
   home.homeDirectory = "/home/cascadura";
 
+  # Pin to pureNvidia for nixGL; must manually update version and hash in ./nixgl.nix
+  # Set to `false` if you want to fetch the latest version; requires --impure flag
+  cascadura.nixGL.pureNvidia = true;
+
   # This value determines the Home Manager release that your configuration is
   # compatible with. This helps avoid breakage when a new Home Manager release
   # introduces backwards incompatible changes.

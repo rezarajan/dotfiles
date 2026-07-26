@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 let
   gruvboxKvantum = pkgs.stdenvNoCC.mkDerivation {
@@ -45,6 +45,25 @@ let
   };
 in
 {
+  home.activation.moveManualGruvboxThemeDirs =
+    lib.hm.dag.entryBefore [ "checkLinkTargets" ] ''
+      for target in \
+        "${config.xdg.configHome}/Kvantum/gruvbox-kvantum" \
+        "${config.xdg.dataHome}/icons/Gruvbox-Plus-Dark"
+      do
+        if [ -e "$target" ] && [ ! -L "$target" ]; then
+          backup="$target.hm-backup"
+          index=0
+          while [ -e "$backup" ]; do
+            index=$((index + 1))
+            backup="$target.hm-backup-$index"
+          done
+
+          run mv "$target" "$backup"
+        fi
+      done
+    '';
+
   qt = {
     enable = true;
     platformTheme.name = "kde";
@@ -65,12 +84,20 @@ in
     pkgs.kdePackages.qtstyleplugin-kvantum
   ];
 
-  xdg.configFile."Kvantum/gruvbox-kvantum".source =
-    "${gruvboxKvantum}/share/Kvantum/gruvbox-kvantum";
+  xdg.configFile."Kvantum/gruvbox-kvantum" = {
+    force = true;
+    source = "${gruvboxKvantum}/share/Kvantum/gruvbox-kvantum";
+  };
 
   xdg.dataFile = {
-    "color-schemes/GruvboxDragon.colors".source = gruvboxDragonColors;
-    "icons/Gruvbox-Plus-Dark".source =
-      "${gruvboxPlusDarkIcons}/share/icons/Gruvbox-Plus-Dark";
+    "color-schemes/GruvboxDragon.colors" = {
+      force = true;
+      source = gruvboxDragonColors;
+    };
+
+    "icons/Gruvbox-Plus-Dark" = {
+      force = true;
+      source = "${gruvboxPlusDarkIcons}/share/icons/Gruvbox-Plus-Dark";
+    };
   };
 }
