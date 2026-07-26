@@ -1,5 +1,15 @@
 # theme = light:Catppuccin Latte,dark:Catppuccin Frappe
 theme = Gruvbox Material Dark
+
+# ------------------------------------------------------------
+# Ghostty tab and window settings
+# ------------------------------------------------------------
+gtk-titlebar-style = tabs
+gtk-toolbar-style = flat
+gtk-wide-tabs = false
+
+window-show-tab-bar = never
+
 window-height = 36
 window-width = 120
 window-padding-x = 8
