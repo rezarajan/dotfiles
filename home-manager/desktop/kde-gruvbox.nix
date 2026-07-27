@@ -23,6 +23,7 @@ let
   gruvboxPlusDarkIcons = pkgs.stdenvNoCC.mkDerivation {
     pname = "gruvbox-plus-dark-icons";
     version = "6.5.0";
+    dontFixup = true;
 
     src = pkgs.fetchFromGitHub {
       owner = "SylEleuth";
@@ -66,7 +67,13 @@ in
 
   qt = {
     enable = true;
-    platformTheme.name = "kde";
+    platformTheme = {
+      name = "kde";
+      package = [
+        pkgs.kdePackages.kio
+        pkgs.kdePackages.plasma-integration
+      ];
+    };
     style.name = "kvantum";
 
     kde.settings = {
@@ -83,6 +90,25 @@ in
   home.packages = [
     pkgs.kdePackages.qtstyleplugin-kvantum
   ];
+
+  xdg.desktopEntries.systemsettings = {
+    name = "System Settings";
+    genericName = "System Settings";
+    exec = "/usr/bin/systemsettings";
+    icon = "preferences-system";
+    categories = [
+      "Qt"
+      "KDE"
+      "Settings"
+    ];
+    startupNotify = true;
+    settings = {
+      OnlyShowIn = "KDE;";
+      SingleMainWindow = "true";
+      X-DocPath = "systemsettings/index.html";
+      X-KDE-Shortcuts = "Tools,Meta+I";
+    };
+  };
 
   xdg.configFile."Kvantum/gruvbox-kvantum" = {
     force = true;
