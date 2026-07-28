@@ -324,7 +324,6 @@ require('lazy').setup({
         { '<leader>s', group = '[S]earch', mode = { 'n', 'v' } },
         { '<leader>t', group = '[T]oggle' },
         { '<leader>T', group = '[T]abs' },
-        { '<leader>W', group = '[W]indows' },
         { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
         { '<leader>M', group = '[M]arkdown' },
         { '<leader>m', group = '[M]arks' },
