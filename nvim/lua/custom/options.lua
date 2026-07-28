@@ -12,3 +12,6 @@ vim.opt.mouse = ''
 
 -- Enable search highlighting (cleared with <Esc>)
 vim.opt.hlsearch = true
+
+-- Pretty native tab labels without adding a persistent bufferline.
+require('custom.tabline').setup()

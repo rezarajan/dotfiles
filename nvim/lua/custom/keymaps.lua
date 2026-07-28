@@ -17,5 +17,20 @@ vim.keymap.set('n', '<leader>n', function()
   vim.wo.relativenumber = not vim.wo.relativenumber
 end, { desc = 'Toggle Relative Line [N]umbers' })
 
+-- Tab workflow
+vim.keymap.set('n', 'gT', '<cmd>tabprevious<CR>', { desc = 'Previous tab' })
+vim.keymap.set('n', 'gt', '<cmd>tabnext<CR>', { desc = 'Next tab' })
+vim.keymap.set('n', '[t', '<cmd>tabprevious<CR>', { desc = 'Previous tab' })
+vim.keymap.set('n', ']t', '<cmd>tabnext<CR>', { desc = 'Next tab' })
+vim.keymap.set('n', '<leader>Tn', '<cmd>tabnew<CR>', { desc = '[T]ab [N]ew' })
+vim.keymap.set('n', '<leader>Tc', '<cmd>tabclose<CR>', { desc = '[T]ab [C]lose' })
+vim.keymap.set('n', '<leader>To', '<cmd>tabonly<CR>', { desc = '[T]ab [O]nly' })
+vim.keymap.set('n', '<leader>Tl', '<cmd>tabnext<CR>', { desc = '[T]ab Right' })
+vim.keymap.set('n', '<leader>Th', '<cmd>tabprevious<CR>', { desc = '[T]ab Left' })
+
+for i = 1, 9 do
+  vim.keymap.set('n', '<leader>T' .. i, '<cmd>tabnext ' .. i .. '<CR>', { desc = 'Go to tab ' .. i })
+end
+
 -- Commented out Oil keymap (defined in plugin config instead)
 -- vim.keymap.set('n', '<leader>o', '<cmd>Oil<CR>', { desc = 'Open Oil' })

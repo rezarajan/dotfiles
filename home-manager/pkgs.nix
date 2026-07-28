@@ -20,6 +20,7 @@
       # Dev Tools
       dev-tools = [
         # pkgs.aria2
+        pkgs.azure-cli
         pkgs.binutils
         pkgs.bun
         pkgs.cargo
@@ -51,6 +52,7 @@
         pkgs.postgresql_18
         pkgs.ripgrep
         # pkgs.tailscale
+        pkgs.opentofu
         pkgs.tree-sitter
         pkgs.teleport
         pkgs.uv
