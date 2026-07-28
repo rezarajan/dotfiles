@@ -44,6 +44,7 @@
         pkgs.jq
         pkgs.laravel
         pkgs.minikube
+        pkgs.mermaid-cli
         pkgs.neovim
         pkgs.nixd
         pkgs.nodejs_24
