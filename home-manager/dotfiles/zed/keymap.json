@@ -1,0 +1,122 @@
+[
+  {
+    "context": "Workspace",
+    "bindings": {
+      "ctrl-n": null
+    }
+  },
+  {
+    "context": "Editor && vim_mode == normal && !menu",
+    "bindings": {
+      "space b": "tab_switcher::ToggleAll",
+      "space f": "file_finder::Toggle",
+      "space /": "pane::DeploySearch",
+      "space n": "editor::ToggleRelativeLineNumbers",
+      "space q": "diagnostics::Deploy",
+      "space e": "editor::Hover",
+
+      "space s f": "file_finder::Toggle",
+      "space s b": "tab_switcher::ToggleAll",
+      "space s g": "pane::DeploySearch",
+      "space s /": "pane::DeploySearch",
+      "space s d": "diagnostics::Deploy",
+      "space s k": "zed::OpenKeymap",
+      "space s s": "command_palette::Toggle",
+      "space s c": "command_palette::Toggle",
+      "space s y": "outline::Toggle",
+      "space s shift-y": "project_symbols::Toggle",
+      "space s a": "outline::Toggle",
+
+      "space d d": "editor::Hover",
+      "space d l": "diagnostics::Deploy",
+      "space d e": "diagnostics::Deploy",
+      "space d w": "diagnostics::Deploy",
+
+      "space m a": "editor::ToggleBookmark",
+      "space m m": "editor::ViewBookmarks",
+      "space m n": "editor::GoToNextBookmark",
+      "space m p": "editor::GoToPreviousBookmark",
+
+      "space 1": ["pane::ActivateItem", 0],
+      "space 2": ["pane::ActivateItem", 1],
+      "space 3": ["pane::ActivateItem", 2],
+      "space 4": ["pane::ActivateItem", 3],
+
+      "space w v": "pane::SplitRight",
+      "space w s": "pane::SplitDown",
+      "space w q": ["pane::CloseActiveItem", { "close_pinned": false }],
+      "space w o": "workspace::CloseInactiveTabsAndPanes",
+
+      "g shift-o": "outline::Toggle",
+      "g shift-w": "project_symbols::Toggle",
+      "[ d": "editor::GoToPreviousDiagnostic",
+      "] d": "editor::GoToDiagnostic"
+    }
+  },
+  {
+    "context": "VimControl && !menu",
+    "bindings": {
+      "ctrl-h": "workspace::ActivatePaneLeft",
+      "ctrl-j": "workspace::ActivatePaneDown",
+      "ctrl-k": "workspace::ActivatePaneUp",
+      "ctrl-l": "workspace::ActivatePaneRight",
+      "ctrl-\\": "workspace::ActivatePreviousPane",
+
+      "alt-h": "vim::ResizePaneLeft",
+      "alt-j": "vim::ResizePaneDown",
+      "alt-k": "vim::ResizePaneUp",
+      "alt-l": "vim::ResizePaneRight"
+    }
+  },
+  {
+    "context": "Dock",
+    "bindings": {
+      "ctrl-h": "workspace::ActivatePaneLeft",
+      "ctrl-j": "workspace::ActivatePaneDown",
+      "ctrl-k": "workspace::ActivatePaneUp",
+      "ctrl-l": "workspace::ActivatePaneRight",
+      "ctrl-\\": "workspace::ActivatePreviousPane"
+    }
+  },
+  {
+    "context": "BufferSearchBar",
+    "bindings": {
+      "ctrl-n": "search::SelectNextMatch",
+      "ctrl-shift-n": "search::SelectPreviousMatch"
+    }
+  },
+  {
+    "context": "BufferSearchBar > Editor",
+    "bindings": {
+      "ctrl-n": "search::SelectNextMatch",
+      "ctrl-shift-n": "search::SelectPreviousMatch"
+    }
+  },
+  {
+    "context": "ProjectSearchBar",
+    "bindings": {
+      "ctrl-n": "search::SelectNextMatch",
+      "ctrl-shift-n": "search::SelectPreviousMatch"
+    }
+  },
+  {
+    "context": "ProjectSearchBar > Editor",
+    "bindings": {
+      "ctrl-n": "search::SelectNextMatch",
+      "ctrl-shift-n": "search::SelectPreviousMatch"
+    }
+  },
+  {
+    "context": "ProjectSearchView",
+    "bindings": {
+      "ctrl-n": "search::SelectNextMatch",
+      "ctrl-shift-n": "search::SelectPreviousMatch"
+    }
+  },
+  {
+    "context": "ProjectPanel && not_editing",
+    "bindings": {
+      "escape": "editor::ToggleFocus"
+    }
+  }
+]
