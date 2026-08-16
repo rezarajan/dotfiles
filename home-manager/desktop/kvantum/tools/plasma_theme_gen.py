@@ -26,7 +26,8 @@ RADIUS = 8
 F = INSET + RADIUS          # frame tile size
 C = 32                      # center tile size
 MARGIN = 8                  # content margin, Breeze-compatible
-SHADOW = 10                 # shadow band width
+SHADOW = 10                 # shadow band width (outside the window)
+SH_INSET = RADIUS           # shadow underlap: wraps the rounded corners
 SHADOW_PEAK = 0.30
 HAIRLINE = 0.07             # ColorScheme-Text alpha for the 1px border
 
@@ -194,32 +195,53 @@ def mask_frame(s):
 
 
 def shadow_frame(s):
-    """Soft shadow 9-patch used by Plasma dialog shadows (drawn outside the mask)."""
-    stops = (f'<stop offset="0" stop-color="#000" stop-opacity="{fmt(SHADOW_PEAK)}"/>'
-             f'<stop offset="0.45" stop-color="#000" stop-opacity="{fmt(SHADOW_PEAK * 0.3)}"/>'
-             f'<stop offset="1" stop-color="#000" stop-opacity="0"/>')
+    """Soft shadow 9-patch for Plasma dialog shadows.
+
+    The tiles OVERLAP the window by SH_INSET (declared via the
+    shadow-hint-*-inset elements, like Breeze): the shadow slides under
+    the body and wraps around the rounded corners, so the corner notch
+    fills with shadow instead of bright backdrop and no gap line can
+    open at the window edge. Inner SH_INSET band is held at peak alpha
+    (hidden under the body except in the notch), outer SHADOW band
+    eases to zero.
+    """
+    T = SHADOW + SH_INSET
+    k = SH_INSET / T          # fraction of the tile that underlaps
+    inner_stops = (f'<stop offset="0" stop-color="#000" stop-opacity="0"/>'
+                   f'<stop offset="{fmt((1 - k) * 0.45)}" stop-color="#000" '
+                   f'stop-opacity="{fmt(SHADOW_PEAK * 0.3)}"/>'
+                   f'<stop offset="{fmt(1 - k)}" stop-color="#000" '
+                   f'stop-opacity="{fmt(SHADOW_PEAK)}"/>'
+                   f'<stop offset="1" stop-color="#000" stop-opacity="{fmt(SHADOW_PEAK)}"/>')
     for side, (x1, y1, x2, y2) in {"top": (0, 1, 0, 0), "bottom": (0, 0, 0, 1),
                                    "left": (1, 0, 0, 0), "right": (0, 0, 1, 0)}.items():
-        s.defs.append(f'<linearGradient id="sg-{side}" x1="{x1}" y1="{y1}" '
-                      f'x2="{x2}" y2="{y2}">{stops}</linearGradient>')
-    centers = {"topleft": (SHADOW, SHADOW), "topright": (0, SHADOW),
-               "bottomright": (0, 0), "bottomleft": (SHADOW, 0)}
+        s.defs.append(f'<linearGradient id="sg-{side}" x1="{x2}" y1="{y2}" '
+                      f'x2="{x1}" y2="{y1}">{inner_stops}</linearGradient>')
+    corner_stops = (f'<stop offset="0" stop-color="#000" stop-opacity="{fmt(SHADOW_PEAK)}"/>'
+                    f'<stop offset="{fmt(k)}" stop-color="#000" stop-opacity="{fmt(SHADOW_PEAK)}"/>'
+                    f'<stop offset="{fmt((k + 1) / 2)}" stop-color="#000" '
+                    f'stop-opacity="{fmt(SHADOW_PEAK * 0.3)}"/>'
+                    f'<stop offset="1" stop-color="#000" stop-opacity="0"/>')
+    centers = {"topleft": (T, T), "topright": (0, T),
+               "bottomright": (0, 0), "bottomleft": (T, 0)}
     for c, (cx, cy) in centers.items():
         s.defs.append(
-            f'<radialGradient id="sg-c-{c}" cx="{cx}" cy="{cy}" r="{SHADOW}" '
-            f'gradientUnits="userSpaceOnUse">{stops}</radialGradient>')
+            f'<radialGradient id="sg-c-{c}" cx="{cx}" cy="{cy}" r="{T}" '
+            f'gradientUnits="userSpaceOnUse">{corner_stops}</radialGradient>')
     s.group("shadow-center", C, C, "")
     for c in CORNERS:
-        s.group(f"shadow-{c}", SHADOW, SHADOW,
-                f'<rect width="{SHADOW}" height="{SHADOW}" style="fill:url(#sg-c-{c})"/>')
+        s.group(f"shadow-{c}", T, T,
+                f'<rect width="{T}" height="{T}" style="fill:url(#sg-c-{c})"/>')
     for side in ("top", "bottom", "left", "right"):
         vert = side in ("left", "right")
-        gw, gh = (SHADOW, C) if vert else (C, SHADOW)
+        gw, gh = (T, C) if vert else (C, T)
         s.group(f"shadow-{side}", gw, gh,
                 f'<rect width="{gw}" height="{gh}" style="fill:url(#sg-{side})"/>')
     for side in ("top", "bottom", "left", "right"):
         s.group(f"shadow-hint-{side}-margin", SHADOW, SHADOW,
                 f'<rect width="{SHADOW}" height="{SHADOW}" style="fill:#f0f"/>')
+        s.group(f"shadow-hint-{side}-inset", SH_INSET, SH_INSET,
+                f'<rect width="{SH_INSET}" height="{SH_INSET}" style="fill:#f0f"/>')
 
 
 def hints(s, margin=MARGIN):
