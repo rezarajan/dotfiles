@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=X-GNOME-Metatheme
+Name=Gruvbox-Dragon-Light
+Comment=Gruvbox acrylic (light), generated from palette.py
+Encoding=UTF-8
+
+[X-GNOME-Metatheme]
+GtkTheme=Gruvbox-Dragon-Light
+MetacityTheme=Gruvbox-Dragon-Light
+IconTheme=Gruvbox-Plus-Light
+CursorTheme=breeze_cursors

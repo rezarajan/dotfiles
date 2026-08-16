@@ -1,0 +1,6 @@
+/* Gruvbox-Dragon — generated from palette.py, do not edit by hand.
+ * Widget styling comes from Breeze; colors arrive at runtime through
+ * kde-gtk-config's colors.css (synced from the active KDE color scheme,
+ * itself palette-generated) plus the acrylic overlay in the gtk config
+ * dir, so this one theme follows the light/dark toggle. */
+@import url("/usr/share/themes/Breeze/gtk-4.0/gtk-dark.css");

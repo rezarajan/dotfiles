@@ -1,5 +1,15 @@
-# created by KDE Plasma, Mon Apr 27 03:02:10 2026
-#
+gtk-enable-animations=1
+gtk-theme-name="Gruvbox-Dragon"
+gtk-primary-button-warps-slider=1
+gtk-toolbar-style=3
+gtk-menu-images=1
+gtk-button-images=1
+gtk-cursor-blink-time=1000
+gtk-cursor-blink=1
+gtk-cursor-theme-size=24
+gtk-cursor-theme-name="breeze_cursors"
+gtk-sound-theme-name="ocean"
+gtk-icon-theme-name="Gruvbox-Plus-Dark"
+gtk-font-name="Inter,  11"
 
-gtk-alternative-button-order = 1
-
+gtk-modules=appmenu-gtk-module
