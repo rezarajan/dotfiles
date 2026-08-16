@@ -92,52 +92,70 @@ def spinner(v, cx, cy, r, angle, w=14, ow=22):
 
 ARROW = "M 32 12 L 32 98 L 53 79 L 65 108 L 81 101 L 68 73 L 97 71 Z"
 
-# Mac-style glove hands: single smooth silhouettes + a flared cuff rect
-# (the two-pass rim welds them into one glove with a waist), and interior
-# CREASE strokes drawn on top — silhouette bumps alone cannot separate
-# fingers at cursor sizes; the crease lines are what make them legible.
-POINTING_HAND = (
-    "M 44 62 L 44 20 Q 44 10 53 10 Q 62 10 62 20 L 62 50 "
-    "C 62 44 76 44 76 50 "
-    "C 76 45 90 45 90 51 "
-    "C 90 47 102 47 102 54 "
-    "C 105 58 106 64 105 70 L 104 84 "
-    "C 103 94 96 100 86 100 L 50 100 "
-    "C 44 100 40 96 39 90 "
-    "C 38 84 34 78 29 72 "
-    "C 24 65 26 58 33 58 "
-    "C 38 58 42 60 44 64 Z"
-)
-POINTING_CUFF = '<rect x="40" y="100" width="56" height="14" rx="7" {fs}/>'
-POINTING_CREASES = ["M 62 52 L 62 70", "M 76 50 L 76 70", "M 90 52 L 90 71",
-                    "M 40 66 Q 34 70 33 78", "M 44 101 L 92 101"]
+# Mac-style glove hands, built from anatomical parts welded by the
+# two-pass rim: tapered SPLAYED finger capsules (angled, bowed sides,
+# bulbous tips), round knuckle bulges in an arc, organic palm blobs, a
+# flared cuff, and CURVED interior crease strokes — straight parallel
+# fingers and straight creases read as boxy and lifeless.
+def capsule(bx, by, ang, L, wb, wt, bow=2.0):
+    """Tapered finger: base (bx,by), tilt ang degrees from vertical,
+    length L, base/tip widths wb/wt, sides bowed outward slightly."""
+    a = math.radians(ang)
+    ux, uy = math.sin(a), -math.cos(a)
+    nx, ny = math.cos(a), math.sin(a)
+    tx, ty = bx + ux * L, by + uy * L
+    blx, bly = bx - nx * wb / 2, by - ny * wb / 2
+    brx, bry = bx + nx * wb / 2, by + ny * wb / 2
+    tlx, tly = tx - nx * wt / 2, ty - ny * wt / 2
+    trx, try_ = tx + nx * wt / 2, ty + ny * wt / 2
+    mw = (wb + wt) / 2 + bow  # bowed mid width
+    mlx, mly = bx + ux * L * 0.55 - nx * mw / 2, by + uy * L * 0.55 - ny * mw / 2
+    mrx, mry = bx + ux * L * 0.55 + nx * mw / 2, by + uy * L * 0.55 + ny * mw / 2
+    r = wt / 2
+    return (f"M {blx:.1f} {bly:.1f} Q {mlx:.1f} {mly:.1f} {tlx:.1f} {tly:.1f} "
+            f"A {r:.1f} {r:.1f} 0 0 1 {trx:.1f} {try_:.1f} "
+            f"Q {mrx:.1f} {mry:.1f} {brx:.1f} {bry:.1f} Z")
 
-OPEN_HAND = (
-    "M 26 60 L 26 30 Q 26 21 34 21 Q 42 21 42 30 L 42 56 "
-    "Q 45 60 48 56 L 48 18 Q 48 9 56 9 Q 64 9 64 18 L 64 54 "
-    "Q 67 58 70 54 L 70 22 Q 70 13 78 13 Q 86 13 86 22 L 86 56 "
-    "Q 89 60 92 56 L 92 36 Q 92 27 99 27 Q 106 27 106 36 L 106 64 "
-    "C 108 78 106 90 98 97 C 90 102 78 103 64 103 L 46 103 "
-    "C 36 103 30 98 28 92 "
-    "C 22 92 16 88 12 82 Q 8 76 14 70 C 18 66 24 66 26 70 Z"
-)
-OPEN_CUFF = '<rect x="36" y="103" width="60" height="14" rx="7" {fs}/>'
-OPEN_CREASES = ["M 45 58 L 45 78", "M 67 56 L 67 76", "M 89 58 L 89 78",
-                "M 40 104 L 92 104"]
 
-CLOSED_HAND = (
-    "M 24 74 C 24 60 28 50 38 47 "
-    "Q 39 38 48 38 Q 56 38 57 47 "
-    "Q 58 39 66 39 Q 74 39 75 48 "
-    "Q 76 41 84 41 Q 91 41 92 50 "
-    "Q 93 44 99 44 Q 104 44 104 52 "
-    "C 106 60 106 70 104 78 C 102 88 94 94 82 94 L 44 94 "
-    "C 34 94 26 88 24 80 Z"
+POINTING_PARTS = (
+    [f'<path d="{capsule(52, 60, -3, 48, 17, 14)}" {{fs}}/>'] +
+    [f'<circle cx="{cx}" cy="{cy}" r="{r}" {{fs}}/>'
+     for cx, cy, r in ((70, 52, 9.5), (84, 55.5, 9), (96.5, 60, 8))] +
+    ['<path d="M 42 66 C 42 58 47 54 55 54 L 90 54 C 100 56 105 62 105 72 '
+     'C 105 84 101 94 92 99 C 84 102 60 102 52 100 C 45 98 42 92 41 84 '
+     'C 40 76 41 70 42 66 Z" {fs}/>',
+     f'<path d="{capsule(44, 78, -125, 20, 15, 12)}" {{fs}}/>',
+     '<rect x="40" y="100" width="56" height="14" rx="7" {fs}/>']
 )
-CLOSED_THUMB = '<rect x="30" y="78" width="34" height="16" rx="8" {fs}/>'
-CLOSED_CUFF = '<rect x="36" y="96" width="58" height="14" rx="7" {fs}/>'
-CLOSED_CREASES = ["M 57 47 L 57 64", "M 75 48 L 75 65", "M 92 50 L 92 66",
-                  "M 32 80 Q 48 75 62 81", "M 40 97 L 90 97"]
+POINTING_CREASES = ["M 63 52 Q 62 60 61 68", "M 77 52 Q 77 60 76 67",
+                    "M 90 56 Q 90 62 89 68", "M 46 68 Q 40 74 38 82",
+                    "M 44 101 Q 66 105 92 101"]
+
+OPEN_PARTS = (
+    [f'<path d="{capsule(*p)}" {{fs}}/>' for p in
+     ((38, 58, -12, 36, 17, 13), (56, 56, -4, 44, 17, 14),
+      (74, 57, 4, 40, 17, 13), (90, 60, 13, 30, 15, 11),
+      (38, 76, -58, 20, 16, 13))] +
+    ['<path d="M 26 66 C 25 58 30 54 38 54 L 92 54 C 100 54 104 60 104 68 '
+     'C 105 78 103 88 96 95 C 88 102 74 104 60 103 C 44 102 32 98 28 88 '
+     'C 25 80 25 72 26 66 Z" {fs}/>',
+     '<rect x="34" y="102" width="62" height="14" rx="7" {fs}/>']
+)
+OPEN_CREASES = ["M 47 57 Q 46 66 43 73", "M 65 55 Q 65 63 64 71",
+                "M 82 57 Q 82 64 80 70", "M 38 103 Q 64 107 92 103"]
+
+CLOSED_PARTS = (
+    [f'<circle cx="{cx}" cy="{cy}" r="{r}" {{fs}}/>'
+     for cx, cy, r in ((42, 52, 10), (60, 47, 11), (78, 48, 10.5), (94, 54, 9))] +
+    ['<path d="M 26 74 C 25 62 30 54 40 52 L 96 52 C 102 54 106 60 106 68 '
+     'C 107 76 105 84 100 89 C 92 95 78 96 64 96 C 48 96 34 94 29 86 '
+     'C 26 82 26 78 26 74 Z" {fs}/>',
+     f'<path d="{capsule(64, 86, -90, 26, 15, 12)}" {{fs}}/>',
+     '<rect x="36" y="96" width="58" height="14" rx="7" {fs}/>']
+)
+CLOSED_CREASES = ["M 51 50 Q 52 58 51 64", "M 69 46 Q 70 54 69 61",
+                  "M 86 50 Q 87 57 86 63", "M 40 82 Q 52 78 64 83",
+                  "M 40 97 Q 64 101 90 97"]
 
 
 def creases(ds, v, w=4):
@@ -153,8 +171,8 @@ def build_cursors(v):
 
     c["default"] = ([solid([f'<path d="{ARROW}" {{fs}}/>'], v)], (32, 12), 0)
 
-    c["pointer"] = ([solid([f'<path d="{POINTING_HAND}" {{fs}}/>', POINTING_CUFF], v) +
-                     creases(POINTING_CREASES, v)], (53, 10), 0)
+    c["pointer"] = ([solid(POINTING_PARTS, v) +
+                     creases(POINTING_CREASES, v)], (50, 12), 0)
 
     c["text"] = ([lines(["M 64 26 L 64 102", "M 53 25 L 75 25",
                          "M 53 103 L 75 103"], v, w=11, ow=23)], (64, 64), 0)
@@ -191,11 +209,10 @@ def build_cursors(v):
                       spinner(v, 92, 92, 22, k * 30, w=12, ow=18)
                       for k in range(12)], (32, 12), 60)
 
-    c["openhand"] = ([solid([f'<path d="{OPEN_HAND}" {{fs}}/>', OPEN_CUFF], v) +
+    c["openhand"] = ([solid(OPEN_PARTS, v) +
                       creases(OPEN_CREASES, v)], (64, 64), 0)
 
-    c["closedhand"] = ([solid([f'<path d="{CLOSED_HAND}" {{fs}}/>', CLOSED_THUMB,
-                               CLOSED_CUFF], v) +
+    c["closedhand"] = ([solid(CLOSED_PARTS, v) +
                         creases(CLOSED_CREASES, v)], (64, 68), 0)
 
     pencil = rot(
