@@ -1,0 +1,13 @@
+[8019db3d-d55d-4b1c-9752-56534b2d28e7]
+Description=Chromium bubbles: undecorated
+noborder=true
+noborderrule=2
+title=Chromium
+titlematch=1
+types=3
+wmclass=chromium
+wmclassmatch=1
+
+[General]
+count=1
+rules=8019db3d-d55d-4b1c-9752-56534b2d28e7
