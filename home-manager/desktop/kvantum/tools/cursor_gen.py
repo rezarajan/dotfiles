@@ -135,7 +135,7 @@ def capsule(bx, by, ang, L, wb, wt, bow=2.0):
 
 
 POINTING_PARTS = (
-    [f'<path d="{capsule(52, 60, -3, 48, 17, 14)}" {{fs}}/>'] +
+    [f'<path d="{capsule(52, 60, -3, 41, 17, 14)}" {{fs}}/>'] +
     [f'<circle cx="{cx}" cy="{cy}" r="{r}" {{fs}}/>'
      for cx, cy, r in ((70, 52, 9.5), (84, 55.5, 9), (96.5, 60, 8))] +
     ['<path d="M 42 66 C 42 58 47 54 55 54 L 90 54 C 100 56 105 62 105 72 '
@@ -150,8 +150,8 @@ POINTING_CREASES = ["M 63 52 Q 62 60 61 68", "M 77 52 Q 77 60 76 67",
 
 OPEN_PARTS = (
     [f'<path d="{capsule(*p)}" {{fs}}/>' for p in
-     ((38, 58, -12, 36, 17, 13), (56, 56, -4, 44, 17, 14),
-      (74, 57, 4, 40, 17, 13), (90, 60, 13, 30, 15, 11),
+     ((38, 58, -12, 36, 17, 13), (56, 56, -4, 36, 17, 14),
+      (74, 57, 4, 37, 17, 13), (90, 60, 13, 30, 15, 11),
       (38, 76, -58, 20, 16, 13))] +
     ['<path d="M 26 66 C 25 58 30 54 38 54 L 92 54 C 100 54 104 60 104 68 '
      'C 105 78 103 88 96 95 C 88 102 74 104 60 103 C 44 102 32 98 28 88 '
@@ -256,6 +256,25 @@ def build_cursors(v):
     c["zoom-in"] = ([zoom_in], (55, 55), 0)
     c["zoom-out"] = ([zoom_out], (55, 55), 0)
 
+    # arrow + menu-list badge
+    c["context-menu"] = ([solid([f'<path d="{ARROW}" {{fs}}/>',
+                                 '<rect x="74" y="72" width="42" height="40" rx="9" {fs}/>'], v) +
+                          f'<path d="M 83 84 H 107 M 83 92 H 107 M 83 100 H 99" fill="none" '
+                          f'stroke="{v.A}" stroke-width="6" stroke-linecap="round"/>'],
+                         (32, 12), 0)
+
+    # spreadsheet cell plus
+    c["cell"] = ([lines(["M 64 26 L 64 102", "M 26 64 L 102 64"], v, w=14, ow=26)],
+                 (64, 64), 0)
+
+    # eyedropper, tip to the lower left, aqua drop in the tube
+    dropper = rot(
+        solid(['<circle cx="64" cy="26" r="13" {fs}/>',
+               '<rect x="56" y="30" width="16" height="52" rx="6" {fs}/>',
+               '<path d="M 56 80 L 64 102 L 72 80 Z" {fs}/>'], v) +
+        f'<rect x="59" y="58" width="10" height="20" rx="5" fill="{v.A}"/>', 45)
+    c["color-picker"] = ([dropper], (37, 91), 0)
+
     badge = (f'<rect x="74" y="76" width="40" height="36" rx="9" fill="{v.F}" '
              f'stroke="{v.O}" stroke-width="6"/>')
     c["copy"] = ([solid([f'<path d="{ARROW}" {{fs}}/>'], v) + badge +
@@ -298,6 +317,9 @@ ALIASES = {
     "copy": ["dnd-copy"],
     "link": ["dnd-link", "alias"],
     "vertical-text": ["vertical_text"],
+    "context-menu": ["context_menu"],
+    "cell": ["plus"],
+    "color-picker": ["eyedropper"],
 }
 
 
