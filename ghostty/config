@@ -4,19 +4,28 @@ theme = Gruvbox Material Dark
 # ------------------------------------------------------------
 # Acrylic window
 # ------------------------------------------------------------
-# Translucent background with compositor blur (KWin blur protocol).
+# Subtle translucency with compositor blur (KWin blur protocol).
 # Work stays readable: background-opacity-cells defaults to false, so
 # cells with explicit background colors (statuslines, selections, tmux
 # bars) remain fully opaque, and minimum-contrast floors text legibility
 # over the translucent background.
-background-opacity = 0.92
+background-opacity = 0.96
 background-blur = true
 minimum-contrast = 1.1
+
+# Keep the titlebar opaque: the GTK headerbar inherits window transparency,
+# so paint it at the widget level via custom CSS (gruvbox dragon bg)
+window-decoration = client
+window-titlebar-foreground = ebdbb2
+gtk-custom-css = gruvbox-titlebar.css
 
 # ------------------------------------------------------------
 # Ghostty tab and window settings
 # ------------------------------------------------------------
-gtk-titlebar-style = tabs
+# native + gtk-titlebar=false: no GTK titlebar; KWin decorates instead
+# (was "tabs", but the tab bar is never shown and the GTK titlebar goes
+# fully transparent under background-opacity)
+gtk-titlebar-style = native
 gtk-toolbar-style = flat
 gtk-wide-tabs = false
 

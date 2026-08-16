@@ -1,0 +1,6 @@
+/* Opaque gruvbox titlebar: the translucent window surface makes the GTK
+   headerbar see-through, so paint it explicitly at the widget level. */
+headerbar {
+  background-color: #181616;
+  color: #ebdbb2;
+}
