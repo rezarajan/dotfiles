@@ -9,6 +9,12 @@ function fastfetch-logo --description 'set the fastfetch greeting logo: text (fi
             else
                 echo "no custom logo set (greeting uses the distro logo)"
             end
+        case --moon
+            set -U fastfetch_logo ~/.cache/fastfetch/moon.png
+            set -U fastfetch_logo_type moon
+            set -eU fastfetch_logo_frames
+            set -eU fastfetch_logo_ramp
+            echo "moon logo set — the greeting renders today's phase (regenerated daily)"
         case --clear
             set -eU fastfetch_logo
             set -eU fastfetch_logo_type

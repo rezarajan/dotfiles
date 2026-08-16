@@ -12,6 +12,27 @@ function fastfetch-animated --description 'fastfetch greeting: size-adaptive log
         return
     end
 
+    # moon logo: regenerate today's phase render (local synodic math, no
+    # network), then show it as a static kitty-graphics image
+    if test "$fastfetch_logo_type" = moon
+        set -l png ~/.cache/fastfetch/moon.png
+        mkdir -p ~/.cache/fastfetch
+        if not test -f $png; or test (date +%Y%m%d) != (date -r $png +%Y%m%d)
+            python3 ~/.config/fastfetch/moon_gen.py $png >/dev/null 2>&1
+        end
+        if test -f $png
+            set -l w 22
+            set -q fastfetch_logo_width; and set w $fastfetch_logo_width
+            set -l avail (math $sz[2] - 24)
+            test $w -gt $avail; and set w $avail
+            if test $w -ge 12; and test $sz[1] -ge 22
+                fastfetch --logo-type kitty-direct --logo $png --logo-width $w
+                return
+            end
+        end
+        # render failed or window too narrow: fall through to ascii chain
+    end
+
     # image logo: kitty graphics can't be color-waved or safely piped
     # through the capture/redraw machinery — render straight to the tty
     # (fastfetch does its own width truncation there) and stay static
@@ -158,7 +179,7 @@ function __fastfetch_greeting_render --argument-names rows cols --description 'i
             case file
                 # only ascii-art files; image logos are handled (or ruled
                 # out for this window size) before the chain runs
-                if set -q fastfetch_logo; and test -f "$fastfetch_logo"; and not string match -qr '^kitty' -- "$fastfetch_logo_type"
+                if set -q fastfetch_logo; and test -f "$fastfetch_logo"; and not string match -qr '^(kitty|moon)' -- "$fastfetch_logo_type"
                     set args --logo-type file --logo $fastfetch_logo
                 else
                     continue

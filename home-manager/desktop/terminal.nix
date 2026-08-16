@@ -9,6 +9,7 @@
 # SMIL animation in ./fastfetch/oathkeeper.svg; frames regenerate via
 # ./fastfetch/tools/keyblade_gen.py). Active logo selection lives in
 # fish universal variables (mutable, not managed here) — switch with:
+#   fastfetch-logo --moon                                     # moon phase
 #   fastfetch-logo ~/.config/fastfetch/oathkeeper-frames-png  # keyblade
 #   fastfetch-logo oathkeeper                                 # figlet text
 #   fastfetch-logo --clear                                    # distro logo
@@ -39,6 +40,13 @@
     "fastfetch/kitty_transmit.py" = {
       force = true;
       source = ./fastfetch/tools/kitty_transmit.py;
+    };
+
+    # current-moon-phase renderer; the greeting's `moon` logo mode calls
+    # it daily and shows the result via kitty graphics
+    "fastfetch/moon_gen.py" = {
+      force = true;
+      source = ./fastfetch/tools/moon_gen.py;
     };
 
     "fastfetch/cachyos.png" = {
