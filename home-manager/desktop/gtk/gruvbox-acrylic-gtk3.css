@@ -1,0 +1,50 @@
+/* Gruvbox acrylic refinements — layered over Breeze-GTK + KDE color sync.
+   References the @*_breeze colors from the generated colors.css, so it
+   follows the light/dark switch automatically. */
+
+button {
+  border-radius: 6px;
+}
+
+entry {
+  border-radius: 6px;
+}
+
+menu,
+.menu,
+.context-menu {
+  border-radius: 8px;
+  background-color: alpha(@theme_bg_color_breeze, 0.94);
+  border: 1px solid alpha(@theme_fg_color_breeze, 0.08);
+  padding: 8px;
+}
+
+menu menuitem,
+.menu menuitem,
+.context-menu menuitem {
+  border-radius: 5px;
+  padding: 5px 8px;
+}
+
+menu menuitem:hover,
+.menu menuitem:hover,
+.context-menu menuitem:hover {
+  background-color: @theme_selected_bg_color_breeze;
+  color: @theme_selected_fg_color_breeze;
+}
+
+popover,
+popover.background {
+  border-radius: 8px;
+}
+
+tooltip,
+tooltip.background {
+  border-radius: 8px;
+  background-color: alpha(@theme_bg_color_breeze, 0.94);
+  border: 1px solid alpha(@theme_fg_color_breeze, 0.08);
+}
+
+scrollbar slider {
+  border-radius: 3px;
+}

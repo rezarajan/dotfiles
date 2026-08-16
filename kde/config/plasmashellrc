@@ -1,19 +1,15 @@
-[PlasmaTransientsConfig]
-popupHeight=432
-popupWidth=432
-
-[PlasmaViews][Panel 23]
+[PlasmaViews][Panel 128]
+alignment=132
 floating=1
-panelLengthMode=1
-panelVisibility=2
+panelLengthMode=0
+panelOpacity=2
+panelVisibility=0
+shell=org.kde.plasma.desktop
 
-[PlasmaViews][Panel 23][Defaults]
-thickness=46
-
-[PlasmaViews][Panel 47]
-floating=1
-
-[PlasmaViews][Panel 47][Defaults]
+[PlasmaViews][Panel 128][Defaults]
+maxLength=3127
+minLength=3127
+offset=0
 thickness=27
 
 [Updates]
