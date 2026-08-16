@@ -92,13 +92,32 @@ def spinner(v, cx, cy, r, angle, w=14, ow=22):
 
 ARROW = "M 32 12 L 32 98 L 53 79 L 65 108 L 81 101 L 68 73 L 97 71 Z"
 
-HAND = [
-    '<rect x="44" y="14" width="18" height="58" rx="9" {fs}/>',       # index
-    '<rect x="36" y="56" width="56" height="54" rx="18" {fs}/>',      # palm
-    '<rect x="66" y="42" width="14" height="26" rx="7" {fs}/>',       # folded
-    '<rect x="82" y="48" width="13" height="22" rx="6" {fs}/>',       # folded
-    '<circle cx="33" cy="90" r="12" {fs}/>',                          # thumb
-]
+# Hands are single smooth paths: fingertip round caps, folded-knuckle
+# bumps, thumb curves. The two-pass rim renders concave valleys and
+# creases as dark grooves, which is what makes them read as fingers.
+POINTING_HAND = (
+    "M 44 60 L 44 20 Q 44 11 52 11 Q 60 11 60 20 L 60 52 "
+    "C 60 45 74 45 74 52 L 74 54 C 74 47 88 47 88 54 L 88 58 "
+    "C 88 51 100 51 100 58 L 100 62 C 103 66 104 72 103 78 "
+    "C 101 94 94 106 78 109 L 58 109 C 49 109 43 103 41 95 "
+    "C 39 88 34 82 30 76 C 26 70 28 64 34 63 C 38 62 42 63 44 66 Z"
+)
+
+OPEN_HAND = (
+    "M 30 92 L 30 34 Q 30 25 38 25 Q 46 25 46 34 L 46 52 L 49 52 "
+    "L 49 24 Q 49 15 56 15 Q 64 15 64 24 L 64 50 L 67 50 "
+    "L 67 26 Q 67 17 73 17 Q 80 17 80 26 L 80 52 L 83 52 "
+    "L 83 36 Q 83 27 89 27 Q 96 27 96 36 L 96 66 "
+    "C 98 84 94 98 84 106 Q 72 114 58 113 Q 40 112 32 100 "
+    "C 22 94 14 82 20 74 Q 24 68 32 72 Z"
+)
+
+CLOSED_HAND = (
+    "M 30 78 C 30 64 34 56 44 54 Q 44 46 52 46 Q 59 46 60 54 "
+    "Q 61 47 68 47 Q 75 47 76 55 Q 77 48 84 48 Q 91 48 92 56 "
+    "Q 98 58 100 66 C 102 76 100 88 94 96 Q 84 106 64 106 "
+    "Q 42 106 34 96 Q 28 88 30 78 Z"
+)
 
 
 # ---------------------------------------------------------------- cursors
@@ -108,7 +127,7 @@ def build_cursors(v):
 
     c["default"] = ([solid([f'<path d="{ARROW}" {{fs}}/>'], v)], (32, 12), 0)
 
-    c["pointer"] = ([solid(HAND, v)], (53, 14), 0)
+    c["pointer"] = ([solid([f'<path d="{POINTING_HAND}" {{fs}}/>'], v)], (52, 12), 0)
 
     c["text"] = ([lines(["M 64 26 L 64 102", "M 53 25 L 75 25",
                          "M 53 103 L 75 103"], v, w=11, ow=23)], (64, 64), 0)
@@ -145,22 +164,12 @@ def build_cursors(v):
                       spinner(v, 92, 92, 22, k * 30, w=12, ow=18)
                       for k in range(12)], (32, 12), 60)
 
-    open_hand = [
-        '<rect x="34" y="54" width="60" height="52" rx="20" {fs}/>',
-        '<rect x="36" y="34" width="14" height="30" rx="7" {fs}/>',
-        '<rect x="53" y="28" width="14" height="34" rx="7" {fs}/>',
-        '<rect x="70" y="30" width="14" height="32" rx="7" {fs}/>',
-        '<rect x="86" y="40" width="13" height="26" rx="6" {fs}/>',
-    ]
-    c["openhand"] = ([solid(open_hand, v)], (64, 60), 0)
+    c["openhand"] = ([solid([f'<path d="{OPEN_HAND}" {{fs}}/>'], v)], (62, 64), 0)
 
-    closed_hand = [
-        '<rect x="34" y="58" width="60" height="46" rx="18" {fs}/>',
-        '<rect x="38" y="48" width="14" height="20" rx="7" {fs}/>',
-        '<rect x="55" y="44" width="14" height="22" rx="7" {fs}/>',
-        '<rect x="72" y="46" width="14" height="21" rx="7" {fs}/>',
-    ]
-    c["closedhand"] = ([solid(closed_hand, v)], (64, 64), 0)
+    c["closedhand"] = ([solid([f'<path d="{CLOSED_HAND}" {{fs}}/>'], v) +
+                        f'<path d="M 36 90 Q 48 100 62 100" fill="none" '
+                        f'stroke="{v.O}" stroke-width="4" stroke-linecap="round" opacity="0.6"/>'],
+                       (64, 74), 0)
 
     pencil = rot(
         solid(['<rect x="55" y="22" width="18" height="60" rx="5" {fs}/>',
