@@ -119,6 +119,24 @@ in
     pkgs.kdePackages.qtstyleplugin-kvantum
   ];
 
+  # A stale QT_STYLE_OVERRIDE=kvantum persists in the systemd user manager:
+  # at logout, startplasma restores the manager environment to a snapshot
+  # taken at session start (cleanupPlasmaEnvironment), so a var that was in
+  # the environment once keeps resurrecting across logins for as long as the
+  # user manager lives. Purge it at login, after Plasma's environment import
+  # and before any graphical service starts.
+  systemd.user.services.purge-qt-style-override = {
+    Unit = {
+      Description = "Purge stale QT_STYLE_OVERRIDE from the session environment";
+      Before = [ "graphical-session-pre.target" ];
+    };
+    Service = {
+      Type = "oneshot";
+      ExecStart = "/usr/bin/systemctl --user unset-environment QT_STYLE_OVERRIDE";
+    };
+    Install.WantedBy = [ "graphical-session-pre.target" ];
+  };
+
   xdg.desktopEntries.systemsettings = {
     name = "System Settings";
     genericName = "System Settings";
