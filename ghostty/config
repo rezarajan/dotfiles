@@ -4,14 +4,14 @@ theme = Gruvbox Material Dark
 # ------------------------------------------------------------
 # Acrylic window
 # ------------------------------------------------------------
-# Translucency with compositor blur (KWin blur protocol). Opacity must
-# leave enough of the background visible for the blur to read as acrylic
-# — at 0.96 the blur is imperceptible; 0.90 shows it while the blur
-# itself keeps what's behind unreadable. Work stays legible:
-# background-opacity-cells defaults to false, so cells with explicit
-# background colors (statuslines, selections, tmux bars) remain fully
-# opaque, and minimum-contrast floors text contrast.
-background-opacity = 0.90
+# Subtle translucency. Real compositor blur is unavailable (ghostty
+# 1.3.x can't speak Plasma 6.7's ext-background-effect-v1 protocol), so
+# stay at 0.96 where the unblurred bleed-through remains a faint
+# presence; the frosted-glass shader adds the acrylic surface finish.
+# Work stays legible: background-opacity-cells defaults to false, so
+# cells with explicit background colors (statuslines, selections, tmux
+# bars) remain fully opaque, and minimum-contrast floors text contrast.
+background-opacity = 0.96
 background-blur = true
 minimum-contrast = 1.1
 
