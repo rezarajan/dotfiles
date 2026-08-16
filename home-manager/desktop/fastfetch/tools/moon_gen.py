@@ -72,7 +72,11 @@ def star(cx, cy, r):
 def build_svg(p):
     lit = lit_path(p)
     waxing = p < 0.5
-    glow_cx = CX + (60 if waxing else -60) if lit not in (None, "full") else CX
+    # glow leans toward the lit limb, but the gradient must fade to zero
+    # INSIDE the canvas — a radius past the edge clips into a visible
+    # square halo boundary
+    glow_cx = CX + (36 if waxing else -36) if lit not in (None, "full") else CX
+    glow_r = 208
 
     craters = [
         (CX - 60, CY - 55, 34), (CX + 45, CY + 20, 46), (CX - 25, CY + 85, 26),
@@ -97,7 +101,7 @@ def build_svg(p):
         parts.append(f'<path d="{star(sx, sy, sr)}" fill="{CREAM}" opacity="{so}"/>')
 
     if lit is not None:
-        parts.append(f'<circle cx="{glow_cx}" cy="{CY}" r="{R + 90}" fill="url(#glow)"/>')
+        parts.append(f'<circle cx="{glow_cx}" cy="{CY}" r="{glow_r}" fill="url(#glow)"/>')
 
     # dark side with a faint rim
     parts.append(f'<circle cx="{CX}" cy="{CY}" r="{R}" fill="{DARKSIDE}" stroke="{RIM}" stroke-width="2"/>')
