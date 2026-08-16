@@ -276,25 +276,31 @@ def shadow_frame(sheet, base, F, sh, r, bg, border, S, hint):
         vert = side in ("left", "right")
         gw, gh = (F, C) if vert else (C, F)
         g = sheet.group(f"{base}-{side}", gw, gh)
-        rects = {  # (shadow, border, body) rects per side
-            "top": ((0, 0, C, sh), (0, sh, C, W), (0, sh + W, C, inner - W)),
-            "bottom": ((0, F - sh, C, sh), (0, inner - W, C, W), (0, 0, C, inner - W)),
-            "left": ((0, 0, sh, C), (sh, 0, W, C), (sh + W, 0, inner - W, C)),
-            "right": ((F - sh, 0, sh, C), (inner - W, 0, W, C), (0, 0, inner - W, C)),
+        rects = {  # (shadow, border, body) rects per side — the body fill
+            # runs under the hairline so the border zone keeps full menu
+            # opacity (a low-alpha hairline drawn INSTEAD of the body left
+            # a near-transparent gap that read as a bright box outline
+            # over contrasting backdrops)
+            "top": ((0, 0, C, sh), (0, sh, C, W), (0, sh, C, inner)),
+            "bottom": ((0, F - sh, C, sh), (0, inner - W, C, W), (0, 0, C, inner)),
+            "left": ((0, 0, sh, C), (sh, 0, W, C), (sh, 0, inner, C)),
+            "right": ((F - sh, 0, sh, C), (inner - W, 0, W, C), (0, 0, inner, C)),
         }[side]
         sx, sy, sw2, sh2 = rects[0]
         ET.SubElement(g, f"{{{SVGNS}}}rect",
                       {"x": fmt(sx), "y": fmt(sy), "width": fmt(sw2),
                        "height": fmt(sh2), "fill": f"url(#{grads[side]})"})
-        add_rect(g, *rects[1], bc, bo)
         add_rect(g, *rects[2], fc, fo)
+        add_rect(g, *rects[1], bc, bo)
 
     # corner tiles (top-left drawn, others rotated) -----------------------
     shadow_ops = [("M", (0, 0)), ("L", (F, 0)), ("L", (F, sh)),
                   ("A", r, r, 0, (sh, F)), ("L", (0, F)), ("Z",)]
     ring_ops = [("M", (F, sh)), ("A", r, r, 0, (sh, F)), ("L", (sh + W, F)),
                 ("A", r - W, r - W, 1, (F, sh + W)), ("Z",)]
-    body_ops = [("M", (F, sh + W)), ("A", r - W, r - W, 0, (sh + W, F)),
+    # body fill covers the full rounded wedge INCLUDING the ring zone,
+    # hairline goes on top — same bright-gap fix as the edge tiles
+    body_ops = [("M", (F, sh)), ("A", r, r, 0, (sh, F)),
                 ("L", (F, F)), ("Z",)]
     order = ["topleft", "topright", "bottomright", "bottomleft"]
     for i, corner in enumerate(order):
@@ -304,8 +310,8 @@ def shadow_frame(sheet, base, F, sh, r, bg, border, S, hint):
             so, ro, bo2 = rot90(so, F), rot90(ro, F), rot90(bo2, F)
         ET.SubElement(g, f"{{{SVGNS}}}path",
                       {"d": pathd(so), "fill": f"url(#acrg-{base}-c-{corner})"})
-        add_path(g, ro, bc, bo)
         add_path(g, bo2, fc, fo)
+        add_path(g, ro, bc, bo)
 
     for side in ("top", "bottom", "left", "right"):
         single(sheet, f"{base}-hint-{side}", hint, hint,
