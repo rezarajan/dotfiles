@@ -14,59 +14,50 @@ from pathlib import Path
 BASE = Path(__file__).resolve().parent.parent
 SVGNS = "http://www.w3.org/2000/svg"
 
-# ---------------------------------------------------------------- palettes
-DARK = dict(
-    window="#181616",
-    fg="#ebdbb2", fg_bright="#fbf1c7",
-    accent="#689d6a",
-    menu_bg="#1d2021", menu_alpha=0.76, menu_border=("#ebdbb2", 0.05),
-    btn_fill=("#ebdbb2", 0.07), btn_border=("#ebdbb2", 0.16),
-    hov_fill=("#ebdbb2", 0.12), hov_border=("#689d6a", 0.55),
-    prs_fill=("#000000", 0.25), prs_border=("#ebdbb2", 0.12),
-    tgl_fill=("#689d6a", 0.28), tgl_border=("#689d6a", 0.55),
-    edit_fill=("#1d2021", 0.50), edit_border=("#ebdbb2", 0.14),
-    edit_focus_border=("#689d6a", 0.80),
-    tab_n=(("#ebdbb2", 0.05), ("#ebdbb2", 0.10)),
-    tab_f=(("#ebdbb2", 0.09), ("#ebdbb2", 0.10)),
-    tab_t=(("#ebdbb2", 0.14), ("#ebdbb2", 0.18)),
-    frame_fill=("#ebdbb2", 0.04), frame_border=("#ebdbb2", 0.10),
-    item_hov=("#ebdbb2", 0.07), item_prs=("#689d6a", 0.28), item_sel=("#689d6a", 0.35),
-    mitem_hov=("#ebdbb2", 0.12), mitem_sel=("#689d6a", 0.90), shadow=0.22,
-    mbar_hov=("#ebdbb2", 0.10), mbar_prs=("#ebdbb2", 0.16),
-    hairline=("#ebdbb2", 0.12),
-    groove=("#ebdbb2", 0.15), bar=("#689d6a", 1.0), bar_dis=("#ebdbb2", 0.20),
-    sb_n=("#ebdbb2", 0.28), sb_f=("#ebdbb2", 0.45), sb_p=("#689d6a", 0.80),
-    sl_groove=("#ebdbb2", 0.18), sl_fill=("#689d6a", 1.0),
-    cur_n=("#ebdbb2", 1.0), cur_f=("#fbf1c7", 1.0), cur_p=("#689d6a", 1.0),
-    cur_d=("#ebdbb2", 0.40), cur_ring=("#000000", 0.25),
-    focus=("#689d6a", 0.55),
-)
-LIGHT = dict(
-    window="#fbf1c7",
-    fg="#3c3836", fg_bright="#282828",
-    accent="#689d6a",
-    menu_bg="#fbf1c7", menu_alpha=0.84, menu_border=("#3c3836", 0.07),
-    btn_fill=("#3c3836", 0.06), btn_border=("#3c3836", 0.14),
-    hov_fill=("#3c3836", 0.10), hov_border=("#689d6a", 0.60),
-    prs_fill=("#3c3836", 0.16), prs_border=("#3c3836", 0.12),
-    tgl_fill=("#689d6a", 0.30), tgl_border=("#689d6a", 0.60),
-    edit_fill=("#f9f5d7", 0.75), edit_border=("#3c3836", 0.18),
-    edit_focus_border=("#689d6a", 0.90),
-    tab_n=(("#3c3836", 0.04), ("#3c3836", 0.09)),
-    tab_f=(("#3c3836", 0.08), ("#3c3836", 0.09)),
-    tab_t=(("#f9f5d7", 0.90), ("#3c3836", 0.16)),
-    frame_fill=("#3c3836", 0.03), frame_border=("#3c3836", 0.09),
-    item_hov=("#3c3836", 0.06), item_prs=("#689d6a", 0.30), item_sel=("#689d6a", 0.40),
-    mitem_hov=("#3c3836", 0.10), mitem_sel=("#689d6a", 0.90), shadow=0.16,
-    mbar_hov=("#3c3836", 0.08), mbar_prs=("#3c3836", 0.14),
-    hairline=("#3c3836", 0.12),
-    groove=("#3c3836", 0.12), bar=("#689d6a", 1.0), bar_dis=("#3c3836", 0.20),
-    sb_n=("#3c3836", 0.30), sb_f=("#3c3836", 0.50), sb_p=("#689d6a", 0.80),
-    sl_groove=("#3c3836", 0.15), sl_fill=("#689d6a", 1.0),
-    cur_n=("#f9f5d7", 1.0), cur_f=("#f9f5d7", 1.0), cur_p=("#689d6a", 1.0),
-    cur_d=("#3c3836", 0.30), cur_ring=("#3c3836", 0.35),
-    focus=("#689d6a", 0.70),
-)
+# ------------------------------------------------------------------- roles
+# The design language: which palette token each widget surface uses, at
+# which opacity. Colors and opacities both come from palette.py.
+import palette
+
+
+def roles(P):
+    col, A = P["colors"], P["a"]
+    fg, accent = col["fg"], col["accent"]
+    return dict(
+        window=col["bg"],
+        fg=fg, fg_bright=col["fg_bright"],
+        accent=accent,
+        menu_bg=col["popup"], menu_alpha=A["menu"],
+        menu_border=(fg, A["menu_border"]),
+        btn_fill=(fg, A["btn_fill"]), btn_border=(fg, A["btn_border"]),
+        hov_fill=(fg, A["hov_fill"]), hov_border=(accent, A["hov_border"]),
+        prs_fill=(col["press"], A["press"]), prs_border=(fg, A["prs_border"]),
+        tgl_fill=(accent, A["tgl_fill"]), tgl_border=(accent, A["tgl_border"]),
+        edit_fill=(col["field"], A["edit_fill"]),
+        edit_border=(fg, A["edit_border"]),
+        edit_focus_border=(accent, A["edit_focus"]),
+        tab_n=((fg, A["tab_fill"]), (fg, A["tab_border"])),
+        tab_f=((fg, A["tab_hov"]), (fg, A["tab_border"])),
+        tab_t=((col["tab_active"], A["tab_active"]), (fg, A["tab_active_border"])),
+        frame_fill=(fg, A["frame_fill"]), frame_border=(fg, A["frame_border"]),
+        item_hov=(fg, A["item_hov"]), item_prs=(accent, A["item_prs"]),
+        item_sel=(accent, A["item_sel"]),
+        mitem_hov=(fg, A["mitem_hov"]), mitem_sel=(accent, A["mitem_sel"]),
+        shadow=A["shadow"],
+        mbar_hov=(fg, A["mbar_hov"]), mbar_prs=(fg, A["mbar_prs"]),
+        hairline=(fg, A["hairline"]),
+        groove=(fg, A["groove"]), bar=(accent, 1.0), bar_dis=(fg, A["bar_dis"]),
+        sb_n=(fg, A["sb_n"]), sb_f=(fg, A["sb_f"]), sb_p=(accent, A["sb_p"]),
+        sl_groove=(fg, A["sl_groove"]), sl_fill=(accent, 1.0),
+        cur_n=(col["handle"], 1.0), cur_f=(col["handle_hover"], 1.0),
+        cur_p=(accent, 1.0), cur_d=(fg, A["handle_dis"]),
+        cur_ring=(col["ring"], A["ring"]),
+        focus=(accent, A["focus"]),
+    )
+
+
+DARK = roles(palette.DARK)
+LIGHT = roles(palette.LIGHT)
 
 W = 1  # hairline border width
 C = 8  # stretched center tile size

@@ -15,6 +15,8 @@ Output: ../../plasma-theme/gruvbox-acrylic/ relative to this script.
 import json
 from pathlib import Path
 
+import palette
+
 OUT = Path(__file__).resolve().parent.parent.parent / "plasma-theme" / "gruvbox-acrylic"
 
 INSET = 4      # transparent gap between window edge and body (Breeze-like)
@@ -26,15 +28,17 @@ SHADOW = 10                 # shadow band width
 SHADOW_PEAK = 0.30
 HAIRLINE = 0.07             # ColorScheme-Text alpha for the 1px border
 
-STYLE = """
-            .ColorScheme-Text {
-                color:#ebdbb2;
-                stop-color:#ebdbb2;
-            }
-            .ColorScheme-Background {
-                color:#181616;
-                stop-color:#181616;
-            }
+# placeholder values only — Plasma rewrites this stylesheet at runtime from
+# the active color scheme
+STYLE = f"""
+            .ColorScheme-Text {{
+                color:{palette.DARK["colors"]["fg"]};
+                stop-color:{palette.DARK["colors"]["fg"]};
+            }}
+            .ColorScheme-Background {{
+                color:{palette.DARK["colors"]["bg"]};
+                stop-color:{palette.DARK["colors"]["bg"]};
+            }}
         """
 
 
@@ -234,15 +238,15 @@ def sheet(alpha, panel=False):
     return s
 
 
-# (path, translucent alpha, normal alpha, is_panel)
+# (path, (translucent alpha, normal alpha), is_panel) — alphas from palette
 TARGETS = [
-    ("dialogs/background.svg", 0.72, 0.90, False),
-    ("widgets/background.svg", 0.75, 0.90, False),
-    ("widgets/tooltip.svg", 0.80, 0.92, False),
-    ("widgets/panel-background.svg", 0.65, 0.85, True),
+    ("dialogs/background.svg", palette.PLASMA["dialog"], False),
+    ("widgets/background.svg", palette.PLASMA["widget"], False),
+    ("widgets/tooltip.svg", palette.PLASMA["tooltip"], False),
+    ("widgets/panel-background.svg", palette.PLASMA["panel"], True),
 ]
 
-for rel, t_alpha, n_alpha, is_panel in TARGETS:
+for rel, (t_alpha, n_alpha), is_panel in TARGETS:
     sheet(n_alpha, is_panel).write(OUT / rel)
     sheet(t_alpha, is_panel).write(OUT / "translucent" / rel)
 

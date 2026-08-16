@@ -3,6 +3,8 @@
 knobs, and gruvbox-consistent Qt palette colors."""
 from pathlib import Path
 
+import palette
+
 BASE = Path(__file__).resolve().parent.parent
 
 
@@ -25,8 +27,8 @@ COMMON = {
     "ToolTip": frames(12),
     "Menu": frames(12),
     "MenuItem": frames(5, {"text.margin.left": "6", "text.margin.right": "6",
-                           "text.press.color": "#fbf1c7",
-                           "text.toggle.color": "#fbf1c7"}),
+                           "text.press.color": palette.ON_ACCENT,
+                           "text.toggle.color": palette.ON_ACCENT}),
     "MenuBarItem": frames(5),
     "ItemView": frames(4),
     "Slider": frames(2),
@@ -35,23 +37,9 @@ COMMON = {
     "Dock": frames(8),
 }
 
-DARK_COLORS = {
-    "GeneralColors": {
-        "window.color": "#181616", "base.color": "#181616",
-        "alt.base.color": "#282828", "button.color": "#282828",
-        "light.color": "#3c3836", "mid.light.color": "#282828",
-        "dark.color": "#0f0d0d", "mid.color": "#282828",
-        "highlight.color": "#689d6a", "inactive.highlight.color": "#3c3836",
-        "link.color": "#83a598", "link.visited.color": "#d3869b",
-    },
-}
-LIGHT_COLORS = {
-    "GeneralColors": {
-        "alt.base.color": "#f2e5bc",
-        "light.color": "#f9f5d7", "mid.light.color": "#f2e5bc",
-        "dark.color": "#bdae93", "mid.color": "#d5c4a1",
-    },
-}
+# full Qt palette tables come from the shared palette module
+DARK_COLORS = {"GeneralColors": dict(palette.DARK["qt"])}
+LIGHT_COLORS = {"GeneralColors": dict(palette.LIGHT["qt"])}
 
 DARK_REPLACES = [
     ("#d8dee978", "#ebdbb278"),
