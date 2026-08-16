@@ -88,7 +88,10 @@ in
         pkgs.kdePackages.plasma-integration
       ];
     };
-    style.name = "kvantum";
+    # NOTE: no qt.style.name here — it would export QT_STYLE_OVERRIDE=kvantum,
+    # which forces every Qt app onto the plain (light) Kvantum style at login
+    # regardless of the active mode's widgetStyle (kvantum-dark). The widget
+    # style is owned by kdeglobals via the look-and-feel packages.
 
     kde.settings = {
       # NOTE: do not pin ColorScheme/Icons/widgetStyle here — the light/dark
