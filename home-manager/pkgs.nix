@@ -21,7 +21,7 @@
       dev-tools = [
         # pkgs.aria2
         pkgs.azure-cli
-        pkgs.binutils
+        # pkgs.binutils
         pkgs.bun
         pkgs.cargo
         pkgs.claude-code
@@ -35,9 +35,10 @@
         pkgs.gh
         # pkgs.glow
         pkgs.hugo
+        pkgs.jujutsu
         pkgs.k9s
         pkgs.kind
-        pkgs.kubectl
+        # pkgs.kubectl
         pkgs.kubernetes-helm
         pkgs.gnum4
         pkgs.just
