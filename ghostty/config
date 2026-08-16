@@ -2,6 +2,18 @@
 theme = Gruvbox Material Dark
 
 # ------------------------------------------------------------
+# Acrylic window
+# ------------------------------------------------------------
+# Translucent background with compositor blur (KWin blur protocol).
+# Work stays readable: background-opacity-cells defaults to false, so
+# cells with explicit background colors (statuslines, selections, tmux
+# bars) remain fully opaque, and minimum-contrast floors text legibility
+# over the translucent background.
+background-opacity = 0.92
+background-blur = true
+minimum-contrast = 1.1
+
+# ------------------------------------------------------------
 # Ghostty tab and window settings
 # ------------------------------------------------------------
 gtk-titlebar-style = tabs
@@ -46,3 +58,7 @@ keybind = ctrl+w>shift+l=resize_split:right,20
 
 # Shaders
 custom-shader = shaders/cursor-warp.glsl
+
+# SSH Compat
+shell-integration = detect
+shell-integration-features = ssh-env,ssh-terminfo
