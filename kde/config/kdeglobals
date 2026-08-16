@@ -25,9 +25,9 @@ BackgroundAlternate=60,56,54
 BackgroundNormal=24,22,22
 DecorationFocus=104,157,106
 DecorationHover=131,165,152
-ForegroundActive=142,192,124
+ForegroundActive=184,187,38
 ForegroundInactive=55,115,117
-ForegroundLink=184,187,38
+ForegroundLink=142,192,124
 ForegroundNegative=218,68,83
 ForegroundNeutral=246,116,0
 ForegroundNormal=235,219,178
@@ -92,7 +92,7 @@ ForegroundVisited=127,140,141
 
 [General]
 BrowserApplication=chromium.desktop
-ColorSchemeHash=57ade24f20d777f51323dcd9a55769ba81d11623
+ColorSchemeHash=79f657c98254016e3e69c72c4cbd5ea19cda69fb
 TerminalApplication=/usr/bin/ghostty --gtk-single-instance=true
 TerminalService=com.mitchellh.ghostty.desktop
 UseSystemBell=true
@@ -107,6 +107,7 @@ toolBarFont=Inter,10.5,-1,5,400,0,0,0,0,0,0,0,0,0,0,1,,0,0
 
 [KDE]
 AnimationDurationFactor=0.25
+AutomaticLookAndFeel=false
 AutomaticLookAndFeelIdleInterval=6
 DefaultDarkLookAndFeel=gruvbox
 DefaultLightLookAndFeel=gruvbox-light

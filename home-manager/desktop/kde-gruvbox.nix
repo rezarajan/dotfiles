@@ -91,13 +91,19 @@ in
     style.name = "kvantum";
 
     kde.settings = {
+      # NOTE: do not pin ColorScheme/Icons/widgetStyle here — the light/dark
+      # toggle owns them via the kdedefaults layer (the look-and-feel
+      # packages' defaults), and user-layer pins would override whichever
+      # mode is active at switch time. On a fresh machine, apply once with:
+      #   plasma-apply-lookandfeel -a gruvbox
       kdeglobals = {
-        General.ColorScheme = "GruvboxDragon";
-        Icons.Theme = "Gruvbox-Plus-Dark";
         KDE = {
-          widgetStyle = "kvantum-dark";
           DefaultDarkLookAndFeel = "gruvbox";
           DefaultLightLookAndFeel = "gruvbox-light";
+          # never auto-apply a variant at login/time-of-day; the manually
+          # chosen mode persists (KNightTime defaults to "day" without
+          # location data, which used to flip sessions to light at login)
+          AutomaticLookAndFeel = false;
         };
       };
 
