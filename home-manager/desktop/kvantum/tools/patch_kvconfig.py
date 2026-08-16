@@ -26,7 +26,7 @@ COMMON = {
                  "layout_margin": M["layout_margin"],
                  "toolbar_item_spacing": M["toolbar_item_spacing"],
                  "toolbar_interior_spacing": M["toolbar_interior_spacing"]},
-    "PanelButtonCommand": frames(6, {
+    "PanelButtonCommand": frames(int(M["control_frame"]), {
         "frame.expansion": "0",
         "text.margin.left": M["text_margin_h"],
         "text.margin.right": M["text_margin_h"],
@@ -43,7 +43,7 @@ COMMON = {
                            "text.press.color": palette.ON_ACCENT,
                            "text.toggle.color": palette.ON_ACCENT}),
     "MenuBarItem": frames(5),
-    "ItemView": frames(4),
+    "ItemView": frames(int(M["itemview_frame"])),
     "Slider": frames(2),
     "Progressbar": frames(3),
     "ProgressbarContents": frames(3),
