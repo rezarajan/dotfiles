@@ -4,12 +4,14 @@ theme = Gruvbox Material Dark
 # ------------------------------------------------------------
 # Acrylic window
 # ------------------------------------------------------------
-# Subtle translucency with compositor blur (KWin blur protocol).
-# Work stays readable: background-opacity-cells defaults to false, so
-# cells with explicit background colors (statuslines, selections, tmux
-# bars) remain fully opaque, and minimum-contrast floors text legibility
-# over the translucent background.
-background-opacity = 0.96
+# Translucency with compositor blur (KWin blur protocol). Opacity must
+# leave enough of the background visible for the blur to read as acrylic
+# — at 0.96 the blur is imperceptible; 0.90 shows it while the blur
+# itself keeps what's behind unreadable. Work stays legible:
+# background-opacity-cells defaults to false, so cells with explicit
+# background colors (statuslines, selections, tmux bars) remain fully
+# opaque, and minimum-contrast floors text contrast.
+background-opacity = 0.90
 background-blur = true
 minimum-contrast = 1.1
 
