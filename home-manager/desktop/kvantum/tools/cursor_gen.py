@@ -11,6 +11,7 @@ uncovered shape falls back gracefully.
 
 Needs imagemagick + xcursorgen (override with $XCURSORGEN).
 """
+import json
 import math
 import os
 import shutil
@@ -265,7 +266,33 @@ def gen_theme(name, v, comment):
                 dst = cdir / alias
                 if not dst.exists():
                     dst.symlink_to(target)
-    print(f"built {name} ({len(cursors)} cursors + aliases)")
+
+    # scalable variants (Plasma 6 svg cursor format): KWin renders these
+    # at the exact effective size (cursor size x display scale), so the
+    # pointer stays crisp on any display — the xcursor rasters above
+    # remain as the fallback for X11/legacy clients. Hotspots are in SVG
+    # document coordinates; nominal_size=D maps the design grid 1:1 onto
+    # the configured cursor size.
+    sdir = OUT / name / "cursors_scalable"
+    for cname, (frames, hot, delay) in cursors.items():
+        d = sdir / cname
+        d.mkdir(parents=True)
+        meta = []
+        for fi, inner in enumerate(frames):
+            fn = f"{cname}-{fi:02d}.svg" if len(frames) > 1 else f"{cname}.svg"
+            (d / fn).write_text(svg_doc(inner))
+            entry = {"filename": fn, "hotspot_x": hot[0], "hotspot_y": hot[1],
+                     "nominal_size": D}
+            if delay:
+                entry["delay"] = delay
+            meta.append(entry)
+        (d / "metadata.json").write_text(json.dumps(meta, indent=2) + "\n")
+    for target, names in ALIASES.items():
+        for alias in names:
+            dst = sdir / alias
+            if not dst.exists():
+                dst.symlink_to(target)
+    print(f"built {name} ({len(cursors)} cursors + aliases, xcursor + scalable svg)")
 
 
 if __name__ == "__main__":
