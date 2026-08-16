@@ -19,11 +19,13 @@ import palette
 
 OUT = Path(__file__).resolve().parent.parent.parent / "plasma-theme" / "gruvbox-acrylic"
 
-INSET = 4      # transparent gap between window edge and body (Breeze-like)
+INSET = 0      # body fills the window: KWin's blur region is the full
+               # window rect, so any transparent inset band shows it as a
+               # bright boxy halo around the rounded body
 RADIUS = 8
 F = INSET + RADIUS          # frame tile size
 C = 32                      # center tile size
-MARGIN = INSET + 4          # content margin (inset + padding), Breeze-compatible
+MARGIN = 8                  # content margin, Breeze-compatible
 SHADOW = 10                 # shadow band width
 SHADOW_PEAK = 0.30
 HAIRLINE = 0.07             # ColorScheme-Text alpha for the 1px border
@@ -154,18 +156,22 @@ def body_frame(s, alpha, with_hairline=True):
         r, b = ring, body
         for _ in range(i):
             r, b = rot90(r, F), rot90(b, F)
-        inner = (fg_path(r, HAIRLINE) if with_hairline else "") + bg_path(b, alpha)
+        full = [("M", (F, INSET)), ("A", RADIUS, RADIUS, 0, (INSET, F)),
+                ("L", (F, F)), ("Z",)]
+        for _ in range(i):
+            full = rot90(full, F)
+        inner = bg_path(full, alpha) + (fg_path(r, HAIRLINE) if with_hairline else "")
         s.group(c, F, F, inner)
     edges = {
-        "top": (fg_rect(0, INSET, C, w, HAIRLINE), bg_rect(0, INSET + w, C, F - INSET - w, alpha)),
-        "bottom": (fg_rect(0, F - INSET - w, C, w, HAIRLINE), bg_rect(0, 0, C, F - INSET - w, alpha)),
-        "left": (fg_rect(INSET, 0, w, C, HAIRLINE), bg_rect(INSET + w, 0, F - INSET - w, C, alpha)),
-        "right": (fg_rect(F - INSET - w, 0, w, C, HAIRLINE), bg_rect(0, 0, F - INSET - w, C, alpha)),
+        "top": (fg_rect(0, INSET, C, w, HAIRLINE), bg_rect(0, INSET, C, F - INSET, alpha)),
+        "bottom": (fg_rect(0, F - INSET - w, C, w, HAIRLINE), bg_rect(0, 0, C, F - INSET, alpha)),
+        "left": (fg_rect(INSET, 0, w, C, HAIRLINE), bg_rect(INSET, 0, F - INSET, C, alpha)),
+        "right": (fg_rect(F - INSET - w, 0, w, C, HAIRLINE), bg_rect(0, 0, F - INSET, C, alpha)),
     }
     for name, (hl, bgr) in edges.items():
         vert = name in ("left", "right")
         gw, gh = (F, C) if vert else (C, F)
-        s.group(name, gw, gh, (hl if with_hairline else "") + bgr)
+        s.group(name, gw, gh, bgr + (hl if with_hairline else ""))
 
 
 def mask_frame(s):
@@ -220,8 +226,9 @@ def hints(s, margin=MARGIN):
     for side in ("top", "bottom", "left", "right"):
         s.group(f"hint-{side}-margin", margin, margin,
                 f'<rect width="{fmt(margin)}" height="{fmt(margin)}" style="fill:#f0f"/>')
-        s.group(f"hint-{side}-inset", INSET, INSET,
-                f'<rect width="{INSET}" height="{INSET}" style="fill:#f0f"/>')
+        if INSET:
+            s.group(f"hint-{side}-inset", INSET, INSET,
+                    f'<rect width="{INSET}" height="{INSET}" style="fill:#f0f"/>')
 
 
 def sheet(alpha, panel=False):

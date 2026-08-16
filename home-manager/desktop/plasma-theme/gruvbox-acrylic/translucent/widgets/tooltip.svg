@@ -21,42 +21,38 @@
 <radialGradient id="sg-c-bottomleft" cx="10" cy="0" r="10" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#000" stop-opacity="0.3"/><stop offset="0.45" stop-color="#000" stop-opacity="0.09"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
 </defs>
 <g id="center" transform="translate(0,0)"><rect x="0" y="0" width="32" height="32" class="ColorScheme-Background" style="fill:currentColor;fill-opacity:0.8"/></g>
-<g id="topleft" transform="translate(36,0)"><path d="M 12 4 A 8 8 0 0 0 4 12 L 5 12 A 7 7 0 0 1 12 5 Z" class="ColorScheme-Text" style="fill:currentColor;fill-opacity:0.07"/><path d="M 12 5 A 7 7 0 0 0 5 12 L 12 12 Z" class="ColorScheme-Background" style="fill:currentColor;fill-opacity:0.8"/></g>
-<g id="topright" transform="translate(52,0)"><path d="M 8 12 A 8 8 0 0 0 0 4 L 0 5 A 7 7 0 0 1 7 12 Z" class="ColorScheme-Text" style="fill:currentColor;fill-opacity:0.07"/><path d="M 7 12 A 7 7 0 0 0 0 5 L 0 12 Z" class="ColorScheme-Background" style="fill:currentColor;fill-opacity:0.8"/></g>
-<g id="bottomright" transform="translate(68,0)"><path d="M 0 8 A 8 8 0 0 0 8 0 L 7 0 A 7 7 0 0 1 0 7 Z" class="ColorScheme-Text" style="fill:currentColor;fill-opacity:0.07"/><path d="M 0 7 A 7 7 0 0 0 7 0 L 0 0 Z" class="ColorScheme-Background" style="fill:currentColor;fill-opacity:0.8"/></g>
-<g id="bottomleft" transform="translate(84,0)"><path d="M 4 0 A 8 8 0 0 0 12 8 L 12 7 A 7 7 0 0 1 5 0 Z" class="ColorScheme-Text" style="fill:currentColor;fill-opacity:0.07"/><path d="M 5 0 A 7 7 0 0 0 12 7 L 12 0 Z" class="ColorScheme-Background" style="fill:currentColor;fill-opacity:0.8"/></g>
-<g id="top" transform="translate(100,0)"><rect x="0" y="4" width="32" height="1" class="ColorScheme-Text" style="fill:currentColor;fill-opacity:0.07"/><rect x="0" y="5" width="32" height="7" class="ColorScheme-Background" style="fill:currentColor;fill-opacity:0.8"/></g>
-<g id="bottom" transform="translate(136,0)"><rect x="0" y="7" width="32" height="1" class="ColorScheme-Text" style="fill:currentColor;fill-opacity:0.07"/><rect x="0" y="0" width="32" height="7" class="ColorScheme-Background" style="fill:currentColor;fill-opacity:0.8"/></g>
-<g id="left" transform="translate(172,0)"><rect x="4" y="0" width="1" height="32" class="ColorScheme-Text" style="fill:currentColor;fill-opacity:0.07"/><rect x="5" y="0" width="7" height="32" class="ColorScheme-Background" style="fill:currentColor;fill-opacity:0.8"/></g>
-<g id="right" transform="translate(188,0)"><rect x="7" y="0" width="1" height="32" class="ColorScheme-Text" style="fill:currentColor;fill-opacity:0.07"/><rect x="0" y="0" width="7" height="32" class="ColorScheme-Background" style="fill:currentColor;fill-opacity:0.8"/></g>
-<g id="mask-center" transform="translate(204,0)"><rect width="32" height="32" style="fill:#000"/></g>
-<g id="mask-topleft" transform="translate(240,0)"><path d="M 12 4 A 8 8 0 0 0 4 12 L 12 12 Z" style="fill:#000000"/></g>
-<g id="mask-topright" transform="translate(256,0)"><path d="M 8 12 A 8 8 0 0 0 0 4 L 0 12 Z" style="fill:#000000"/></g>
-<g id="mask-bottomright" transform="translate(272,0)"><path d="M 0 8 A 8 8 0 0 0 8 0 L 0 0 Z" style="fill:#000000"/></g>
-<g id="mask-bottomleft" transform="translate(288,0)"><path d="M 4 0 A 8 8 0 0 0 12 8 L 12 0 Z" style="fill:#000000"/></g>
-<g id="mask-top" transform="translate(304,0)"><rect x="0" y="4" width="32" height="8" style="fill:#000"/></g>
-<g id="mask-bottom" transform="translate(340,0)"><rect x="0" y="0" width="32" height="8" style="fill:#000"/></g>
-<g id="mask-left" transform="translate(376,0)"><rect x="4" y="0" width="8" height="32" style="fill:#000"/></g>
-<g id="mask-right" transform="translate(392,0)"><rect x="0" y="0" width="8" height="32" style="fill:#000"/></g>
-<g id="shadow-center" transform="translate(0,36)"></g>
-<g id="shadow-topleft" transform="translate(36,36)"><rect width="10" height="10" style="fill:url(#sg-c-topleft)"/></g>
-<g id="shadow-topright" transform="translate(50,36)"><rect width="10" height="10" style="fill:url(#sg-c-topright)"/></g>
-<g id="shadow-bottomright" transform="translate(64,36)"><rect width="10" height="10" style="fill:url(#sg-c-bottomright)"/></g>
-<g id="shadow-bottomleft" transform="translate(78,36)"><rect width="10" height="10" style="fill:url(#sg-c-bottomleft)"/></g>
-<g id="shadow-top" transform="translate(92,36)"><rect width="32" height="10" style="fill:url(#sg-top)"/></g>
-<g id="shadow-bottom" transform="translate(128,36)"><rect width="32" height="10" style="fill:url(#sg-bottom)"/></g>
-<g id="shadow-left" transform="translate(164,36)"><rect width="10" height="32" style="fill:url(#sg-left)"/></g>
-<g id="shadow-right" transform="translate(178,36)"><rect width="10" height="32" style="fill:url(#sg-right)"/></g>
-<g id="shadow-hint-top-margin" transform="translate(192,36)"><rect width="10" height="10" style="fill:#f0f"/></g>
-<g id="shadow-hint-bottom-margin" transform="translate(206,36)"><rect width="10" height="10" style="fill:#f0f"/></g>
-<g id="shadow-hint-left-margin" transform="translate(220,36)"><rect width="10" height="10" style="fill:#f0f"/></g>
-<g id="shadow-hint-right-margin" transform="translate(234,36)"><rect width="10" height="10" style="fill:#f0f"/></g>
-<g id="hint-top-margin" transform="translate(248,36)"><rect width="8" height="8" style="fill:#f0f"/></g>
-<g id="hint-top-inset" transform="translate(260,36)"><rect width="4" height="4" style="fill:#f0f"/></g>
-<g id="hint-bottom-margin" transform="translate(268,36)"><rect width="8" height="8" style="fill:#f0f"/></g>
-<g id="hint-bottom-inset" transform="translate(280,36)"><rect width="4" height="4" style="fill:#f0f"/></g>
-<g id="hint-left-margin" transform="translate(288,36)"><rect width="8" height="8" style="fill:#f0f"/></g>
-<g id="hint-left-inset" transform="translate(300,36)"><rect width="4" height="4" style="fill:#f0f"/></g>
-<g id="hint-right-margin" transform="translate(308,36)"><rect width="8" height="8" style="fill:#f0f"/></g>
-<g id="hint-right-inset" transform="translate(320,36)"><rect width="4" height="4" style="fill:#f0f"/></g>
+<g id="topleft" transform="translate(36,0)"><path d="M 8 0 A 8 8 0 0 0 0 8 L 8 8 Z" class="ColorScheme-Background" style="fill:currentColor;fill-opacity:0.8"/><path d="M 8 0 A 8 8 0 0 0 0 8 L 1 8 A 7 7 0 0 1 8 1 Z" class="ColorScheme-Text" style="fill:currentColor;fill-opacity:0.07"/></g>
+<g id="topright" transform="translate(48,0)"><path d="M 8 8 A 8 8 0 0 0 0 0 L 0 8 Z" class="ColorScheme-Background" style="fill:currentColor;fill-opacity:0.8"/><path d="M 8 8 A 8 8 0 0 0 0 0 L 0 1 A 7 7 0 0 1 7 8 Z" class="ColorScheme-Text" style="fill:currentColor;fill-opacity:0.07"/></g>
+<g id="bottomright" transform="translate(60,0)"><path d="M 0 8 A 8 8 0 0 0 8 0 L 0 0 Z" class="ColorScheme-Background" style="fill:currentColor;fill-opacity:0.8"/><path d="M 0 8 A 8 8 0 0 0 8 0 L 7 0 A 7 7 0 0 1 0 7 Z" class="ColorScheme-Text" style="fill:currentColor;fill-opacity:0.07"/></g>
+<g id="bottomleft" transform="translate(72,0)"><path d="M 0 0 A 8 8 0 0 0 8 8 L 8 0 Z" class="ColorScheme-Background" style="fill:currentColor;fill-opacity:0.8"/><path d="M 0 0 A 8 8 0 0 0 8 8 L 8 7 A 7 7 0 0 1 1 0 Z" class="ColorScheme-Text" style="fill:currentColor;fill-opacity:0.07"/></g>
+<g id="top" transform="translate(84,0)"><rect x="0" y="0" width="32" height="8" class="ColorScheme-Background" style="fill:currentColor;fill-opacity:0.8"/><rect x="0" y="0" width="32" height="1" class="ColorScheme-Text" style="fill:currentColor;fill-opacity:0.07"/></g>
+<g id="bottom" transform="translate(120,0)"><rect x="0" y="0" width="32" height="8" class="ColorScheme-Background" style="fill:currentColor;fill-opacity:0.8"/><rect x="0" y="7" width="32" height="1" class="ColorScheme-Text" style="fill:currentColor;fill-opacity:0.07"/></g>
+<g id="left" transform="translate(156,0)"><rect x="0" y="0" width="8" height="32" class="ColorScheme-Background" style="fill:currentColor;fill-opacity:0.8"/><rect x="0" y="0" width="1" height="32" class="ColorScheme-Text" style="fill:currentColor;fill-opacity:0.07"/></g>
+<g id="right" transform="translate(168,0)"><rect x="0" y="0" width="8" height="32" class="ColorScheme-Background" style="fill:currentColor;fill-opacity:0.8"/><rect x="7" y="0" width="1" height="32" class="ColorScheme-Text" style="fill:currentColor;fill-opacity:0.07"/></g>
+<g id="mask-center" transform="translate(180,0)"><rect width="32" height="32" style="fill:#000"/></g>
+<g id="mask-topleft" transform="translate(216,0)"><path d="M 8 0 A 8 8 0 0 0 0 8 L 8 8 Z" style="fill:#000000"/></g>
+<g id="mask-topright" transform="translate(228,0)"><path d="M 8 8 A 8 8 0 0 0 0 0 L 0 8 Z" style="fill:#000000"/></g>
+<g id="mask-bottomright" transform="translate(240,0)"><path d="M 0 8 A 8 8 0 0 0 8 0 L 0 0 Z" style="fill:#000000"/></g>
+<g id="mask-bottomleft" transform="translate(252,0)"><path d="M 0 0 A 8 8 0 0 0 8 8 L 8 0 Z" style="fill:#000000"/></g>
+<g id="mask-top" transform="translate(264,0)"><rect x="0" y="0" width="32" height="8" style="fill:#000"/></g>
+<g id="mask-bottom" transform="translate(300,0)"><rect x="0" y="0" width="32" height="8" style="fill:#000"/></g>
+<g id="mask-left" transform="translate(336,0)"><rect x="0" y="0" width="8" height="32" style="fill:#000"/></g>
+<g id="mask-right" transform="translate(348,0)"><rect x="0" y="0" width="8" height="32" style="fill:#000"/></g>
+<g id="shadow-center" transform="translate(360,0)"></g>
+<g id="shadow-topleft" transform="translate(396,0)"><rect width="10" height="10" style="fill:url(#sg-c-topleft)"/></g>
+<g id="shadow-topright" transform="translate(0,36)"><rect width="10" height="10" style="fill:url(#sg-c-topright)"/></g>
+<g id="shadow-bottomright" transform="translate(14,36)"><rect width="10" height="10" style="fill:url(#sg-c-bottomright)"/></g>
+<g id="shadow-bottomleft" transform="translate(28,36)"><rect width="10" height="10" style="fill:url(#sg-c-bottomleft)"/></g>
+<g id="shadow-top" transform="translate(42,36)"><rect width="32" height="10" style="fill:url(#sg-top)"/></g>
+<g id="shadow-bottom" transform="translate(78,36)"><rect width="32" height="10" style="fill:url(#sg-bottom)"/></g>
+<g id="shadow-left" transform="translate(114,36)"><rect width="10" height="32" style="fill:url(#sg-left)"/></g>
+<g id="shadow-right" transform="translate(128,36)"><rect width="10" height="32" style="fill:url(#sg-right)"/></g>
+<g id="shadow-hint-top-margin" transform="translate(142,36)"><rect width="10" height="10" style="fill:#f0f"/></g>
+<g id="shadow-hint-bottom-margin" transform="translate(156,36)"><rect width="10" height="10" style="fill:#f0f"/></g>
+<g id="shadow-hint-left-margin" transform="translate(170,36)"><rect width="10" height="10" style="fill:#f0f"/></g>
+<g id="shadow-hint-right-margin" transform="translate(184,36)"><rect width="10" height="10" style="fill:#f0f"/></g>
+<g id="hint-top-margin" transform="translate(198,36)"><rect width="8" height="8" style="fill:#f0f"/></g>
+<g id="hint-bottom-margin" transform="translate(210,36)"><rect width="8" height="8" style="fill:#f0f"/></g>
+<g id="hint-left-margin" transform="translate(222,36)"><rect width="8" height="8" style="fill:#f0f"/></g>
+<g id="hint-right-margin" transform="translate(234,36)"><rect width="8" height="8" style="fill:#f0f"/></g>
 </svg>
