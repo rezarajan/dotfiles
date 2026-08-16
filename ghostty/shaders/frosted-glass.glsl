@@ -56,11 +56,14 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
     float n = hash12(floor(fragCoord)) - 0.5;
 
     // frost veil: frosted glass scatters light, so the pane gains a soft
-    // milky lift with smooth large-scale unevenness — this is what lowers
-    // the contrast of whatever bleeds through and makes it read as blurred
-    float frost = vnoise(fragCoord / 220.0) * 0.6
-                + vnoise(fragCoord / 80.0 + 31.7) * 0.4;
-    float veil = 0.028 + (frost - 0.5) * 0.030;
+    // milky lift with smooth unevenness — this is what lowers the
+    // contrast of whatever bleeds through and makes it read as blurred.
+    // The unevenness scales with the window (not fixed pixels), so a
+    // fullscreen pane gets a few broad sweeps of haze instead of tiling
+    // dozens of blotches; most of the veil is the uniform base lift.
+    float frost = vnoise(fragCoord / (iResolution.y * 0.55)) * 0.6
+                + vnoise(fragCoord / (iResolution.y * 0.20) + 31.7) * 0.4;
+    float veil = 0.048 + (frost - 0.5) * 0.018;
 
     // soft sheen: the glass catches a little more light at the top
     float sheen = (0.5 - uv.y) * 0.022;
