@@ -197,26 +197,28 @@ def mask_frame(s):
 def shadow_frame(s):
     """Soft shadow 9-patch for Plasma dialog shadows.
 
-    The tiles OVERLAP the window by SH_INSET (declared via the
-    shadow-hint-*-inset elements, like Breeze): the shadow slides under
-    the body and wraps around the rounded corners, so the corner notch
-    fills with shadow instead of bright backdrop and no gap line can
-    open at the window edge. Inner SH_INSET band is held at peak alpha
-    (hidden under the body except in the notch), outer SHADOW band
-    eases to zero.
+    Tiles overlap the window by SH_INSET (shadow-hint-*-inset, like
+    Breeze) so the shadow can wrap the rounded corners — but paint is
+    strictly limited to OUTSIDE the body: corner tiles are wedge paths
+    bounded by the body arc (the corner notch fills with shadow), and
+    edge tiles fade to zero within 2px past the window line (just enough
+    to seal fractional-scale seams). Nothing rides under the translucent
+    body, so no inner frame can show through it.
     """
     T = SHADOW + SH_INSET
-    k = SH_INSET / T          # fraction of the tile that underlaps
-    inner_stops = (f'<stop offset="0" stop-color="#000" stop-opacity="0"/>'
-                   f'<stop offset="{fmt((1 - k) * 0.45)}" stop-color="#000" '
-                   f'stop-opacity="{fmt(SHADOW_PEAK * 0.3)}"/>'
-                   f'<stop offset="{fmt(1 - k)}" stop-color="#000" '
-                   f'stop-opacity="{fmt(SHADOW_PEAK)}"/>'
-                   f'<stop offset="1" stop-color="#000" stop-opacity="{fmt(SHADOW_PEAK)}"/>')
-    for side, (x1, y1, x2, y2) in {"top": (0, 1, 0, 0), "bottom": (0, 0, 0, 1),
+    we = SHADOW / T           # window edge position along the tile
+    edge_stops = (f'<stop offset="0" stop-color="#000" stop-opacity="0"/>'
+                  f'<stop offset="{fmt(we * 0.5)}" stop-color="#000" '
+                  f'stop-opacity="{fmt(SHADOW_PEAK * 0.3)}"/>'
+                  f'<stop offset="{fmt(we)}" stop-color="#000" '
+                  f'stop-opacity="{fmt(SHADOW_PEAK)}"/>'
+                  f'<stop offset="{fmt(we + 2 / T)}" stop-color="#000" stop-opacity="0"/>'
+                  f'<stop offset="1" stop-color="#000" stop-opacity="0"/>')
+    for side, (x2, y2, x1, y1) in {"top": (0, 1, 0, 0), "bottom": (0, 0, 0, 1),
                                    "left": (1, 0, 0, 0), "right": (0, 0, 1, 0)}.items():
-        s.defs.append(f'<linearGradient id="sg-{side}" x1="{x2}" y1="{y2}" '
-                      f'x2="{x1}" y2="{y1}">{inner_stops}</linearGradient>')
+        s.defs.append(f'<linearGradient id="sg-{side}" x1="{x1}" y1="{y1}" '
+                      f'x2="{x2}" y2="{y2}">{edge_stops}</linearGradient>')
+    k = SH_INSET / T
     corner_stops = (f'<stop offset="0" stop-color="#000" stop-opacity="{fmt(SHADOW_PEAK)}"/>'
                     f'<stop offset="{fmt(k)}" stop-color="#000" stop-opacity="{fmt(SHADOW_PEAK)}"/>'
                     f'<stop offset="{fmt((k + 1) / 2)}" stop-color="#000" '
@@ -228,10 +230,16 @@ def shadow_frame(s):
         s.defs.append(
             f'<radialGradient id="sg-c-{c}" cx="{cx}" cy="{cy}" r="{T}" '
             f'gradientUnits="userSpaceOnUse">{corner_stops}</radialGradient>')
+    # wedge: full tile minus the quarter-disc under the body corner
+    wedge = [("M", (0, 0)), ("L", (T, 0)), ("L", (T, SHADOW)),
+             ("A", RADIUS, RADIUS, 0, (SHADOW, T)), ("L", (0, T)), ("Z",)]
     s.group("shadow-center", C, C, "")
-    for c in CORNERS:
+    for i, c in enumerate(CORNERS):
+        ops = wedge
+        for _ in range(i):
+            ops = rot90(ops, T)
         s.group(f"shadow-{c}", T, T,
-                f'<rect width="{T}" height="{T}" style="fill:url(#sg-c-{c})"/>')
+                f'<path d="{pathd(ops)}" style="fill:url(#sg-c-{c})"/>')
     for side in ("top", "bottom", "left", "right"):
         vert = side in ("left", "right")
         gw, gh = (T, C) if vert else (C, T)
