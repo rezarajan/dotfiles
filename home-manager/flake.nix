@@ -44,6 +44,7 @@
           ./pkgs.nix
           ./desktop/kde-gruvbox.nix
           ./desktop/fonts.nix
+          ./desktop/terminal.nix
           ./dotfiles/default.nix
         ];
       };
