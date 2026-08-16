@@ -125,6 +125,12 @@ in
   # the environment once keeps resurrecting across logins for as long as the
   # user manager lives. Purge it at login, after Plasma's environment import
   # and before any graphical service starts.
+  # kwin is spawned directly by startplasma (not a systemd unit), inheriting
+  # the manager environment before any user unit can run — so the purge must
+  # happen in the idle gap between logout (snapshot restore) and the next
+  # login (startplasma import). A recurring timer in the persistent user
+  # manager closes that gap; once one login starts clean, the session's
+  # snapshot is clean and the cycle self-heals.
   systemd.user.services.purge-qt-style-override = {
     Unit = {
       Description = "Purge stale QT_STYLE_OVERRIDE from the session environment";
@@ -135,6 +141,16 @@ in
       ExecStart = "/usr/bin/systemctl --user unset-environment QT_STYLE_OVERRIDE";
     };
     Install.WantedBy = [ "graphical-session-pre.target" ];
+  };
+
+  systemd.user.timers.purge-qt-style-override = {
+    Unit.Description = "Continuously purge stale QT_STYLE_OVERRIDE between sessions";
+    Timer = {
+      OnStartupSec = "10";
+      OnUnitInactiveSec = "10";
+      AccuracySec = "5";
+    };
+    Install.WantedBy = [ "timers.target" ];
   };
 
   xdg.desktopEntries.systemsettings = {

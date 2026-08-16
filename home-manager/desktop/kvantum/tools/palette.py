@@ -160,11 +160,11 @@ METRICS = dict(
     layout_margin="9",            # margin around layouts / dialog edges
     toolbar_item_spacing="1",
     toolbar_interior_spacing="3",
-    control_frame="4",            # frame/padding of buttons/combos/inputs
-    text_margin_h="3",            # horizontal text padding inside controls
+    control_frame="3",            # frame/padding of buttons/combos/inputs
+    text_margin_h="2",            # horizontal text padding inside controls
     text_margin_v="1",            # vertical text padding inside controls
     control_min_height="+0.3font",  # uniform height for buttons/combos/inputs
-    itemview_frame="3",           # padding of list/grid item boxes
+    itemview_frame="2",           # padding of list/grid item boxes
 )
 
 # Plasma desktop theme surface opacities (variant-agnostic: the theme's SVGs
