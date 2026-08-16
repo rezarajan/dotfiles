@@ -81,13 +81,30 @@ def arc_path(cx, cy, r, a0, a1):
     return f"M {x0:.1f} {y0:.1f} A {r} {r} 0 {large} 1 {x1:.1f} {y1:.1f}"
 
 
-def spinner(v, cx, cy, r, angle, w=14, ow=22):
-    ring = (f'<circle cx="{cx}" cy="{cy}" r="{r}" fill="none" '
-            f'stroke="{v.O}" stroke-width="{w}" opacity="0.45"/>')
-    d = arc_path(cx, cy, r, angle - 90, angle + 30)
-    arc = (f'<path d="{d}" fill="none" stroke="{v.O}" stroke-width="{ow}" stroke-linecap="round"/>'
-           f'<path d="{d}" fill="none" stroke="{v.A}" stroke-width="{w}" stroke-linecap="round"/>')
-    return ring + arc
+# gruvbox beachball — the playful mac-style wait spinner: six palette
+# wedges behind a glove-style contrast rim with a little ivory hub
+BALL_COLORS = (G["aqua"], G["aqua_bright"], G["green_bright"],
+               G["sel_link"], G["orange_kde"], G["pink"])
+
+# animated cursors: enough frames at a short delay to stay fluid on
+# high-refresh displays (48 x 20ms = 50fps, ~1s per rotation)
+NFRAMES = 48
+FRAME_DELAY = 20
+
+
+def beachball(v, cx, cy, r, angle):
+    parts = [f'<circle cx="{cx}" cy="{cy}" r="{r + 3}" fill="{v.O}"/>']
+    for i, color in enumerate(BALL_COLORS):
+        a0 = angle + i * 60
+        x0 = cx + r * math.cos(math.radians(a0))
+        y0 = cy + r * math.sin(math.radians(a0))
+        x1 = cx + r * math.cos(math.radians(a0 + 60))
+        y1 = cy + r * math.sin(math.radians(a0 + 60))
+        parts.append(f'<path d="M {cx} {cy} L {x0:.1f} {y0:.1f} '
+                     f'A {r} {r} 0 0 1 {x1:.1f} {y1:.1f} Z" fill="{color}"/>')
+    parts.append(f'<circle cx="{cx}" cy="{cy}" r="{r * 0.28:.1f}" '
+                 f'fill="{G["light0"]}" stroke="{v.O}" stroke-width="4"/>')
+    return "".join(parts)
 
 
 ARROW = "M 32 12 L 32 98 L 53 79 L 65 108 L 81 101 L 68 73 L 97 71 Z"
@@ -202,12 +219,12 @@ def build_cursors(v):
                   f'<path d="{qmark}" fill="none" stroke="{G["light0"]}" stroke-width="8" stroke-linecap="round"/>' +
                   f'<circle cx="92" cy="109" r="5" fill="{G["light0"]}"/>'], (32, 12), 0)
 
-    c["wait"] = ([spinner(v, 64, 64, 36, k * 30, w=16, ow=26)
-                  for k in range(12)], (64, 64), 60)
+    c["wait"] = ([beachball(v, 64, 64, 38, k * 360 / NFRAMES)
+                  for k in range(NFRAMES)], (64, 64), FRAME_DELAY)
 
     c["progress"] = ([solid([f'<path d="{ARROW}" {{fs}}/>'], v) +
-                      spinner(v, 92, 92, 22, k * 30, w=12, ow=18)
-                      for k in range(12)], (32, 12), 60)
+                      beachball(v, 92, 92, 24, k * 360 / NFRAMES)
+                      for k in range(NFRAMES)], (32, 12), FRAME_DELAY)
 
     c["openhand"] = ([solid(OPEN_PARTS, v) +
                       creases(OPEN_CREASES, v)], (64, 64), 0)
@@ -225,11 +242,17 @@ def build_cursors(v):
     c["up-arrow"] = ([solid(['<path d="M 64 14 L 42 50 L 56 50 L 56 106 '
                              'L 72 106 L 72 50 L 86 50 Z" {fs}/>'], v)], (64, 14), 0)
 
-    lens = (f'<circle cx="55" cy="55" r="31" fill="none" stroke="{v.O}" stroke-width="24"/>'
-            f'<circle cx="55" cy="55" r="31" fill="none" stroke="{v.F}" stroke-width="13"/>')
-    handle = lines(["M 79 79 L 106 106"], v, w=15, ow=25)
-    zoom_in = lens + handle + lines(["M 43 55 L 67 55", "M 55 43 L 55 67"], v, w=9, ow=0)
-    zoom_out = lens + handle + lines(["M 43 55 L 67 55"], v, w=9, ow=0)
+    # zoom lenses: filled glass so the glyphs actually read, and
+    # color-coded bold glyphs — aqua + for in, red − for out — so the
+    # two are distinguishable at a glance even at 24px
+    handle = lines(["M 80 80 L 107 107"], v, w=16, ow=26)
+    glass = solid(['<circle cx="55" cy="55" r="33" {fs}/>'], v)
+    zoom_in = handle + glass + (
+        f'<path d="M 41 55 L 69 55 M 55 41 L 55 69" fill="none" '
+        f'stroke="{v.A}" stroke-width="13" stroke-linecap="round"/>')
+    zoom_out = handle + glass + (
+        f'<path d="M 41 55 L 69 55" fill="none" '
+        f'stroke="{v.R}" stroke-width="13" stroke-linecap="round"/>')
     c["zoom-in"] = ([zoom_in], (55, 55), 0)
     c["zoom-out"] = ([zoom_out], (55, 55), 0)
 

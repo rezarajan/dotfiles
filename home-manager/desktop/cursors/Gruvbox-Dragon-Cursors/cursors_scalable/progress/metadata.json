@@ -4,83 +4,335 @@
     "hotspot_x": 32,
     "hotspot_y": 12,
     "nominal_size": 128,
-    "delay": 60
+    "delay": 20
   },
   {
     "filename": "progress-01.svg",
     "hotspot_x": 32,
     "hotspot_y": 12,
     "nominal_size": 128,
-    "delay": 60
+    "delay": 20
   },
   {
     "filename": "progress-02.svg",
     "hotspot_x": 32,
     "hotspot_y": 12,
     "nominal_size": 128,
-    "delay": 60
+    "delay": 20
   },
   {
     "filename": "progress-03.svg",
     "hotspot_x": 32,
     "hotspot_y": 12,
     "nominal_size": 128,
-    "delay": 60
+    "delay": 20
   },
   {
     "filename": "progress-04.svg",
     "hotspot_x": 32,
     "hotspot_y": 12,
     "nominal_size": 128,
-    "delay": 60
+    "delay": 20
   },
   {
     "filename": "progress-05.svg",
     "hotspot_x": 32,
     "hotspot_y": 12,
     "nominal_size": 128,
-    "delay": 60
+    "delay": 20
   },
   {
     "filename": "progress-06.svg",
     "hotspot_x": 32,
     "hotspot_y": 12,
     "nominal_size": 128,
-    "delay": 60
+    "delay": 20
   },
   {
     "filename": "progress-07.svg",
     "hotspot_x": 32,
     "hotspot_y": 12,
     "nominal_size": 128,
-    "delay": 60
+    "delay": 20
   },
   {
     "filename": "progress-08.svg",
     "hotspot_x": 32,
     "hotspot_y": 12,
     "nominal_size": 128,
-    "delay": 60
+    "delay": 20
   },
   {
     "filename": "progress-09.svg",
     "hotspot_x": 32,
     "hotspot_y": 12,
     "nominal_size": 128,
-    "delay": 60
+    "delay": 20
   },
   {
     "filename": "progress-10.svg",
     "hotspot_x": 32,
     "hotspot_y": 12,
     "nominal_size": 128,
-    "delay": 60
+    "delay": 20
   },
   {
     "filename": "progress-11.svg",
     "hotspot_x": 32,
     "hotspot_y": 12,
     "nominal_size": 128,
-    "delay": 60
+    "delay": 20
+  },
+  {
+    "filename": "progress-12.svg",
+    "hotspot_x": 32,
+    "hotspot_y": 12,
+    "nominal_size": 128,
+    "delay": 20
+  },
+  {
+    "filename": "progress-13.svg",
+    "hotspot_x": 32,
+    "hotspot_y": 12,
+    "nominal_size": 128,
+    "delay": 20
+  },
+  {
+    "filename": "progress-14.svg",
+    "hotspot_x": 32,
+    "hotspot_y": 12,
+    "nominal_size": 128,
+    "delay": 20
+  },
+  {
+    "filename": "progress-15.svg",
+    "hotspot_x": 32,
+    "hotspot_y": 12,
+    "nominal_size": 128,
+    "delay": 20
+  },
+  {
+    "filename": "progress-16.svg",
+    "hotspot_x": 32,
+    "hotspot_y": 12,
+    "nominal_size": 128,
+    "delay": 20
+  },
+  {
+    "filename": "progress-17.svg",
+    "hotspot_x": 32,
+    "hotspot_y": 12,
+    "nominal_size": 128,
+    "delay": 20
+  },
+  {
+    "filename": "progress-18.svg",
+    "hotspot_x": 32,
+    "hotspot_y": 12,
+    "nominal_size": 128,
+    "delay": 20
+  },
+  {
+    "filename": "progress-19.svg",
+    "hotspot_x": 32,
+    "hotspot_y": 12,
+    "nominal_size": 128,
+    "delay": 20
+  },
+  {
+    "filename": "progress-20.svg",
+    "hotspot_x": 32,
+    "hotspot_y": 12,
+    "nominal_size": 128,
+    "delay": 20
+  },
+  {
+    "filename": "progress-21.svg",
+    "hotspot_x": 32,
+    "hotspot_y": 12,
+    "nominal_size": 128,
+    "delay": 20
+  },
+  {
+    "filename": "progress-22.svg",
+    "hotspot_x": 32,
+    "hotspot_y": 12,
+    "nominal_size": 128,
+    "delay": 20
+  },
+  {
+    "filename": "progress-23.svg",
+    "hotspot_x": 32,
+    "hotspot_y": 12,
+    "nominal_size": 128,
+    "delay": 20
+  },
+  {
+    "filename": "progress-24.svg",
+    "hotspot_x": 32,
+    "hotspot_y": 12,
+    "nominal_size": 128,
+    "delay": 20
+  },
+  {
+    "filename": "progress-25.svg",
+    "hotspot_x": 32,
+    "hotspot_y": 12,
+    "nominal_size": 128,
+    "delay": 20
+  },
+  {
+    "filename": "progress-26.svg",
+    "hotspot_x": 32,
+    "hotspot_y": 12,
+    "nominal_size": 128,
+    "delay": 20
+  },
+  {
+    "filename": "progress-27.svg",
+    "hotspot_x": 32,
+    "hotspot_y": 12,
+    "nominal_size": 128,
+    "delay": 20
+  },
+  {
+    "filename": "progress-28.svg",
+    "hotspot_x": 32,
+    "hotspot_y": 12,
+    "nominal_size": 128,
+    "delay": 20
+  },
+  {
+    "filename": "progress-29.svg",
+    "hotspot_x": 32,
+    "hotspot_y": 12,
+    "nominal_size": 128,
+    "delay": 20
+  },
+  {
+    "filename": "progress-30.svg",
+    "hotspot_x": 32,
+    "hotspot_y": 12,
+    "nominal_size": 128,
+    "delay": 20
+  },
+  {
+    "filename": "progress-31.svg",
+    "hotspot_x": 32,
+    "hotspot_y": 12,
+    "nominal_size": 128,
+    "delay": 20
+  },
+  {
+    "filename": "progress-32.svg",
+    "hotspot_x": 32,
+    "hotspot_y": 12,
+    "nominal_size": 128,
+    "delay": 20
+  },
+  {
+    "filename": "progress-33.svg",
+    "hotspot_x": 32,
+    "hotspot_y": 12,
+    "nominal_size": 128,
+    "delay": 20
+  },
+  {
+    "filename": "progress-34.svg",
+    "hotspot_x": 32,
+    "hotspot_y": 12,
+    "nominal_size": 128,
+    "delay": 20
+  },
+  {
+    "filename": "progress-35.svg",
+    "hotspot_x": 32,
+    "hotspot_y": 12,
+    "nominal_size": 128,
+    "delay": 20
+  },
+  {
+    "filename": "progress-36.svg",
+    "hotspot_x": 32,
+    "hotspot_y": 12,
+    "nominal_size": 128,
+    "delay": 20
+  },
+  {
+    "filename": "progress-37.svg",
+    "hotspot_x": 32,
+    "hotspot_y": 12,
+    "nominal_size": 128,
+    "delay": 20
+  },
+  {
+    "filename": "progress-38.svg",
+    "hotspot_x": 32,
+    "hotspot_y": 12,
+    "nominal_size": 128,
+    "delay": 20
+  },
+  {
+    "filename": "progress-39.svg",
+    "hotspot_x": 32,
+    "hotspot_y": 12,
+    "nominal_size": 128,
+    "delay": 20
+  },
+  {
+    "filename": "progress-40.svg",
+    "hotspot_x": 32,
+    "hotspot_y": 12,
+    "nominal_size": 128,
+    "delay": 20
+  },
+  {
+    "filename": "progress-41.svg",
+    "hotspot_x": 32,
+    "hotspot_y": 12,
+    "nominal_size": 128,
+    "delay": 20
+  },
+  {
+    "filename": "progress-42.svg",
+    "hotspot_x": 32,
+    "hotspot_y": 12,
+    "nominal_size": 128,
+    "delay": 20
+  },
+  {
+    "filename": "progress-43.svg",
+    "hotspot_x": 32,
+    "hotspot_y": 12,
+    "nominal_size": 128,
+    "delay": 20
+  },
+  {
+    "filename": "progress-44.svg",
+    "hotspot_x": 32,
+    "hotspot_y": 12,
+    "nominal_size": 128,
+    "delay": 20
+  },
+  {
+    "filename": "progress-45.svg",
+    "hotspot_x": 32,
+    "hotspot_y": 12,
+    "nominal_size": 128,
+    "delay": 20
+  },
+  {
+    "filename": "progress-46.svg",
+    "hotspot_x": 32,
+    "hotspot_y": 12,
+    "nominal_size": 128,
+    "delay": 20
+  },
+  {
+    "filename": "progress-47.svg",
+    "hotspot_x": 32,
+    "hotspot_y": 12,
+    "nominal_size": 128,
+    "delay": 20
   }
 ]
