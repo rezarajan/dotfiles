@@ -92,32 +92,58 @@ def spinner(v, cx, cy, r, angle, w=14, ow=22):
 
 ARROW = "M 32 12 L 32 98 L 53 79 L 65 108 L 81 101 L 68 73 L 97 71 Z"
 
-# Hands are single smooth paths: fingertip round caps, folded-knuckle
-# bumps, thumb curves. The two-pass rim renders concave valleys and
-# creases as dark grooves, which is what makes them read as fingers.
+# Mac-style glove hands: single smooth silhouettes + a flared cuff rect
+# (the two-pass rim welds them into one glove with a waist), and interior
+# CREASE strokes drawn on top — silhouette bumps alone cannot separate
+# fingers at cursor sizes; the crease lines are what make them legible.
 POINTING_HAND = (
-    "M 44 60 L 44 20 Q 44 11 52 11 Q 60 11 60 20 L 60 52 "
-    "C 60 45 74 45 74 52 L 74 54 C 74 47 88 47 88 54 L 88 58 "
-    "C 88 51 100 51 100 58 L 100 62 C 103 66 104 72 103 78 "
-    "C 101 94 94 106 78 109 L 58 109 C 49 109 43 103 41 95 "
-    "C 39 88 34 82 30 76 C 26 70 28 64 34 63 C 38 62 42 63 44 66 Z"
+    "M 44 62 L 44 20 Q 44 10 53 10 Q 62 10 62 20 L 62 50 "
+    "C 62 44 76 44 76 50 "
+    "C 76 45 90 45 90 51 "
+    "C 90 47 102 47 102 54 "
+    "C 105 58 106 64 105 70 L 104 84 "
+    "C 103 94 96 100 86 100 L 50 100 "
+    "C 44 100 40 96 39 90 "
+    "C 38 84 34 78 29 72 "
+    "C 24 65 26 58 33 58 "
+    "C 38 58 42 60 44 64 Z"
 )
+POINTING_CUFF = '<rect x="40" y="100" width="56" height="14" rx="7" {fs}/>'
+POINTING_CREASES = ["M 62 52 L 62 70", "M 76 50 L 76 70", "M 90 52 L 90 71",
+                    "M 40 66 Q 34 70 33 78", "M 44 101 L 92 101"]
 
 OPEN_HAND = (
-    "M 30 92 L 30 34 Q 30 25 38 25 Q 46 25 46 34 L 46 52 L 49 52 "
-    "L 49 24 Q 49 15 56 15 Q 64 15 64 24 L 64 50 L 67 50 "
-    "L 67 26 Q 67 17 73 17 Q 80 17 80 26 L 80 52 L 83 52 "
-    "L 83 36 Q 83 27 89 27 Q 96 27 96 36 L 96 66 "
-    "C 98 84 94 98 84 106 Q 72 114 58 113 Q 40 112 32 100 "
-    "C 22 94 14 82 20 74 Q 24 68 32 72 Z"
+    "M 26 60 L 26 30 Q 26 21 34 21 Q 42 21 42 30 L 42 56 "
+    "Q 45 60 48 56 L 48 18 Q 48 9 56 9 Q 64 9 64 18 L 64 54 "
+    "Q 67 58 70 54 L 70 22 Q 70 13 78 13 Q 86 13 86 22 L 86 56 "
+    "Q 89 60 92 56 L 92 36 Q 92 27 99 27 Q 106 27 106 36 L 106 64 "
+    "C 108 78 106 90 98 97 C 90 102 78 103 64 103 L 46 103 "
+    "C 36 103 30 98 28 92 "
+    "C 22 92 16 88 12 82 Q 8 76 14 70 C 18 66 24 66 26 70 Z"
 )
+OPEN_CUFF = '<rect x="36" y="103" width="60" height="14" rx="7" {fs}/>'
+OPEN_CREASES = ["M 45 58 L 45 78", "M 67 56 L 67 76", "M 89 58 L 89 78",
+                "M 40 104 L 92 104"]
 
 CLOSED_HAND = (
-    "M 30 78 C 30 64 34 56 44 54 Q 44 46 52 46 Q 59 46 60 54 "
-    "Q 61 47 68 47 Q 75 47 76 55 Q 77 48 84 48 Q 91 48 92 56 "
-    "Q 98 58 100 66 C 102 76 100 88 94 96 Q 84 106 64 106 "
-    "Q 42 106 34 96 Q 28 88 30 78 Z"
+    "M 24 74 C 24 60 28 50 38 47 "
+    "Q 39 38 48 38 Q 56 38 57 47 "
+    "Q 58 39 66 39 Q 74 39 75 48 "
+    "Q 76 41 84 41 Q 91 41 92 50 "
+    "Q 93 44 99 44 Q 104 44 104 52 "
+    "C 106 60 106 70 104 78 C 102 88 94 94 82 94 L 44 94 "
+    "C 34 94 26 88 24 80 Z"
 )
+CLOSED_THUMB = '<rect x="30" y="78" width="34" height="16" rx="8" {fs}/>'
+CLOSED_CUFF = '<rect x="36" y="96" width="58" height="14" rx="7" {fs}/>'
+CLOSED_CREASES = ["M 57 47 L 57 64", "M 75 48 L 75 65", "M 92 50 L 92 66",
+                  "M 32 80 Q 48 75 62 81", "M 40 97 L 90 97"]
+
+
+def creases(ds, v, w=4):
+    return "".join(
+        f'<path d="{d}" fill="none" stroke="{v.O}" stroke-width="{w}" '
+        f'stroke-linecap="round" opacity="0.65"/>' for d in ds)
 
 
 # ---------------------------------------------------------------- cursors
@@ -127,7 +153,8 @@ def build_cursors(v):
 
     c["default"] = ([solid([f'<path d="{ARROW}" {{fs}}/>'], v)], (32, 12), 0)
 
-    c["pointer"] = ([solid([f'<path d="{POINTING_HAND}" {{fs}}/>'], v)], (52, 12), 0)
+    c["pointer"] = ([solid([f'<path d="{POINTING_HAND}" {{fs}}/>', POINTING_CUFF], v) +
+                     creases(POINTING_CREASES, v)], (53, 10), 0)
 
     c["text"] = ([lines(["M 64 26 L 64 102", "M 53 25 L 75 25",
                          "M 53 103 L 75 103"], v, w=11, ow=23)], (64, 64), 0)
@@ -164,12 +191,12 @@ def build_cursors(v):
                       spinner(v, 92, 92, 22, k * 30, w=12, ow=18)
                       for k in range(12)], (32, 12), 60)
 
-    c["openhand"] = ([solid([f'<path d="{OPEN_HAND}" {{fs}}/>'], v)], (62, 64), 0)
+    c["openhand"] = ([solid([f'<path d="{OPEN_HAND}" {{fs}}/>', OPEN_CUFF], v) +
+                      creases(OPEN_CREASES, v)], (64, 64), 0)
 
-    c["closedhand"] = ([solid([f'<path d="{CLOSED_HAND}" {{fs}}/>'], v) +
-                        f'<path d="M 36 90 Q 48 100 62 100" fill="none" '
-                        f'stroke="{v.O}" stroke-width="4" stroke-linecap="round" opacity="0.6"/>'],
-                       (64, 74), 0)
+    c["closedhand"] = ([solid([f'<path d="{CLOSED_HAND}" {{fs}}/>', CLOSED_THUMB,
+                               CLOSED_CUFF], v) +
+                        creases(CLOSED_CREASES, v)], (64, 68), 0)
 
     pencil = rot(
         solid(['<rect x="55" y="22" width="18" height="60" rx="5" {fs}/>',
