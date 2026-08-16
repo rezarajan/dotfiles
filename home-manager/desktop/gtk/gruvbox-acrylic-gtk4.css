@@ -51,7 +51,7 @@ popover > contents {
 
 popover.menu > contents,
 popover.background.menu > contents {
-  background-color: alpha(@theme_bg_color_breeze, 0.94);
+  background-color: alpha(@theme_bg_color_breeze, 0.92);
   border: 1px solid alpha(@theme_fg_color_breeze, 0.08);
   padding: 8px;
 }
@@ -68,7 +68,7 @@ popover.menu modelbutton:hover {
 
 tooltip {
   border-radius: 8px;
-  background-color: alpha(@theme_bg_color_breeze, 0.94);
+  background-color: alpha(@theme_bg_color_breeze, 0.92);
   border: 1px solid alpha(@theme_fg_color_breeze, 0.08);
 }
 
