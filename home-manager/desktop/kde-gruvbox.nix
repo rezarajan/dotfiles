@@ -65,6 +65,36 @@ in
       done
     '';
 
+  # Chromium-family browsers and Electron shells spawn bubble UI (share
+  # hub, cast picker …) as plain Wayland toplevels, which KWin decorates
+  # with a full titlebar. This rule strips decorations from exactly those:
+  # bubble windows are titled bare product names, real windows are always
+  # "Page - Product". kwinrulesrc stays mutable (the user edits rules in
+  # the KCM), so the rule is enforced idempotently by UUID on each switch
+  # and other rules are left alone.
+  home.activation.gruvboxKwinRules =
+    lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+      rid="8019db3d-d55d-4b1c-9752-56534b2d28e7"
+      w() {
+        run /usr/bin/kwriteconfig6 --file kwinrulesrc --group "$rid" --key "$1" "$2"
+      }
+      w Description "Browser/Electron bubbles: undecorated"
+      w wmclass "chromium|chrome|thorium|brave|vivaldi|opera|edge|electron"
+      w wmclassmatch 3
+      w title "^(Chromium|Google Chrome|Chrome|Thorium|Brave|Vivaldi|Opera|Microsoft Edge|Electron)$"
+      w titlematch 3
+      w types 3
+      w noborder true
+      w noborderrule 2
+      cur="$(/usr/bin/kreadconfig6 --file kwinrulesrc --group General --key rules)"
+      case ",$cur," in
+        *",$rid,"*) ;;
+        *) run /usr/bin/kwriteconfig6 --file kwinrulesrc --group General \
+             --key rules "''${cur:+$cur,}$rid" ;;
+      esac
+      /usr/bin/qdbus6 org.kde.KWin /KWin org.kde.KWin.reconfigure 2>/dev/null || true
+    '';
+
   # kde-gtk-config owns gtk.css but preserves user content; make sure our
   # acrylic stylesheet stays imported (idempotent).
   home.activation.gruvboxGtkCssImports =

@@ -1,12 +1,12 @@
 [8019db3d-d55d-4b1c-9752-56534b2d28e7]
-Description=Chromium bubbles: undecorated
+Description=Browser/Electron bubbles: undecorated
 noborder=true
 noborderrule=2
-title=Chromium
-titlematch=1
+title=^(Chromium|Google Chrome|Chrome|Thorium|Brave|Vivaldi|Opera|Microsoft Edge|Electron)$
+titlematch=3
 types=3
-wmclass=chromium
-wmclassmatch=1
+wmclass=chromium|chrome|thorium|brave|vivaldi|opera|edge|electron
+wmclassmatch=3
 
 [General]
 count=1
