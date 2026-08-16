@@ -256,10 +256,12 @@ def build_cursors(v):
     c["zoom-in"] = ([zoom_in], (55, 55), 0)
     c["zoom-out"] = ([zoom_out], (55, 55), 0)
 
-    # arrow + menu-list badge
-    c["context-menu"] = ([solid([f'<path d="{ARROW}" {{fs}}/>',
-                                 '<rect x="74" y="72" width="42" height="40" rx="9" {fs}/>'], v) +
-                          f'<path d="M 83 84 H 107 M 83 92 H 107 M 83 100 H 99" fill="none" '
+    # arrow + menu-list badge; the badge is its own layered element with
+    # its own rim (putting it in the arrow's union welds them into one
+    # blob), matching how the help/copy/link badges sit on the arrow
+    c["context-menu"] = ([solid([f'<path d="{ARROW}" {{fs}}/>'], v) +
+                          solid(['<rect x="76" y="74" width="38" height="36" rx="9" {fs}/>'], v) +
+                          f'<path d="M 84 84 H 106 M 84 92 H 106 M 84 100 H 98" fill="none" '
                           f'stroke="{v.A}" stroke-width="6" stroke-linecap="round"/>'],
                          (32, 12), 0)
 
