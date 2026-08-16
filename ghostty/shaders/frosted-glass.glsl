@@ -20,6 +20,18 @@ float hash12(vec2 p) {
     return fract((p3.x + p3.y) * p3.z);
 }
 
+// smooth value noise — soft blobs, no grain
+float vnoise(vec2 p) {
+    vec2 i = floor(p);
+    vec2 f = fract(p);
+    vec2 u = f * f * (3.0 - 2.0 * f);
+    float a = hash12(i);
+    float b = hash12(i + vec2(1.0, 0.0));
+    float c = hash12(i + vec2(0.0, 1.0));
+    float d = hash12(i + vec2(1.0, 1.0));
+    return mix(mix(a, b, u.x), mix(c, d, u.x), u.y);
+}
+
 void mainImage(out vec4 fragColor, in vec2 fragCoord) {
     vec2 uv = fragCoord / iResolution.xy;
     vec4 c = texture(iChannel0, uv);
@@ -43,10 +55,17 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
     // light variants alike)
     float n = hash12(floor(fragCoord)) - 0.5;
 
-    // soft sheen: the glass catches a little more light at the top
-    float sheen = (0.5 - uv.y) * 0.012;
+    // frost veil: frosted glass scatters light, so the pane gains a soft
+    // milky lift with smooth large-scale unevenness — this is what lowers
+    // the contrast of whatever bleeds through and makes it read as blurred
+    float frost = vnoise(fragCoord / 220.0) * 0.6
+                + vnoise(fragCoord / 80.0 + 31.7) * 0.4;
+    float veil = 0.028 + (frost - 0.5) * 0.030;
 
-    tint += (n * 0.022 + sheen) * w;
+    // soft sheen: the glass catches a little more light at the top
+    float sheen = (0.5 - uv.y) * 0.022;
+
+    tint += (veil + sheen + n * 0.022) * w;
 
     // alpha is deliberately unchanged: uniform translucency, no grain in
     // the see-through
