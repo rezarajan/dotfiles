@@ -1,0 +1,17 @@
+{
+    "KPlugin": {
+        "Authors": [
+            {
+                "Email": "rezarajan@gmail.com",
+                "Name": "cascadura"
+            }
+        ],
+        "Category": "",
+        "Description": "Gruvbox acrylic Plasma style \u2014 follows the system color scheme",
+        "Id": "gruvbox-acrylic",
+        "License": "LGPL",
+        "Name": "Gruvbox Acrylic",
+        "Version": "1.0"
+    },
+    "X-Plasma-API": "5.0"
+}
