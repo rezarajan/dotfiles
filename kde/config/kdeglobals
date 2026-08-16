@@ -99,9 +99,11 @@ UseSystemBell=true
 XftAntialias=true
 XftHintStyle=hintslight
 XftSubPixel=none
-font=Noto Sans,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1,,0,0
-menuFont=Noto Sans,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1,,0,0
-toolBarFont=Noto Sans,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1,,0,0
+fixed=JetBrains Mono,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1,,0,0
+font=Inter,10.5,-1,5,400,0,0,0,0,0,0,0,0,0,0,1,,0,0
+menuFont=Inter,10.5,-1,5,400,0,0,0,0,0,0,0,0,0,0,1,,0,0
+smallestReadableFont=Inter,8,-1,5,400,0,0,0,0,0,0,0,0,0,0,1,,0,0
+toolBarFont=Inter,10.5,-1,5,400,0,0,0,0,0,0,0,0,0,0,1,,0,0
 
 [KDE]
 AnimationDurationFactor=0.25
@@ -135,6 +137,7 @@ ScreenScaleFactors=DP-1=1;
 [WM]
 activeBackground=24,22,22
 activeBlend=235,219,178
+activeFont=Inter,10.5,-1,5,500,0,0,0,0,0,0,0,0,0,0,1,Medium,0,0
 activeForeground=235,219,178
 inactiveBackground=24,22,22
 inactiveBlend=60,56,54

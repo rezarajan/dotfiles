@@ -153,6 +153,18 @@ LIGHT = dict(
     ),
 )
 
+# Layout metrics shared across the widget system — one spacing rhythm for
+# every control (consumed by patch_kvconfig.py)
+METRICS = dict(
+    layout_spacing="6",           # gap between widgets in layouts
+    layout_margin="10",           # margin around layouts / dialog edges
+    toolbar_item_spacing="2",
+    toolbar_interior_spacing="4",
+    text_margin_h="4",            # horizontal text padding inside controls
+    text_margin_v="2",            # vertical text padding inside controls
+    control_min_height="+0.5font",  # uniform height for buttons/combos/inputs
+)
+
 # Plasma desktop theme surface opacities (variant-agnostic: the theme's SVGs
 # take their color from the active scheme at runtime)
 PLASMA = dict(

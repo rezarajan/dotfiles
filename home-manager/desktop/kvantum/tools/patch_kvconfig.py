@@ -15,12 +15,25 @@ def frames(n, extra=None):
     return d
 
 
+M = palette.METRICS
+
 COMMON = {
     "%General": {"attach_active_tab": "false", "progressbar_thickness": "4",
                  "slider_width": "4", "spread_menuitems": "false",
                  "menu_blur_radius": "8", "tooltip_blur_radius": "8",
-                 "tooltip_shadow_depth": "4"},
-    "PanelButtonCommand": frames(6, {"frame.expansion": "0"}),
+                 "tooltip_shadow_depth": "4",
+                 "layout_spacing": M["layout_spacing"],
+                 "layout_margin": M["layout_margin"],
+                 "toolbar_item_spacing": M["toolbar_item_spacing"],
+                 "toolbar_interior_spacing": M["toolbar_interior_spacing"]},
+    "PanelButtonCommand": frames(6, {
+        "frame.expansion": "0",
+        "text.margin.left": M["text_margin_h"],
+        "text.margin.right": M["text_margin_h"],
+        "text.margin.top": M["text_margin_v"],
+        "text.margin.bottom": M["text_margin_v"],
+        "min_height": M["control_min_height"],
+    }),
     "Focus": frames(3),
     "Tab": frames(6),
     "TabFrame": frames(8),
