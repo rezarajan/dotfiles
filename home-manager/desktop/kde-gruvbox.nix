@@ -95,6 +95,38 @@ in
       /usr/bin/qdbus6 org.kde.KWin /KWin org.kde.KWin.reconfigure 2>/dev/null || true
     '';
 
+  # kde-gtk-config owns the mutable GTK configs (settings.ini, ~/.gtkrc-2.0,
+  # xsettingsd.conf). Icons, cursors, and fonts are auto-synced into them
+  # from KDE settings by the gtkconfig KDED module, but the GTK theme NAME
+  # has no KDE-side source of truth — it is only written when a theme is
+  # picked in the Application Style KCM, so a fresh machine keeps showing
+  # Breeze even though the Gruvbox-Dragon themes are deployed. Converge it
+  # here: in a running session ask the GtkConfig service (rewrites every
+  # GTK config incl. xsettingsd and live-notifies apps); headless, seed the
+  # files directly so the first login starts themed (the next in-session
+  # switch then takes the service path and completes the rest).
+  home.activation.gruvboxGtkTheme =
+    lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+      theme="Gruvbox-Dragon"
+      cur="$(/usr/bin/qdbus6 org.kde.GtkConfig /GtkConfig org.kde.GtkConfig.gtkTheme 2>/dev/null || true)"
+      if [ "$cur" = "$theme" ]; then
+        : # already selected
+      elif [ -n "$cur" ]; then
+        run /usr/bin/qdbus6 org.kde.GtkConfig /GtkConfig org.kde.GtkConfig.setGtkTheme "$theme"
+      else
+        for ver in gtk-3.0 gtk-4.0; do
+          ini="${config.xdg.configHome}/$ver/settings.ini"
+          grep -qs "^gtk-theme-name=$theme\$" "$ini" || \
+            run /usr/bin/kwriteconfig6 --file "$ini" --group Settings --key gtk-theme-name "$theme"
+        done
+        rc2="$HOME/.gtkrc-2.0"
+        if ! grep -qs "^gtk-theme-name=\"$theme\"\$" "$rc2"; then
+          [ -f "$rc2" ] && run sed -i "/^gtk-theme-name=/d" "$rc2"
+          run bash -c 'printf "gtk-theme-name=\"%s\"\n" "$0" >> "$1"' "$theme" "$rc2"
+        fi
+      fi
+    '';
+
   # kde-gtk-config owns gtk.css but preserves user content; make sure our
   # acrylic stylesheet stays imported (idempotent).
   home.activation.gruvboxGtkCssImports =
