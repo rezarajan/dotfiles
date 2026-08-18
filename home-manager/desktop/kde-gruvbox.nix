@@ -218,6 +218,53 @@ in
     Install.WantedBy = [ "timers.target" ];
   };
 
+  # xdg-desktop-portal consults the kde and gtk Settings backends in order,
+  # but the KDE backend does not serve the org.gnome.desktop.interface
+  # namespace — those keys come from the gtk backend, i.e. dconf, which
+  # nothing on the KDE side ever updates. Stale dconf values made
+  # portal-reading GTK apps (ghostty's titlebar icon, GNOME apps, flatpaks)
+  # resolve the dark icon theme and prefer-dark while the session was
+  # light. Mirror what kde-gtk-config writes into gtk-3.0/settings.ini
+  # (rewritten on every light/dark toggle) into dconf: a path unit watches
+  # the file, and the service also runs once per login.
+  systemd.user.services.sync-gnome-portal-settings =
+    let
+      syncScript = pkgs.writeShellScript "sync-gnome-portal-settings" ''
+        ini="$HOME/.config/gtk-3.0/settings.ini"
+        [ -r "$ini" ] || exit 0
+        get() { sed -n "s/^$1=//p" "$ini" | head -n1; }
+        put() {
+          v="$(get "$2")"
+          [ -n "$v" ] && /usr/bin/gsettings set org.gnome.desktop.interface "$1" "$v"
+        }
+        put icon-theme gtk-icon-theme-name
+        put cursor-theme gtk-cursor-theme-name
+        put gtk-theme gtk-theme-name
+        case "$(get gtk-application-prefer-dark-theme)" in
+          true|1) scheme=prefer-dark ;;
+          *) scheme=prefer-light ;;
+        esac
+        /usr/bin/gsettings set org.gnome.desktop.interface color-scheme "$scheme"
+      '';
+    in
+    {
+      Unit.Description = "Mirror KDE GTK settings into dconf for the portal's GNOME namespace";
+      Service = {
+        Type = "oneshot";
+        ExecStart = "${syncScript}";
+      };
+      Install.WantedBy = [ "graphical-session.target" ];
+    };
+
+  systemd.user.paths.sync-gnome-portal-settings = {
+    Unit.Description = "Watch kde-gtk-config settings.ini for light/dark toggles";
+    Path = {
+      PathChanged = "%h/.config/gtk-3.0/settings.ini";
+      PathModified = "%h/.config/gtk-3.0/settings.ini";
+    };
+    Install.WantedBy = [ "paths.target" ];
+  };
+
   xdg.desktopEntries.systemsettings = {
     name = "System Settings";
     genericName = "System Settings";
