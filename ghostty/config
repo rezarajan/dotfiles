@@ -1,5 +1,5 @@
-# theme = light:Catppuccin Latte,dark:Catppuccin Frappe
-theme = Gruvbox Material Dark
+theme = light:Gruvbox Material Light,dark:Gruvbox Material Dark
+# theme = Gruvbox Material Dark
 
 # ------------------------------------------------------------
 # Acrylic window
@@ -15,11 +15,12 @@ background-opacity = 0.96
 background-blur = true
 minimum-contrast = 1.1
 
-# Keep the titlebar opaque: the GTK headerbar inherits window transparency,
-# so paint it at the widget level via custom CSS (gruvbox dragon bg)
+# Titlebar follows the terminal theme: window-theme=ghostty maps the GTK
+# headerbar colors to the active theme's bg/fg (opaque, so the old
+# see-through-headerbar problem the custom CSS used to patch is gone),
+# and tracks the light:/dark: conditional theme automatically.
 window-decoration = client
-window-titlebar-foreground = ebdbb2
-gtk-custom-css = gruvbox-titlebar.css
+window-theme = ghostty
 
 # ------------------------------------------------------------
 # Ghostty tab and window settings
