@@ -38,6 +38,7 @@ in
       rofi-wayland
       wlogout
       hyprpaper
+      swaybg # wallpaper fallback where hyprpaper's GL init fails (VMs)
       hypridle
       hyprlock
       grim
@@ -49,6 +50,7 @@ in
       brightnessctl
       playerctl
       pavucontrol
+      libnotify
       jq
     ]);
   };

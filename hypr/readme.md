@@ -64,14 +64,20 @@ Bound to **Super+Shift+W**.
 ## Packages (Arch names)
 
 ```
-hyprland waybar swaync rofi-wayland wlogout hyprpaper hypridle hyprlock
+hyprland waybar swaync rofi-wayland wlogout hyprpaper swaybg hypridle hyprlock
 hyprpolkitagent xdg-desktop-portal-hyprland xdg-desktop-portal-gtk
 pipewire wireplumber pipewire-pulse pavucontrol
-grim slurp swappy wf-recorder cliphist wl-clipboard
+grim slurp swappy wf-recorder cliphist wl-clipboard libnotify
 brightnessctl playerctl jq
 inter-font ttf-jetbrains-mono ttf-nerd-fonts-symbols
 qt6-wayland kvantum polkit
 ```
+
+`wlogout` is AUR-only on Arch (`yay -S wlogout`). Tested end-to-end on
+Hyprland 0.56.2 in a VirtualBox VM (waybar, rofi, swaync, theming toggle,
+screenshots, recording, portals); hyprpaper/hyprlock need a real GPU — in
+VMs the session falls back to swaybg automatically, and swaylock can stand
+in for hyprlock.
 
 Deploy by symlinking this directory to `~/.config/hypr` (plus `waybar`,
 `rofi`, `swaync`, `wlogout` similarly), or via the

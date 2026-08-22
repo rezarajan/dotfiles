@@ -16,6 +16,6 @@
 @define-color link #8ec07c;
 @define-color border_active #689d6a;
 @define-color border_inactive #3c3836;
-@define-color bg_panel #181616d9;
-@define-color bg_popup #1d2021c2;
-@define-color hairline #ebdbb21f;
+@define-color bg_panel rgba(24,22,22,0.85);
+@define-color bg_popup rgba(29,32,33,0.76);
+@define-color hairline rgba(235,219,178,0.12);

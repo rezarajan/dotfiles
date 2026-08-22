@@ -75,6 +75,13 @@ def _rgba_hex(hex_color, alpha):
     return f"{hex_color.lstrip('#')}{round(alpha * 255):02x}"
 
 
+def _rgba_css(hex_color, alpha):
+    """'#rrggbb' + 0..1 -> 'rgba(r,g,b,a)' (GTK3 CSS lacks #rrggbbaa)."""
+    h = hex_color.lstrip("#")
+    r, g, b = (int(h[i:i + 2], 16) for i in (0, 2, 4))
+    return f"rgba({r},{g},{b},{alpha})"
+
+
 # ---------------------------------------------------------------- lua
 def emit_lua():
     lines = [f"-- {HEADER}", "-- Semantic Gruvbox Dragon tokens, one table per variant.",
@@ -103,10 +110,10 @@ def emit_css(subdir, filename_stem):
         for key, val in t.items():
             if isinstance(val, str):
                 lines.append(f"@define-color {key} {val};")
-        # pre-multiplied acrylic surfaces (GTK css lacks a hex+alpha helper)
-        lines.append(f"@define-color bg_panel #{_rgba_hex(t['bg'], t['alpha_panel'])};")
-        lines.append(f"@define-color bg_popup #{_rgba_hex(t['popup'], t['alpha_popup'])};")
-        lines.append(f"@define-color hairline #{_rgba_hex(t['fg'], t['alpha_hairline'])};")
+        # pre-multiplied acrylic surfaces
+        lines.append(f"@define-color bg_panel {_rgba_css(t['bg'], t['alpha_panel'])};")
+        lines.append(f"@define-color bg_popup {_rgba_css(t['popup'], t['alpha_popup'])};")
+        lines.append(f"@define-color hairline {_rgba_css(t['fg'], t['alpha_hairline'])};")
         out = ROOT / subdir / f"{filename_stem}-{mode}.css"
         out.parent.mkdir(parents=True, exist_ok=True)
         out.write_text("\n".join(lines) + "\n", encoding="utf-8", newline="\n")

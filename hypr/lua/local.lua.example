@@ -8,9 +8,13 @@
 -- hl.monitor({ output = "DP-1", mode = "2560x1440@120", position = "0x0", scale = 1 })
 -- hl.monitor({ output = "eDP-1", mode = "preferred", position = "auto-right", scale = 1.6 })
 
--- Virtual machine guest (VirtualBox/QEMU): software rendering + relaxed input
+-- Virtual machine guest (VirtualBox/QEMU): software rendering.
+-- Note: hyprland itself runs fine on llvmpipe, but hyprpaper and hyprlock
+-- need real GL — session-start.sh falls back to swaybg for the wallpaper;
+-- use swaylock (shm-rendered) instead of hyprlock in VMs.
 -- hl.env("WLR_NO_HARDWARE_CURSORS", "1")
--- hl.config({ misc = { vfr = false } })
+-- hl.env("LIBGL_ALWAYS_SOFTWARE", "1")
+-- hl.monitor({ output = "Virtual-1", mode = "1600x1000@60", position = "0x0", scale = 1 })
 
 -- NVIDIA:
 -- hl.env("GBM_BACKEND", "nvidia-drm")

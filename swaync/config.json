@@ -18,10 +18,11 @@
     "hide-on-action": true,
 
     "control-center-width": 400,
+    "control-center-height": 640,
     "control-center-margin-top": 8,
     "control-center-margin-bottom": 8,
     "control-center-margin-right": 8,
-    "fit-to-screen": true,
+    "fit-to-screen": false,
 
     "widgets": [
         "title",
