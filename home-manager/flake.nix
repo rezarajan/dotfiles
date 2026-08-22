@@ -43,6 +43,7 @@
           ./nixgl.nix
           ./pkgs.nix
           ./desktop/kde-gruvbox.nix
+          ./desktop/hyprland.nix
           ./desktop/fonts.nix
           ./desktop/terminal.nix
           ./dotfiles/default.nix

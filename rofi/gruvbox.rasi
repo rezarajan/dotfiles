@@ -1,0 +1,95 @@
+/* rofi — Gruvbox Dragon acrylic launcher.
+ * colors.rasi is the generated active variant (see hypr/scripts/theme-mode.sh);
+ * geometry follows the desktop rhythm: radius 12, hairline borders, 8px gaps. */
+@import "colors.rasi"
+
+* {
+    background-color: transparent;
+    text-color: @fg;
+}
+
+window {
+    width: 560px;
+    location: north;
+    y-offset: 12%;
+    background-color: @bg-popup;
+    border: 1px;
+    border-color: @hairline;
+    border-radius: 12px;
+    padding: 8px;
+}
+
+mainbox {
+    spacing: 8px;
+}
+
+inputbar {
+    spacing: 8px;
+    padding: 10px 14px;
+    background-color: @field;
+    border: 1px;
+    border-color: @hairline;
+    border-radius: 8px;
+    children: [ "prompt", "entry" ];
+}
+
+prompt {
+    text-color: @accent;
+    font: "Inter Medium 11";
+}
+
+entry {
+    placeholder: "Search…";
+    placeholder-color: @fg-muted;
+    text-color: @fg-bright;
+    cursor: text;
+}
+
+listview {
+    lines: 8;
+    fixed-height: false;
+    scrollbar: false;
+    spacing: 2px;
+}
+
+element {
+    padding: 8px 10px;
+    spacing: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+element-icon {
+    size: 22px;
+}
+
+element-text {
+    vertical-align: 0.5;
+}
+
+element selected.normal, element selected.active {
+    background-color: @accent;
+    text-color: @on-accent;
+}
+
+element alternate.normal {
+    background-color: transparent;
+}
+
+element urgent {
+    text-color: @negative;
+}
+
+message {
+    padding: 8px;
+    border-radius: 8px;
+    background-color: @field;
+}
+
+error-message {
+    padding: 12px;
+    border-radius: 12px;
+    background-color: @bg-popup;
+    border: 1px;
+    border-color: @negative;
+}

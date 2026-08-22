@@ -22,13 +22,17 @@ My personal configuration files for Arch Linux with Wayland, managed through Hom
 - **[alacritty/](alacritty/)** - Terminal emulator configuration
 - **[home-manager/](home-manager/)** - Nix-based declarative configuration management
 
-### Wayland Environment
-- **[hypr/](hypr/)** - Hyprland compositor configuration
-- **[waybar/](waybar/)** - Wayland status bar
-- **[rofi/](rofi/)** - Application launcher
-- **[wlogout/](wlogout/)** - Logout menu
-- **[dunst/](dunst/)** - Notification daemon
+### Wayland Environment (Gruvbox Dragon)
+- **[hypr/](hypr/)** - Hyprland compositor, configured in **Lua** (Hyprland ≥ 0.55) — see [hypr/readme.md](hypr/readme.md)
+- **[waybar/](waybar/)** - Status bar (flush top panel, KDE-panel layout)
+- **[rofi/](rofi/)** - Application launcher + device/clipboard pickers
+- **[swaync/](swaync/)** - Notification center (history, DND, volume slider)
+- **[wlogout/](wlogout/)** - Session menu
 - **[sddm/](sddm/)** - Display manager theme
+
+All Wayland-stack colors are generated from the same
+`home-manager/desktop/kvantum/tools/palette.py` that themes KDE/GTK/Qt;
+dark/light switching is one command (`hypr/scripts/theme-mode.sh toggle`).
 
 ### Desktop Environment
 - **[kde/](kde/)** - KDE Plasma configuration
@@ -231,7 +235,7 @@ Never commit secrets! Use:
 - [x] Restructure Neovim config for upstream tracking
 - [ ] Refactor packages code to include common modules and further customizations
   - *Useful when deploying to different machines for personal or development use*
-- [ ] Document Hyprland setup fully
+- [x] Document Hyprland setup fully (see [hypr/readme.md](hypr/readme.md))
 - [ ] Add screenshots and demos
 
 ---

@@ -1,0 +1,94 @@
+/* Waybar — Gruvbox Dragon acrylic.
+ * Tokens come from colors.css (generated from palette.py; the active
+ * variant is copied into place by hypr/scripts/theme-mode.sh). */
+@import "colors.css";
+
+* {
+    font-family: "Inter", "Symbols Nerd Font", sans-serif;
+    font-size: 13.5px;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+}
+
+window#waybar {
+    /* flush panel: translucent surface + hairline bottom edge, like the
+     * KDE gruvbox-acrylic panel */
+    background: @bg_panel;
+    border-bottom: 1px solid @hairline;
+    color: @fg;
+}
+
+tooltip {
+    background: @bg_popup;
+    border: 1px solid @hairline;
+    border-radius: 8px;
+    color: @fg;
+}
+tooltip label { padding: 4px; }
+
+#workspaces {
+    margin: 4px 4px 4px 8px;
+}
+#workspaces button {
+    padding: 0 10px;
+    margin: 0 2px;
+    border-radius: 6px;
+    color: @fg_muted;
+    background: transparent;
+    transition: all 150ms ease;
+}
+#workspaces button.active {
+    color: @on_accent;
+    background: alpha(@accent, 0.85);
+}
+#workspaces button.urgent {
+    color: @on_accent;
+    background: alpha(@negative, 0.85);
+}
+#workspaces button:hover {
+    color: @fg_bright;
+    background: alpha(@fg, 0.12);
+}
+
+#window {
+    margin-left: 10px;
+    color: @fg;
+    font-weight: 500; /* Inter Medium, like KDE window titles */
+}
+window#waybar.empty #window { background: transparent; }
+
+/* right-side modules: quiet text chips with a hover wash */
+#memory, #network, #bluetooth, #pulseaudio, #battery,
+#clock, #tray, #custom-notifications, #custom-recording {
+    padding: 0 10px;
+    margin: 4px 1px;
+    border-radius: 6px;
+    color: @fg;
+    background: transparent;
+    transition: background 150ms ease;
+}
+#memory:hover, #network:hover, #bluetooth:hover, #pulseaudio:hover,
+#battery:hover, #clock:hover, #custom-notifications:hover {
+    background: alpha(@fg, 0.12);
+}
+
+#clock {
+    font-weight: 500;
+    margin-right: 4px;
+}
+
+#battery.warning { color: @neutral; }
+#battery.critical { color: @negative; }
+#pulseaudio.muted { color: @fg_muted; }
+#bluetooth.disabled { color: @fg_muted; }
+#network.disconnected { color: @fg_muted; }
+
+#custom-recording.active {
+    color: @on_accent;
+    background: alpha(@negative, 0.9);
+    font-weight: 600;
+}
+
+#tray > .passive { -gtk-icon-effect: dim; }
+#tray > .needs-attention { -gtk-icon-effect: highlight; }

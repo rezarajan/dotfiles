@@ -1,0 +1,154 @@
+/* SwayNC — Gruvbox Dragon acrylic notification center.
+ * Tokens from colors.css (generated; switched by hypr/scripts/theme-mode.sh). */
+@import url("colors.css");
+
+* {
+    font-family: "Inter", "Symbols Nerd Font", sans-serif;
+    font-size: 13.5px;
+}
+
+/* ---- floating notifications ---- */
+.notification-row {
+    outline: none;
+    margin: 0;
+    padding: 0;
+}
+
+.notification {
+    margin: 6px 8px;
+    border-radius: 12px;
+    border: 1px solid @hairline;
+    background: @bg_popup;
+    box-shadow: 0 4px 14px alpha(black, 0.25);
+    padding: 0;
+}
+
+.notification-content {
+    padding: 10px;
+}
+
+.notification-default-action:hover,
+.notification-action:hover {
+    background: alpha(@fg, 0.08);
+}
+
+.summary {
+    color: @fg_bright;
+    font-weight: 500;
+}
+.time {
+    color: @fg_muted;
+}
+.body {
+    color: @fg;
+}
+
+.critical {
+    border: 1px solid alpha(@negative, 0.6);
+}
+
+.notification-action {
+    border-radius: 8px;
+    border: 1px solid @hairline;
+    background: alpha(@fg, 0.05);
+    color: @fg;
+    margin: 4px;
+}
+
+.close-button {
+    background: transparent;
+    color: @fg_muted;
+    border-radius: 6px;
+    margin: 6px;
+    padding: 0;
+}
+.close-button:hover {
+    background: alpha(@negative, 0.85);
+    color: @on_accent;
+}
+
+/* ---- control center ---- */
+.control-center {
+    border-radius: 12px;
+    border: 1px solid @hairline;
+    background: @bg_popup;
+    margin: 4px;
+    padding: 8px;
+}
+
+.control-center .notification {
+    box-shadow: none;
+    background: alpha(@fg, 0.05);
+    margin: 4px 0;
+}
+
+.widget-title {
+    color: @fg_bright;
+    font-weight: 600;
+    margin: 4px 2px;
+}
+.widget-title > button {
+    border-radius: 6px;
+    border: 1px solid @hairline;
+    background: alpha(@fg, 0.06);
+    color: @fg;
+    padding: 2px 10px;
+}
+.widget-title > button:hover {
+    background: alpha(@accent, 0.85);
+    color: @on_accent;
+}
+
+.widget-dnd {
+    color: @fg;
+    margin: 4px 2px;
+}
+.widget-dnd > switch {
+    border-radius: 10px;
+    border: 1px solid @hairline;
+    background: alpha(@fg, 0.10);
+}
+.widget-dnd > switch:checked {
+    background: @accent;
+}
+.widget-dnd > switch slider {
+    border-radius: 8px;
+    background: @fg_bright;
+}
+
+.widget-volume {
+    background: transparent;
+    color: @fg;
+    padding: 4px 2px;
+}
+.widget-volume scale trough {
+    border-radius: 4px;
+    background: alpha(@fg, 0.15);
+    min-height: 8px;
+}
+.widget-volume scale highlight {
+    border-radius: 4px;
+    background: @accent;
+}
+.widget-volume scale slider {
+    background: @fg_bright;
+    border-radius: 8px;
+}
+
+.widget-mpris {
+    color: @fg;
+    padding: 0;
+}
+.widget-mpris-player {
+    border-radius: 12px;
+    background: alpha(@fg, 0.05);
+    padding: 8px;
+    margin: 4px 0;
+}
+.widget-mpris-title {
+    color: @fg_bright;
+    font-weight: 500;
+}
+.widget-mpris-subtitle {
+    color: @fg_muted;
+}

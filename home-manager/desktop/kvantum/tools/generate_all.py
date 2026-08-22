@@ -7,6 +7,7 @@
   4. Plasma desktop theme -> ../../plasma-theme/gruvbox-acrylic/
   5. GTK theme pair      -> ../../gtk/themes/Gruvbox-Dragon{,-Light}/
   6. Cursor theme pair   -> ../../cursors/Gruvbox-Dragon-Cursors{,-Light}/
+  7. Hyprland stack      -> <repo>/hypr, waybar, rofi, swaync, wlogout tokens
 
 Run after editing palette.py, then `home-manager switch` to deploy.
 """
@@ -20,7 +21,8 @@ sys.path.insert(0, str(HERE))
 
 for script in ("colorscheme_gen.py", "acrylic_gen.py",
                "patch_kvconfig.py", "plasma_theme_gen.py",
-               "gtk_theme_gen.py", "cursor_gen.py"):
+               "gtk_theme_gen.py", "cursor_gen.py",
+               "hyprland_gen.py"):
     if script == "cursor_gen.py" and not shutil.which("xcursorgen"):
         print("==> cursor_gen.py SKIPPED (xcursorgen not on PATH; "
               "committed artifacts remain current)")

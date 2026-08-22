@@ -1,51 +1,40 @@
+/* wlogout — Gruvbox Dragon session menu.
+ * The overlay always uses the dark tokens (theme-mode.sh copies
+ * colors-dark.css to colors.css unconditionally) because the button icons
+ * are light-on-transparent SVGs, like KDE's dark logout scrim. */
+@import url("colors.css");
+
 * {
-	background-image: none;
-	box-shadow: none;
+    background-image: none;
+    font-family: "Inter", sans-serif;
 }
 
 window {
-	background-color: rgba(48, 52, 70, 0.90);
+    background-color: rgba(15, 13, 13, 0.72);
 }
 
 button {
-	border-radius: 0;
-	border-color: #ca9ee6;
-	text-decoration-color: #c6d0f5;
-	color: #c6d0f5;
-	background-color: #292c3c;
-	border-style: solid;
-	border-width: 1px;
-	background-repeat: no-repeat;
-	background-position: center;
-	background-size: 25%;
+    color: @fg;
+    font-size: 15px;
+    background-color: alpha(@fg, 0.05);
+    border: 1px solid @hairline;
+    border-radius: 12px;
+    margin: 8px;
+    background-repeat: no-repeat;
+    background-position: center 35%;
+    background-size: 22%;
+    transition: all 150ms ease;
 }
 
 button:focus, button:active, button:hover {
-	/* 20% Overlay 2, 80% mantle */
-	background-color: rgb(63, 66, 85);
-	outline-style: none;
+    background-color: alpha(@accent, 0.85);
+    color: @on_accent;
+    border-color: alpha(@accent, 0.9);
 }
 
-#lock {
-    background-image: url("/home/cascadura/.config/wlogout/icons/lock.svg");
-}
-
-#logout {
-    background-image: url("/home/cascadura/.config/wlogout/icons/logout.svg");
-}
-
-#suspend {
-    background-image: url("/home/cascadura/.config/wlogout/icons/suspend.svg");
-}
-
-#hibernate {
-    background-image: url("/home/cascadura/.config/wlogout/icons/hibernate.svg");
-}
-
-#shutdown {
-    background-image: url("/home/cascadura/.config/wlogout/icons/shutdown.svg");
-}
-
-#reboot {
-    background-image: url("/home/cascadura/.config/wlogout/icons/reboot.svg");
-}
+#lock { background-image: image(url("icons/lock.svg")); }
+#logout { background-image: image(url("icons/logout.svg")); }
+#suspend { background-image: image(url("icons/suspend.svg")); }
+#hibernate { background-image: image(url("icons/hibernate.svg")); }
+#reboot { background-image: image(url("icons/reboot.svg")); }
+#shutdown { background-image: image(url("icons/shutdown.svg")); }

@@ -1,0 +1,18 @@
+-- Per-machine overrides (copy to lua/local.lua — that file is gitignored).
+-- Loaded last, so anything set here wins over the shared modules.
+
+-- Laptop panel at 1.6x (the old setup's default):
+-- hl.monitor({ output = "eDP-1", mode = "preferred", position = "auto", scale = 1.6 })
+
+-- External monitor left of the laptop:
+-- hl.monitor({ output = "DP-1", mode = "2560x1440@120", position = "0x0", scale = 1 })
+-- hl.monitor({ output = "eDP-1", mode = "preferred", position = "auto-right", scale = 1.6 })
+
+-- Virtual machine guest (VirtualBox/QEMU): software rendering + relaxed input
+-- hl.env("WLR_NO_HARDWARE_CURSORS", "1")
+-- hl.config({ misc = { vfr = false } })
+
+-- NVIDIA:
+-- hl.env("GBM_BACKEND", "nvidia-drm")
+-- hl.env("__GLX_VENDOR_LIBRARY_NAME", "nvidia")
+-- hl.env("LIBVA_DRIVER_NAME", "nvidia")

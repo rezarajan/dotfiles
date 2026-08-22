@@ -1,1 +1,14 @@
 apps/
+
+# active theme variant — copies made at runtime by hypr/scripts/theme-mode.sh
+waybar/colors.css
+rofi/colors.rasi
+swaync/colors.css
+wlogout/colors.css
+hypr/theme/hyprlock-colors.conf
+
+# per-machine hyprland overrides (start from hypr/lua/local.lua.example)
+hypr/lua/local.lua
+
+# user-selected wallpaper (seeded from wallpapers/ on first start)
+hypr/wallpaper.jpg

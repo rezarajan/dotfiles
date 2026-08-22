@@ -1,3 +1,17 @@
+/* rofi — global configuration. The look lives in gruvbox.rasi. */
 configuration {
+    modes: "drun,run,window";
+    font: "Inter 11";
+    show-icons: true;
+    icon-theme: "Gruvbox-Plus-Dark";
+    drun-display-format: "{name}";
+    display-drun: "Apps";
+    display-run: "Run";
+    display-window: "Windows";
+    matching: "fuzzy";
+    sort: true;
+    sorting-method: "fzf";
+    terminal: "ghostty";
 }
-@theme "rounded-catppuccin"
+
+@theme "gruvbox"

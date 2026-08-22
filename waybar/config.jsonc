@@ -1,0 +1,113 @@
+// Waybar — Gruvbox Dragon. Flush 34px top bar mirroring the KDE panel:
+// workspaces + window title left; system status, tray and clock right.
+// Colors live in colors.css (generated; switched by hypr/scripts/theme-mode.sh).
+{
+    "layer": "top",
+    "position": "top",
+    "height": 34,
+    "spacing": 2,
+
+    "modules-left": ["hyprland/workspaces", "hyprland/window"],
+    "modules-center": [],
+    "modules-right": [
+        "custom/recording",
+        "tray",
+        "memory",
+        "network",
+        "bluetooth",
+        "pulseaudio",
+        "battery",
+        "clock",
+        "custom/notifications"
+    ],
+
+    "hyprland/workspaces": {
+        "format": "{name}",
+        "on-click": "activate",
+        "sort-by-number": true
+    },
+
+    "hyprland/window": {
+        "max-length": 60,
+        "separate-outputs": true
+    },
+
+    "custom/recording": {
+        "exec": "test -f \"${XDG_RUNTIME_DIR:-/tmp}/gruvbox-recording\" && echo '{\"text\": \"● REC\", \"class\": \"active\", \"tooltip\": \"Recording — Super+Shift+R stops\"}' || echo '{\"text\": \"\"}'",
+        "return-type": "json",
+        "interval": "once",
+        "signal": 8,
+        "on-click": "bash ~/.config/hypr/scripts/record.sh toggle"
+    },
+
+    "tray": {
+        "icon-size": 16,
+        "spacing": 8
+    },
+
+    "memory": {
+        "format": "󰍛 {percentage}%",
+        "interval": 5,
+        "tooltip-format": "{used:0.1f} / {total:0.1f} GiB"
+    },
+
+    "network": {
+        "format-wifi": "󰤨 {essid}",
+        "format-ethernet": "󰈀",
+        "format-disconnected": "󰤭",
+        "tooltip-format": "{ifname}: {ipaddr}\n↓ {bandwidthDownBytes}  ↑ {bandwidthUpBytes}",
+        "interval": 5,
+        "max-length": 18,
+        "on-click": "nm-connection-editor"
+    },
+
+    "bluetooth": {
+        "format": "󰂯",
+        "format-disabled": "",
+        "format-connected": "󰂱 {num_connections}",
+        "tooltip-format-connected": "{device_enumerate}",
+        "on-click": "blueman-manager"
+    },
+
+    "pulseaudio": {
+        "format": "{icon} {volume}%",
+        "format-muted": "󰝟",
+        "format-icons": { "default": ["󰕿", "󰖀", "󰕾"] },
+        "format-source": "󰍬",
+        "format-source-muted": "󰍭",
+        "on-click": "pavucontrol",
+        "on-click-right": "bash ~/.config/hypr/scripts/audio.sh sink",
+        "on-click-middle": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+        "tooltip-format": "{desc}\nRight-click: switch device"
+    },
+
+    "battery": {
+        "states": { "warning": 25, "critical": 10 },
+        "format": "{icon} {capacity}%",
+        "format-charging": "󰂄 {capacity}%",
+        "format-icons": ["󰁺", "󰁼", "󰁾", "󰂀", "󰁹"],
+        "tooltip-format": "{timeTo}"
+    },
+
+    "clock": {
+        "format": "{:%H:%M}",
+        "tooltip-format": "<big>{:%A, %B %d}</big>\n<tt>{calendar}</tt>",
+        "calendar": { "format": { "today": "<b><u>{}</u></b>" } }
+    },
+
+    "custom/notifications": {
+        "exec": "swaync-client -swb",
+        "return-type": "json",
+        "format": "{icon}",
+        "format-icons": {
+            "notification": "󱅫",
+            "none": "󰂚",
+            "dnd-notification": "󰂛",
+            "dnd-none": "󰂛"
+        },
+        "on-click": "swaync-client -t -sw",
+        "on-click-right": "swaync-client -d -sw",
+        "escape": true,
+        "tooltip": false
+    }
+}
