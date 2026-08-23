@@ -216,9 +216,53 @@ def emit_gtk_colors():
             "tooltip_background": t["popup"],
             "tooltip_border": borders,
         }
+        # Breeze GTK's stylesheet references "_breeze"-suffixed twins of the
+        # standard names (plus backdrop/insensitive/titlebar variants), so
+        # every color is emitted under both — without the twins the theme
+        # keeps its baked-in stock palette.
+        breeze = {f"{name}_breeze": val for name, val in colors.items()}
+        disabled = q["disabled.text.color"]
+        breeze.update({
+            "text_view_bg": q["base.color"],
+            "print_paper_backdrop_breeze": q["base.color"],
+            "insensitive_base_fg_color_breeze": disabled,
+            "insensitive_selected_bg_color_breeze": q["inactive.highlight.color"],
+            "insensitive_selected_fg_color_breeze": disabled,
+            "insensitive_unfocused_bg_color_breeze": q["window.color"],
+            "insensitive_unfocused_fg_color_breeze": disabled,
+            "insensitive_unfocused_selected_bg_color_breeze": q["inactive.highlight.color"],
+            "insensitive_unfocused_selected_fg_color_breeze": disabled,
+            "unfocused_insensitive_borders_breeze": borders,
+            "theme_unfocused_selected_bg_color_alt_breeze": q["inactive.highlight.color"],
+            "theme_unfocused_view_bg_color_breeze": q["base.color"],
+            "theme_unfocused_view_text_color_breeze": q["text.color"],
+            "theme_titlebar_background_breeze": q["window.color"],
+            "theme_titlebar_background_light_breeze": t["bg_alt"],
+            "theme_titlebar_background_backdrop_breeze": q["window.color"],
+            "theme_titlebar_foreground_breeze": q["window.text.color"],
+            "theme_titlebar_foreground_backdrop_breeze": t["fg_muted"],
+            "theme_titlebar_foreground_insensitive_breeze": disabled,
+            "theme_titlebar_foreground_insensitive_backdrop_breeze": disabled,
+        })
+        for var in ("backdrop", "insensitive", "backdrop_insensitive"):
+            breeze[f"theme_button_background_{var}_breeze"] = q["button.color"]
+        for deco, val in (("focus", t["accent"]), ("hover", s["accent_hover"])):
+            for var in ("backdrop", "insensitive", "backdrop_insensitive"):
+                breeze[f"theme_button_decoration_{deco}_{var}_breeze"] = val
+        breeze["theme_button_foreground_insensitive_breeze"] = disabled
+        for var in ("backdrop", "backdrop_insensitive"):
+            breeze[f"theme_button_foreground_{var}_breeze"] = q["button.text.color"]
+        for var in ("active_backdrop", "active_insensitive",
+                    "active_backdrop_insensitive"):
+            breeze[f"theme_button_foreground_{var}_breeze"] = t["fg_bright"]
+        for sem, val in (("error", s["negative"]), ("success", s["positive"]),
+                         ("warning", s["neutral"])):
+            for var in ("backdrop", "insensitive", "insensitive_backdrop"):
+                breeze[f"{sem}_color_{var}_breeze"] = val
+
         lines = [f"/* {HEADER} */"]
         lines += [f"@define-color {name} {_css_color(val)};"
-                  for name, val in colors.items()]
+                  for name, val in {**colors, **breeze}.items()]
         out = ROOT / "hypr" / "theme" / f"gtk-colors-{mode}.css"
         out.parent.mkdir(parents=True, exist_ok=True)
         out.write_text("\n".join(lines) + "\n", encoding="utf-8", newline="\n")
