@@ -70,7 +70,7 @@ Bound to **Super+Shift+W**.
 ```
 hyprland waybar swaync rofi-wayland swww swaybg hypridle hyprlock swaylock
 hyprpolkitagent xdg-desktop-portal-hyprland xdg-desktop-portal-gtk
-pipewire wireplumber pipewire-pulse pwvucontrol pavucontrol
+pipewire wireplumber pipewire-pulse pavucontrol
 grim slurp swappy wf-recorder cliphist wl-clipboard libnotify
 brightnessctl playerctl jq psmisc
 networkmanager nm-connection-editor network-manager-applet blueman
@@ -88,6 +88,8 @@ used to own — the GTK `colors.css` named-color sheet, `qt6ct.conf`
 generated template otherwise). GTK apps, Chromium, ghostty, and Qt/KDE
 apps like Dolphin all follow the same palette and the light/dark toggle.
 
+The audio applet prefers `pwvucontrol` when present (AUR on Arch,
+`pwvucontrol` in nixpkgs) and falls back to `pavucontrol`.
 The session menu (lock/logout/power) is rofi-based (`scripts/power-menu.sh`,
 Super+Backspace or the bar's ⏻ button); the `wlogout/` config remains for
 those who prefer it (AUR: `yay -S wlogout`). Tested end-to-end on

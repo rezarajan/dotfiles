@@ -12,6 +12,7 @@ configuration {
     sort: true;
     sorting-method: "fzf";
     terminal: "ghostty";
+    click-to-exit: true;
 }
 
 @theme "gruvbox"

@@ -32,13 +32,32 @@ hl.on("window.close", function(w)
     end
 end)
 
-hl.on("window.active", function(w)
-    if open_applets == 0 then return end
-    if w and APPLET_CLASSES[w.class] then return end
-    -- focus went elsewhere (or to the desktop): dismiss every open applet
+local function dismiss_applets(predicate)
     for _, win in ipairs(hl.get_windows()) do
-        if APPLET_CLASSES[win.class] then
+        if APPLET_CLASSES[win.class] and (not predicate or predicate(win)) then
             hl.dispatch(hl.dsp.window.close({ window = win }))
         end
     end
+end
+
+hl.on("window.active", function(w)
+    if open_applets == 0 then return end
+    if w and APPLET_CLASSES[w.class] then return end
+    -- focus went elsewhere: dismiss every open applet
+    dismiss_applets()
 end)
+
+-- Clicking outside an applet also dismisses it — plasma behavior. Focus
+-- alone can't catch clicks on the empty desktop or on layer surfaces, so
+-- watch every unmodified left click (non_consuming: apps still get it)
+-- and close applets whose box doesn't contain the cursor. The top strip
+-- is exempt: bar icons toggle their own panels via scripts/panel.sh.
+hl.bind("mouse:272", function()
+    if open_applets == 0 then return end
+    local cur = hl.get_cursor_pos()
+    if not cur or cur.y <= 40 then return end
+    dismiss_applets(function(win)
+        return cur.x < win.at.x or cur.x > win.at.x + win.size.x
+            or cur.y < win.at.y or cur.y > win.at.y + win.size.y
+    end)
+end, { non_consuming = true })
