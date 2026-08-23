@@ -52,7 +52,7 @@ Bound to **Super+Shift+W**.
 
 ## Daily driving
 
-- **Super+F1** — searchable keybinding cheatsheet (live from `hyprctl binds`).
+- **Super+/** — searchable keybinding cheatsheet (live from `hyprctl binds`).
 - **Video calls**: screen sharing runs through xdg-desktop-portal-hyprland
   (window/output picker). **Super+A / Super+Shift+A** switch speaker /
   microphone mid-call (streams migrate immediately). A privacy chip

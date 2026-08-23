@@ -7,7 +7,7 @@
     "height": 38,
     "spacing": 2,
 
-    "modules-left": ["hyprland/workspaces", "hyprland/window"],
+    "modules-left": ["group/workspaces", "hyprland/window"],
     "modules-center": ["mpris"],
     "modules-right": [
         "custom/recording",
@@ -20,15 +20,48 @@
         "battery",
         "custom/clock",
         "custom/theme",
-        "custom/help",
         "custom/notifications",
         "custom/power"
     ],
 
-    "hyprland/workspaces": {
-        "format": "{name}",
-        "on-click": "activate",
-        "sort-by-number": true
+    // workspace pills as custom modules: the built-in hyprland module still
+    // sends pre-Lua dispatchers, so its clicks no-op on Hyprland >= 0.55.
+    // These dispatch real Lua; hypr/lua/bar.lua pokes signal 7 on changes.
+    "group/workspaces": {
+        "orientation": "inherit",
+        "modules": ["custom/ws1", "custom/ws2", "custom/ws3",
+                    "custom/ws4", "custom/ws5"]
+    },
+    "custom/ws1": {
+        "exec": "bash ~/.config/hypr/scripts/ws-status.sh 1",
+        "return-type": "json", "interval": 10, "signal": 7,
+        "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = 1 })'",
+        "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })'",
+        "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })'"
+    },
+    "custom/ws2": {
+        "exec": "bash ~/.config/hypr/scripts/ws-status.sh 2",
+        "return-type": "json", "interval": 10, "signal": 7,
+        "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = 2 })'",
+        "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })'",
+        "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })'"
+    },
+    "custom/ws3": {
+        "exec": "bash ~/.config/hypr/scripts/ws-status.sh 3",
+        "return-type": "json", "interval": 10, "signal": 7,
+        "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = 3 })'",
+        "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })'",
+        "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })'"
+    },
+    "custom/ws4": {
+        "exec": "bash ~/.config/hypr/scripts/ws-status.sh 4",
+        "return-type": "json", "interval": 10, "signal": 7,
+        "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = 4 })'"
+    },
+    "custom/ws5": {
+        "exec": "bash ~/.config/hypr/scripts/ws-status.sh 5",
+        "return-type": "json", "interval": 10, "signal": 7,
+        "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = 5 })'"
     },
 
     "hyprland/window": {
@@ -145,12 +178,6 @@
         "format": "󰐥",
         "tooltip-format": "Session menu",
         "on-click": "bash ~/.config/hypr/scripts/power-menu.sh"
-    },
-
-    "custom/help": {
-        "format": "󰋖",
-        "tooltip-format": "Keybindings (Super+F1)",
-        "on-click": "bash ~/.config/hypr/scripts/keybinds-help.sh"
     },
 
     // media controls: shows the playing track, click toggles, scroll seeks;

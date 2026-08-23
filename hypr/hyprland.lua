@@ -26,6 +26,7 @@ require("lua/options")
 require("lua/animations")
 require("lua/rules")
 require("lua/applets")
+require("lua/bar")
 require("lua/binds")
 require("lua/autostart")
 

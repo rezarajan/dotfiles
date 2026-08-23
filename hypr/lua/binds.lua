@@ -19,7 +19,8 @@ bind(mod .. " + Space", hl.dsp.exec_cmd(apps.menu), { description = "App launche
 bind(mod .. " + B", hl.dsp.exec_cmd(apps.browser), { description = "Browser" })
 bind(mod .. " + E", hl.dsp.exec_cmd(apps.files), { description = "File manager" })
 bind(mod .. " + V", hl.dsp.exec_cmd(apps.clipboard), { description = "Clipboard history" })
-bind(mod .. " + F1", hl.dsp.exec_cmd(apps.keybinds_help), { description = "Keybinding cheatsheet" })
+-- Super+/ — "?" mnemonic; no function keys anywhere (40% keyboards)
+bind(mod .. " + slash", hl.dsp.exec_cmd(apps.keybinds_help), { description = "Keybinding cheatsheet" })
 
 -- ---------------------------------------------------------------- windows
 bind(mod .. " + Q", hl.dsp.window.close(), { description = "Close window" })

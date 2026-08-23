@@ -29,13 +29,20 @@ from gi.repository import Gdk, GdkPixbuf, Gtk  # noqa: E402
 ART_SIZE = 190
 
 
-def pctl(*args):
+def pctl(*args, player=None):
+    cmd = ["playerctl"]
+    if player:
+        cmd += ["-p", player]
+    cmd += list(args)
     try:
-        out = subprocess.run(["playerctl", *args], capture_output=True,
-                             text=True, timeout=2)
+        out = subprocess.run(cmd, capture_output=True, text=True, timeout=2)
         return out.stdout.strip() if out.returncode == 0 else ""
     except Exception:
         return ""
+
+
+def list_players():
+    return [p for p in pctl("-l").splitlines() if p]
 
 
 def art_path(url):
@@ -66,6 +73,26 @@ class MediaPanel(Gtk.Window):
                         margin=18)
         self.add(outer)
 
+        # player switcher: ‹ chromium · 2 of 3 › — shown when several
+        # apps (or several tabs of one app) expose players
+        self.players = []
+        self.idx = 0
+        switcher = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6,
+                           halign=Gtk.Align.CENTER)
+        self.prev_player = Gtk.Button(label="‹")
+        self.prev_player.get_style_context().add_class("player-nav")
+        self.prev_player.connect("clicked", self._switch_player, -1)
+        self.player_label = Gtk.Label(label="")
+        self.player_label.get_style_context().add_class("media-player-name")
+        self.next_player = Gtk.Button(label="›")
+        self.next_player.get_style_context().add_class("player-nav")
+        self.next_player.connect("clicked", self._switch_player, 1)
+        switcher.pack_start(self.prev_player, False, False, 0)
+        switcher.pack_start(self.player_label, False, False, 8)
+        switcher.pack_start(self.next_player, False, False, 0)
+        outer.pack_start(switcher, False, False, 0)
+        self.switcher = switcher
+
         self.art = Gtk.Image()
         self.art.set_size_request(ART_SIZE, ART_SIZE)
         art_frame = Gtk.Box(halign=Gtk.Align.CENTER)
@@ -91,14 +118,14 @@ class MediaPanel(Gtk.Window):
             b.get_style_context().add_class("media-button")
             if key == "play":
                 b.get_style_context().add_class("media-play")
+                b.set_size_request(56, 56)   # true circles, never pills
+            else:
+                b.set_size_request(46, 46)
             b.connect("clicked", self._on_control, action)
+            b.set_valign(Gtk.Align.CENTER)
             controls.pack_start(b, False, False, 0)
             self.buttons[key] = b
         outer.pack_start(controls, False, False, 6)
-
-        self.player = Gtk.Label(label="")
-        self.player.get_style_context().add_class("media-player-name")
-        outer.pack_start(self.player, False, False, 0)
 
         css = Gtk.CssProvider()
         css.load_from_data(b"""
@@ -112,51 +139,94 @@ class MediaPanel(Gtk.Window):
             .media-play {
                 background: alpha(@theme_selected_bg_color, 0.9);
                 color: @theme_selected_fg_color;
-                min-width: 54px; min-height: 54px; font-size: 24px;
+                font-size: 24px;
             }
+            .player-nav {
+                border-radius: 999px; min-width: 30px; min-height: 30px;
+                padding: 0; font-size: 15px;
+                background: transparent; border: none;
+                color: @theme_unfocused_fg_color_breeze;
+            }
+            .player-nav:hover { color: @theme_fg_color; }
         """)
+        # above USER priority (800): the session gtk.css must not square
+        # these circles back off
         Gtk.StyleContext.add_provider_for_screen(
             Gdk.Screen.get_default(), css,
-            Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
+            Gtk.STYLE_PROVIDER_PRIORITY_USER + 100)
 
         self._last_art = None
         self.refresh()
         GLib.timeout_add(1000, self.refresh)
 
+    def _current(self):
+        if not self.players:
+            return None
+        self.idx %= len(self.players)
+        return self.players[self.idx]
+
+    def _switch_player(self, _button, step):
+        if self.players:
+            self.idx = (self.idx + step) % len(self.players)
+            self.refresh()
+
     def _on_control(self, _button, action):
-        pctl(action)
+        pctl(action, player=self._current())
         GLib.timeout_add(200, self.refresh)
 
     def refresh(self):
-        status = pctl("status")
+        old = self._current()
+        self.players = list_players()
+        if old in self.players:
+            self.idx = self.players.index(old)
+        player = self._current()
+
+        many = len(self.players) > 1
+        self.prev_player.set_visible(many)
+        self.next_player.set_visible(many)
+        if player:
+            name = player.split(".")[0]
+            label = (f"{name} · {self.idx + 1} of {len(self.players)}"
+                     if many else name)
+            self.player_label.set_label(label)
+        else:
+            self.player_label.set_label("no players")
+
+        status = pctl("status", player=player) if player else ""
         if not status:
             self.title.set_label("Nothing playing")
             self.artist.set_label("")
-            self.player.set_label("")
             self.art.clear()
             return True
 
-        self.title.set_label(pctl("metadata", "title") or "Unknown title")
-        self.artist.set_label(pctl("metadata", "artist"))
-        self.player.set_label(pctl("metadata", "--format", "{{playerName}}"))
+        self.title.set_label(pctl("metadata", "title", player=player)
+                             or "Unknown title")
+        self.artist.set_label(pctl("metadata", "artist", player=player))
         self.buttons["play"].set_label(
             "\U000f03e4" if status == "Playing" else "\U000f040a")
 
-        art = art_path(pctl("metadata", "mpris:artUrl"))
+        art = art_path(pctl("metadata", "mpris:artUrl", player=player))
         if art != self._last_art:
             self._last_art = art
+            done = False
             if art:
                 try:
                     pix = GdkPixbuf.Pixbuf.new_from_file_at_scale(
                         art, ART_SIZE, ART_SIZE, True)
                     self.art.set_from_pixbuf(pix)
+                    done = True
                 except Exception:
-                    self.art.clear()
-            else:
-                self.art.clear()
+                    pass
+            if not done:
+                # players without artwork get a quiet glyph, not a hole
+                self.art.set_from_icon_name("folder-music-symbolic",
+                                            Gtk.IconSize.DIALOG)
+                self.art.set_pixel_size(96)
         return True
 
 
 if __name__ == "__main__":
-    MediaPanel().show_all()
+    panel = MediaPanel()
+    panel.show_all()
+    panel.refresh()   # after show_all, so switcher visibility sticks
     Gtk.main()

@@ -53,7 +53,7 @@ build_menu() {
     fi
 
     printf '󰑓  Rescan networks\n'
-    printf '󰒓  Connection editor…\n'
+    printf '󰒓  Advanced settings…\n'
 }
 
 choice="$(build_menu | rofi -dmenu -i -p 'Network')" || exit 0
@@ -62,7 +62,7 @@ case "$choice" in
     *"Wi-Fi: on"*)  nmcli radio wifi off; notify -i network-wireless-offline "Wi-Fi disabled" ;;
     *"Wi-Fi: off"*) nmcli radio wifi on; notify -i network-wireless "Wi-Fi enabled" ;;
     *"Rescan"*)     nmcli device wifi rescan 2>/dev/null; exec "$0" ;;
-    *"Connection editor"*) exec bash "$here/panel.sh" network ;;
+    *"Advanced settings"*) exec bash "$here/panel.sh" network ;;
     *"VPN ▸ connect")
         name="${choice#󰖂  }"; name="${name% — VPN ▸ connect}"
         nmcli connection up "$name" >/dev/null 2>&1 \

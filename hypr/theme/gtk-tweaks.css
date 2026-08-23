@@ -83,12 +83,26 @@ scrollbar slider:hover {
     background: alpha(@theme_fg_color, 0.5);
 }
 
-/* ---- buttons / entries: match the desktop's 8px rhythm ---- */
+/* ---- buttons / entries: soft, never boxy ---- */
 button {
-    border-radius: 8px;
+    border-radius: 10px;
 }
-entry {
-    border-radius: 8px;
+entry, combobox entry, spinbutton {
+    border-radius: 10px;
+}
+
+/* ---- menus & popovers: rounded surfaces, pill items ---- */
+menu, .menu, popover, popover.background {
+    border-radius: 12px;
+}
+menu menuitem, .menu menuitem, popover modelbutton {
+    border-radius: 7px;
+    margin: 1px 4px;
+    padding: 5px 10px;
+}
+menu menuitem:hover, popover modelbutton:hover {
+    background: alpha(@theme_selected_bg_color, 0.9);
+    color: @theme_selected_fg_color;
 }
 
 /* ---- toolbars & headers sit on the window surface, no extra chrome ---- */
