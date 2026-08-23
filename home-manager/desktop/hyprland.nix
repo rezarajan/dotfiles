@@ -49,7 +49,8 @@ in
       wl-clipboard
       brightnessctl
       playerctl
-      pavucontrol
+      pwvucontrol # audio mixer, shown as a bar dropdown applet
+      pavucontrol # fallback mixer
       libnotify
       jq
     ]);

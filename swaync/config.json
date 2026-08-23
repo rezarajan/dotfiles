@@ -42,7 +42,7 @@
         },
         "volume": {
             "label": "󰕾",
-            "show-per-app": false
+            "show-per-app": true
         },
         "mpris": {
             "image-size": 72,

@@ -66,7 +66,7 @@ Bound to **Super+Shift+W**.
 ```
 hyprland waybar swaync rofi-wayland wlogout hyprpaper swaybg hypridle hyprlock
 hyprpolkitagent xdg-desktop-portal-hyprland xdg-desktop-portal-gtk
-pipewire wireplumber pipewire-pulse pavucontrol
+pipewire wireplumber pipewire-pulse pwvucontrol pavucontrol
 grim slurp swappy wf-recorder cliphist wl-clipboard libnotify
 brightnessctl playerctl jq
 inter-font ttf-jetbrains-mono ttf-nerd-fonts-symbols

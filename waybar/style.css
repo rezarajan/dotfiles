@@ -92,3 +92,28 @@ window#waybar.empty #window { background: transparent; }
 
 #tray > .passive { -gtk-icon-effect: dim; }
 #tray > .needs-attention { -gtk-icon-effect: highlight; }
+
+/* hover-out volume slider (group/audio drawer) */
+#pulseaudio-slider {
+    min-width: 110px;
+    margin: 4px 2px;
+    padding: 0 6px;
+}
+#pulseaudio-slider trough {
+    min-height: 6px;
+    min-width: 90px;
+    background: alpha(@fg, 0.18);
+    border-radius: 3px;
+}
+#pulseaudio-slider highlight {
+    background: @accent;
+    border-radius: 3px;
+}
+#pulseaudio-slider slider {
+    background: @fg_bright;
+    border-radius: 7px;
+    min-height: 14px;
+    min-width: 14px;
+    margin: -4px;
+    box-shadow: 0 1px 3px alpha(black, 0.4);
+}

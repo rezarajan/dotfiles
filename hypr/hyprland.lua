@@ -11,6 +11,7 @@
 --   lua/options.lua    general / decoration / input / layout options
 --   lua/animations.lua curves and animation tree (fast, KDE-like feel)
 --   lua/rules.lua      window / layer / workspace rules
+--   lua/applets.lua    KDE-style dropdown popups (close on focus loss)
 --   lua/binds.lua      keybindings (vim-flavoured, KDE muscle memory)
 --   lua/autostart.lua  session services (bar, notifications, portal env)
 --
@@ -24,6 +25,7 @@ require("lua/monitors")
 require("lua/options")
 require("lua/animations")
 require("lua/rules")
+require("lua/applets")
 require("lua/binds")
 require("lua/autostart")
 

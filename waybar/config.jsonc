@@ -15,7 +15,7 @@
         "memory",
         "network",
         "bluetooth",
-        "pulseaudio",
+        "group/audio",
         "battery",
         "clock",
         "custom/notifications"
@@ -69,16 +69,34 @@
         "on-click": "blueman-manager"
     },
 
+    // KDE-style audio: hover slides out a volume slider, click drops the
+    // mixer applet down from the bar (see hypr/scripts/audio-panel.sh)
+    "group/audio": {
+        "orientation": "inherit",
+        "drawer": {
+            "transition-duration": 300,
+            "transition-left-to-right": false,
+            "children-class": "audio-drawer"
+        },
+        "modules": ["pulseaudio", "pulseaudio/slider"]
+    },
+
     "pulseaudio": {
         "format": "{icon} {volume}%",
         "format-muted": "󰝟",
         "format-icons": { "default": ["󰕿", "󰖀", "󰕾"] },
         "format-source": "󰍬",
         "format-source-muted": "󰍭",
-        "on-click": "pavucontrol",
+        "on-click": "bash ~/.config/hypr/scripts/audio-panel.sh",
         "on-click-right": "bash ~/.config/hypr/scripts/audio.sh sink",
         "on-click-middle": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
-        "tooltip-format": "{desc}\nRight-click: switch device"
+        "tooltip-format": "{desc}\nClick: mixer · right-click: switch device"
+    },
+
+    "pulseaudio/slider": {
+        "min": 0,
+        "max": 100,
+        "orientation": "horizontal"
     },
 
     "battery": {
