@@ -25,8 +25,10 @@ if [ -z "$BIN" ]; then
     exit 1
 fi
 
-if pgrep -x "$BIN" >/dev/null 2>&1; then
-    pkill -x "$BIN"
+# match on the full command line: -x compares against the 15-char comm
+# field and silently never matches longer names (nm-connection-editor)
+if pgrep -f "(^|/)$BIN( |\$)" >/dev/null 2>&1; then
+    pkill -f "(^|/)$BIN( |\$)"
 else
     exec "$BIN"
 fi
