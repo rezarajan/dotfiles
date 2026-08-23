@@ -287,7 +287,11 @@ def emit_kdeglobals():
             ("light", "GruvboxDragonLight", "Gruvbox-Plus-Light", "kvantum")):
         colors_src = (HERE.parents[1] / "color-schemes" / f"{scheme}.colors")
         lines = [f"# {HEADER}",
-                 "[General]", f"ColorScheme={scheme}"]
+                 "[General]", f"ColorScheme={scheme}",
+                 # ghostty is the terminal everywhere (matches the KDE
+                 # session's TerminalApplication)
+                 "TerminalApplication=ghostty",
+                 "TerminalService=com.mitchellh.ghostty.desktop"]
         lines += [f"{k}={v}" for k, v in KDE_FONTS.items()]
         lines += ["XftAntialias=true", "XftHintStyle=hintslight",
                   "XftSubPixel=none", "",

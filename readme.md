@@ -8,7 +8,7 @@ My personal configuration files for Arch Linux with Wayland, managed through Hom
 
 [![Neovim](https://img.shields.io/badge/Neovim-57A143?style=flat&logo=neovim&logoColor=white)](nvim/)
 [![Hyprland](https://img.shields.io/badge/Hyprland-00B4D8?style=flat&logo=wayland&logoColor=white)](hypr/)
-[![Alacritty](https://img.shields.io/badge/Alacritty-F46D01?style=flat&logo=alacritty&logoColor=white)](alacritty/)
+[![Ghostty](https://img.shields.io/badge/Ghostty-282828?style=flat&logoColor=white)](ghostty/)
 [![Home Manager](https://img.shields.io/badge/Home_Manager-5277C3?style=flat&logo=nixos&logoColor=white)](home-manager/)
 
 </div>
@@ -19,7 +19,7 @@ My personal configuration files for Arch Linux with Wayland, managed through Hom
 
 ### Core Applications
 - **[nvim/](nvim/)** - Neovim config based on kickstart.nvim with custom plugins (Oil, Yazi)
-- **[alacritty/](alacritty/)** - Terminal emulator configuration
+- **[ghostty/](ghostty/)** - Terminal emulator (default everywhere: Hyprland, rofi, KDE)
 - **[home-manager/](home-manager/)** - Nix-based declarative configuration management
 
 ### Wayland Environment (Gruvbox Dragon)
@@ -90,7 +90,7 @@ git clone https://github.com/yourusername/dotfiles.git ~/git/dotfiles
 
 # Link individual configs
 ln -sf ~/git/dotfiles/nvim ~/.config/nvim
-ln -sf ~/git/dotfiles/alacritty ~/.config/alacritty
+ln -sf ~/git/dotfiles/ghostty ~/.config/ghostty
 ln -sf ~/git/dotfiles/hypr ~/.config/hypr
 ln -sf ~/git/dotfiles/waybar ~/.config/waybar
 # ... and so on
@@ -180,7 +180,6 @@ Edit `home-manager/home.nix`:
 {
   home.packages = with pkgs; [
     neovim
-    alacritty
     # ... your packages
   ];
 
@@ -214,7 +213,7 @@ This creates a symlink from `~/.config/nvim` to `~/git/dotfiles/nvim`.
 ln -sf ~/git/dotfiles/<config-name> ~/.config/<config-name>
 
 # Multiple configs
-for dir in nvim alacritty hypr waybar rofi; do
+for dir in nvim ghostty hypr waybar rofi; do
   ln -sf ~/git/dotfiles/$dir ~/.config/$dir
 done
 ```
