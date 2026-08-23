@@ -7,6 +7,7 @@ local apps = require("lua/apps")
 
 local mod = "SUPER"
 local dirs = { h = "l", j = "d", k = "u", l = "r" }
+local dir_names = { l = "left", d = "down", u = "up", r = "right" }
 
 local function bind(keys, action, flags)
     hl.bind(keys, action, flags)
@@ -32,9 +33,9 @@ bind(mod .. " + Tab", hl.dsp.layout("togglesplit"), { description = "Toggle spli
 -- focus / move (vim keys)
 for key, dir in pairs(dirs) do
     bind(mod .. " + " .. key, hl.dsp.focus({ direction = dir }),
-        { description = "Focus " .. dir })
+        { description = "Focus " .. dir_names[dir] })
     bind(mod .. " + SHIFT + " .. key, hl.dsp.window.move({ direction = dir }),
-        { description = "Move window " .. dir })
+        { description = "Move window " .. dir_names[dir] })
 end
 
 -- resize: quick chords plus a hold-to-resize submap (Super+R, like Meta+T
@@ -102,14 +103,16 @@ bind("Print", hl.dsp.exec_cmd(apps.screenshot_screen), { description = "Screensh
 bind(mod .. " + Print", hl.dsp.exec_cmd(apps.screenshot_window), { description = "Screenshot window" })
 bind(mod .. " + SHIFT + R", hl.dsp.exec_cmd(apps.record_toggle), { description = "Screen recording on/off" })
 
--- ----------------------------------------------------- media & hardware keys
-local wpctl = "wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ "
-bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd(wpctl .. "5%+"), { locked = true, repeating = true })
-bind("XF86AudioLowerVolume", hl.dsp.exec_cmd(wpctl .. "5%-"), { locked = true, repeating = true })
-bind("XF86AudioMute", hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"), { locked = true })
-bind("XF86AudioMicMute", hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"), { locked = true })
-bind("XF86MonBrightnessUp", hl.dsp.exec_cmd("brightnessctl -e4 -n2 set 5%+"), { locked = true, repeating = true })
-bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("brightnessctl -e4 -n2 set 5%-"), { locked = true, repeating = true })
+-- ------------------------------------------------- media & hardware keys
+-- media keys go through the OSD script so every press shows the
+-- volume/brightness slider popup
+local osd = apps.script("osd.sh")
+bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd(osd .. " volume-up"), { locked = true, repeating = true })
+bind("XF86AudioLowerVolume", hl.dsp.exec_cmd(osd .. " volume-down"), { locked = true, repeating = true })
+bind("XF86AudioMute", hl.dsp.exec_cmd(osd .. " volume-mute"), { locked = true })
+bind("XF86AudioMicMute", hl.dsp.exec_cmd(osd .. " mic-mute"), { locked = true })
+bind("XF86MonBrightnessUp", hl.dsp.exec_cmd(osd .. " brightness-up"), { locked = true, repeating = true })
+bind("XF86MonBrightnessDown", hl.dsp.exec_cmd(osd .. " brightness-down"), { locked = true, repeating = true })
 bind("XF86AudioPlay", hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
 bind("XF86AudioPause", hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
 bind("XF86AudioNext", hl.dsp.exec_cmd("playerctl next"), { locked = true })

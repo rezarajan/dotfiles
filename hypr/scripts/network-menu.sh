@@ -72,11 +72,40 @@ case "$choice" in
         name="${choice#󰖂  }"; name="${name% — VPN active ▸ disconnect}"
         nmcli connection down "$name" >/dev/null 2>&1 \
             && notify "VPN disconnected" "$name" ;;
-    *"— connected"*) ;; # wired status row: nothing to do
+    *"— connected"*)
+        # connection submenu: details and actions, all inside rofi
+        name="${choice#󰈀  }"; name="${name% — connected*}"
+        dev="${choice##*(}"; dev="${dev%)}"
+        details="$(nmcli -t -f IP4.ADDRESS,IP4.GATEWAY,IP4.DNS,GENERAL.HWADDR \
+            device show "$dev" 2>/dev/null \
+            | sed -e 's/^IP4.ADDRESS\[1\]:/󰩠  IP  /' -e 's/^IP4.GATEWAY:/󰑩  Gateway  /' \
+                  -e 's/^IP4.DNS\[[0-9]\]:/󰇖  DNS  /' -e 's/^GENERAL.HWADDR:/󰘔  MAC  /' \
+            | grep -v '^IP4')"
+        sub="$(printf '%s\n───\n󰅛  Disconnect\n󰌍  Back' "$details" \
+            | rofi -dmenu -i -p "$name")" || exit 0
+        case "$sub" in
+            *Disconnect)
+                nmcli connection down "$name" >/dev/null 2>&1 \
+                    && notify "Disconnected" "$name" ;;
+            *Back) exec "$0" ;;
+        esac ;;
     *)
         # a Wi-Fi row: strip mark/icon/lock to recover the SSID
         ssid="$(printf '%s' "$choice" | sed -e 's/^● //' -e 's/^[^ ]*  //' -e 's/  󰌾$//')"
         [ -n "$ssid" ] || exit 0
+        case "$choice" in "● "*)
+            # connected network: submenu instead of a useless reconnect
+            sub="$(printf '󰅛  Disconnect\n󰆴  Forget network\n󰌍  Back' \
+                | rofi -dmenu -i -p "$ssid")" || exit 0
+            case "$sub" in
+                *Disconnect) nmcli connection down "$ssid" >/dev/null 2>&1 \
+                    && notify "Disconnected" "$ssid" ;;
+                *Forget) nmcli connection delete "$ssid" >/dev/null 2>&1 \
+                    && notify "Forgotten" "$ssid" ;;
+                *Back) exec "$0" ;;
+            esac
+            exit 0 ;;
+        esac
         if nmcli -t -f NAME connection show | grep -qFx "$ssid"; then
             nmcli connection up "$ssid" >/dev/null 2>&1 \
                 && notify -i network-wireless "Connected" "$ssid" \

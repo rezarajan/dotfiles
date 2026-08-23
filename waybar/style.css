@@ -36,22 +36,32 @@ tooltip label { padding: 4px; }
 #workspaces button {
     padding: 0 10px;
     margin: 0 2px;
-    border-radius: 6px;
+    border-radius: 7px;
     color: @fg_muted;
     background: transparent;
-    transition: all 150ms ease;
+    /* material decel: the active pill grows/shrinks smoothly */
+    transition: all 350ms cubic-bezier(0.05, 0.7, 0.1, 1);
 }
 #workspaces button.active {
     color: @on_accent;
     background: alpha(@accent, 0.85);
+    padding: 0 18px;
 }
 #workspaces button.urgent {
     color: @on_accent;
     background: alpha(@negative, 0.85);
+    animation: urgent-pulse 1.2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 #workspaces button:hover {
     color: @fg_bright;
     background: alpha(@fg, 0.12);
+}
+
+@keyframes urgent-pulse {
+    50% { background: alpha(@negative, 0.45); }
+}
+@keyframes rec-pulse {
+    50% { background: alpha(@negative, 0.45); color: @fg_bright; }
 }
 
 #window {
@@ -64,7 +74,7 @@ window#waybar.empty #window { background: transparent; }
 /* right-side modules: quiet text chips with a hover wash */
 #memory, #network, #bluetooth, #pulseaudio, #battery, #custom-clock, #tray,
 #custom-notifications, #custom-recording, #custom-privacy, #custom-theme,
-#custom-power {
+#custom-power, #custom-help {
     padding: 0 10px;
     margin: 4px 1px;
     border-radius: 6px;
@@ -74,7 +84,8 @@ window#waybar.empty #window { background: transparent; }
 }
 #memory:hover, #network:hover, #bluetooth:hover, #pulseaudio:hover,
 #battery:hover, #custom-clock:hover, #custom-notifications:hover,
-#custom-privacy:hover, #custom-theme:hover, #custom-power:hover {
+#custom-privacy:hover, #custom-theme:hover, #custom-power:hover,
+#custom-help:hover {
     background: alpha(@fg, 0.12);
 }
 
@@ -86,7 +97,7 @@ window#waybar.empty #window { background: transparent; }
 
 /* icon-only buttons read better a step larger */
 #custom-theme, #custom-notifications, #custom-power, #custom-privacy,
-#custom-recording {
+#custom-recording, #custom-help {
     font-size: 17px;
 }
 
@@ -120,6 +131,30 @@ window#waybar.empty #window { background: transparent; }
     color: @on_accent;
     background: alpha(@negative, 0.9);
     font-weight: 600;
+    animation: rec-pulse 1.6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* media controls, centered — quiet chip, italic when paused */
+#mpris {
+    padding: 0 14px;
+    margin: 4px 0;
+    border-radius: 6px;
+    color: @fg;
+    background: alpha(@fg, 0.05);
+    transition: all 200ms cubic-bezier(0.2, 0, 0, 1);
+}
+#mpris:hover {
+    background: alpha(@fg, 0.12);
+}
+#mpris.paused {
+    color: @fg_muted;
+    background: transparent;
+}
+
+#battery.critical:not(.charging) {
+    animation: urgent-pulse 1.2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    color: @on_accent;
+    background: alpha(@negative, 0.85);
 }
 
 #tray > .passive { -gtk-icon-effect: dim; }

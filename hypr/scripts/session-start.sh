@@ -65,6 +65,12 @@ if have swaync; then
     fi
 fi
 
+# 4b. media-player tracking: media keys and the bar's media module follow
+#     the most recently active player
+if command -v playerctld >/dev/null 2>&1; then
+    running playerctld || playerctld daemon 2>/dev/null
+fi
+
 # 5. clipboard history for Super+V
 if have wl-paste && have cliphist; then
     if ! pgrep -f "wl-paste.*cliphist" >/dev/null; then
