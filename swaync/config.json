@@ -27,8 +27,8 @@
     "widgets": [
         "title",
         "dnd",
-        "volume",
         "mpris",
+        "volume",
         "notifications"
     ],
     "widget-config": {
@@ -45,8 +45,9 @@
             "show-per-app": true
         },
         "mpris": {
-            "image-size": 72,
-            "image-radius": 8
+            "image-size": 96,
+            "image-radius": 10,
+            "blacklist": []
         }
     }
 }

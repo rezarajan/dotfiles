@@ -148,20 +148,47 @@
     border-radius: 8px;
 }
 
+/* ---- media card: album art + circular transport buttons ---- */
 .widget-mpris {
     color: @fg;
     padding: 0;
 }
 .widget-mpris-player {
     border-radius: 12px;
-    background: alpha(@fg, 0.05);
-    padding: 8px;
-    margin: 4px 0;
+    background: alpha(@fg, 0.06);
+    border: 1px solid @hairline;
+    padding: 12px;
+    margin: 6px 0;
+}
+.widget-mpris-album-art {
+    border-radius: 10px;
+    box-shadow: 0 2px 8px alpha(black, 0.35);
 }
 .widget-mpris-title {
     color: @fg_bright;
-    font-weight: 500;
+    font-weight: 600;
+    font-size: 15px;
 }
 .widget-mpris-subtitle {
     color: @fg_muted;
+    font-size: 13px;
+}
+.widget-mpris button {
+    border-radius: 999px;
+    min-width: 36px;
+    min-height: 36px;
+    margin: 2px 4px;
+    background: alpha(@fg, 0.08);
+    border: 1px solid @hairline;
+    color: @fg_bright;
+    transition: all 200ms cubic-bezier(0.2, 0, 0, 1);
+}
+.widget-mpris button:hover {
+    background: alpha(@accent, 0.9);
+    color: @on_accent;
+}
+.widget-mpris > box > button {
+    /* the case where swaync nests player nav buttons */
+    background: transparent;
+    border: none;
 }
