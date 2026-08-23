@@ -46,19 +46,29 @@ hl.window_rule({
 })
 
 -- Settings panels behave like KDE panel applets: rounded dropdowns that
--- slide down under the bar's right edge (their bar icons toggle them via
--- scripts/panel.sh; lua/applets.lua dismisses them on focus loss).
-for _, class in ipairs({
-    "com.saivert.pwvucontrol", "org.pulseaudio.pavucontrol", "pavucontrol",
-    "nm-connection-editor",
-    "blueman-manager", "Blueman-manager", ".blueman-manager-wrapped",
-}) do
+-- slide down under the bar (their bar icons toggle them via
+-- scripts/panel.sh; lua/applets.lua dismisses them on focus loss and
+-- click-outside). Each entry: class, size, and where it drops.
+local applet_rules = {
+    -- right-edge settings panels
+    { "com.saivert.pwvucontrol" }, { "org.pulseaudio.pavucontrol" },
+    { "pavucontrol" }, { "nm-connection-editor" },
+    { "blueman-manager" }, { "Blueman-manager" },
+    { ".blueman-manager-wrapped" },
+    -- media popup drops centred, under its bar chip (second entry covers
+    -- GTK falling back to the script name for the app id)
+    { "gruvbox-media", size = { 400, 470 },
+        move = { "monitor_w*0.5-200", 46 } },
+    { "media-panel.py", size = { 400, 470 },
+        move = { "monitor_w*0.5-200", 46 } },
+}
+for _, entry in ipairs(applet_rules) do
     hl.window_rule({
-        name = "applet-" .. class,
-        match = { class = "^(" .. class .. ")$" },
+        name = "applet-" .. entry[1],
+        match = { class = "^(" .. entry[1] .. ")$" },
         float = true,
-        size = { 560, 660 },
-        move = { "monitor_w-568", 46 }, -- under the bar, flush with its right edge
+        size = entry.size or { 560, 660 },
+        move = entry.move or { "monitor_w-568", 46 },
         animation = "slidevert",
         -- acrylic: translucent surface, compositor blur behind
         opacity = "0.92 0.92",

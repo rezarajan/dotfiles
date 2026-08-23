@@ -27,7 +27,6 @@
     "widgets": [
         "title",
         "dnd",
-        "mpris",
         "volume",
         "notifications"
     ],

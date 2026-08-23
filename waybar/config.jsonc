@@ -164,7 +164,7 @@
         "player-icons": { "default": "󰝚", "spotify": "󰓇", "firefox": "󰈹",
                           "chromium": "󰊯", "mpv": "󰐹" },
         "status-icons": { "paused": "󰏤", "stopped": "󰓛" },
-        "on-click": "swaync-client -t -sw",
+        "on-click": "bash ~/.config/hypr/scripts/panel.sh media",
         "on-click-right": "playerctl play-pause",
         "on-scroll-up": "playerctl next",
         "on-scroll-down": "playerctl previous",
