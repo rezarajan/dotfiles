@@ -1,0 +1,98 @@
+/* Gruvbox Dragon — GTK widget polish for the Hyprland session.
+ * Imported (per mode) after colors.css by theme-mode.sh; uses only named
+ * colors so one file serves dark and light. Goal: KDE-applet-level polish
+ * on Breeze GTK — chip tabs, modern sliders, quiet scrollbars. */
+
+/* ---- notebook tabs: rounded chips instead of boxy tabs ---- */
+notebook > header {
+    background: transparent;
+    border: none;
+    padding: 6px 6px 0 6px;
+}
+notebook > header > tabs {
+    background: transparent;
+}
+notebook > header > tabs > tab {
+    padding: 5px 16px;
+    margin: 2px 3px;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    box-shadow: none;
+    color: @theme_unfocused_fg_color_breeze;
+    transition: all 200ms cubic-bezier(0.2, 0, 0, 1);
+}
+notebook > header > tabs > tab:hover {
+    background: alpha(@theme_fg_color, 0.08);
+    color: @theme_fg_color;
+}
+notebook > header > tabs > tab:checked {
+    background: alpha(@theme_selected_bg_color, 0.9);
+    color: @theme_selected_fg_color;
+}
+notebook > stack {
+    background: transparent;
+}
+
+/* ---- scales (sliders): slim trough, round knob, tidy marks ---- */
+scale trough {
+    min-height: 6px;
+    border-radius: 3px;
+    background: alpha(@theme_fg_color, 0.18);
+    border: none;
+}
+scale highlight {
+    border-radius: 3px;
+    background: @theme_selected_bg_color;
+}
+scale slider {
+    min-width: 16px;
+    min-height: 16px;
+    margin: -6px;
+    border-radius: 9px;
+    background: @theme_fg_color;
+    border: 1px solid alpha(@theme_bg_color, 0.6);
+    box-shadow: 0 1px 3px alpha(black, 0.35);
+}
+/* KDE's applets show no scale mark text — the crowded "Silence/Base/100%"
+ * labels are pavucontrol noise; keep the tick indicators only */
+scale marks label {
+    color: transparent;
+    font-size: 1pt;
+}
+scale value {
+    font-size: 0.82em;
+    color: @theme_unfocused_fg_color_breeze;
+}
+scale marks indicator {
+    background: alpha(@theme_fg_color, 0.3);
+}
+
+/* ---- scrollbars: slim overlay style ---- */
+scrollbar {
+    background: transparent;
+    border: none;
+}
+scrollbar slider {
+    min-width: 6px;
+    min-height: 6px;
+    border-radius: 3px;
+    background: alpha(@theme_fg_color, 0.3);
+}
+scrollbar slider:hover {
+    background: alpha(@theme_fg_color, 0.5);
+}
+
+/* ---- buttons / entries: match the desktop's 8px rhythm ---- */
+button {
+    border-radius: 8px;
+}
+entry {
+    border-radius: 8px;
+}
+
+/* ---- toolbars & headers sit on the window surface, no extra chrome ---- */
+toolbar, .toolbar {
+    background: transparent;
+    border: none;
+}

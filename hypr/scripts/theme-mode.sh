@@ -64,6 +64,7 @@ copy "$CONF/wlogout/colors-dark.css"        "$CONF/wlogout/colors.css"
 for v in 3 4; do
     mkdir -p "$CONF/gtk-$v.0"
     copy "$CONF/hypr/theme/gtk-colors-$MODE.css" "$CONF/gtk-$v.0/colors.css"
+    copy "$CONF/hypr/theme/gtk-tweaks.css" "$CONF/gtk-$v.0/gruvbox-tweaks.css"
     gtkcss="$CONF/gtk-$v.0/gtk.css"
     touch "$gtkcss"
     grep -q "colors.css" "$gtkcss" 2>/dev/null || \
@@ -72,6 +73,8 @@ for v in 3 4; do
         grep -q "gruvbox-acrylic.css" "$gtkcss" 2>/dev/null || \
             printf "@import 'gruvbox-acrylic.css';\n" >> "$gtkcss"
     fi
+    grep -q "gruvbox-tweaks.css" "$gtkcss" 2>/dev/null || \
+        printf "@import 'gruvbox-tweaks.css';\n" >> "$gtkcss"
 done
 
 # GTK settings.ini — what kde-gtk-config writes under KDE. Chromium and

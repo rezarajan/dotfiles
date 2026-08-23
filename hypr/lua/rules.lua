@@ -57,9 +57,11 @@ for _, class in ipairs({
         name = "applet-" .. class,
         match = { class = "^(" .. class .. ")$" },
         float = true,
-        size = { 440, 600 },
-        move = { "monitor_w-448", 42 }, -- under the bar, flush with its right edge
+        size = { 560, 660 },
+        move = { "monitor_w-568", 46 }, -- under the bar, flush with its right edge
         animation = "slidevert",
+        -- acrylic: translucent surface, compositor blur behind
+        opacity = "0.92 0.92",
     })
 end
 

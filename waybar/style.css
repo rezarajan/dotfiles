@@ -5,7 +5,7 @@
 
 * {
     font-family: "Inter", "Symbols Nerd Font", sans-serif;
-    font-size: 13.5px;
+    font-size: 14px;
     /* tabular figures: digits all share one width, so live values
      * (volume %, memory, clock) never change a module's size */
     font-feature-settings: "tnum";
@@ -79,10 +79,16 @@ window#waybar.empty #window { background: transparent; }
 }
 
 /* fixed widths so changing values never resize (and jitter) the chips */
-#pulseaudio { min-width: 64px; }
-#memory { min-width: 62px; }
-#battery { min-width: 64px; }
-#custom-clock { min-width: 48px; }
+#pulseaudio { min-width: 74px; }
+#memory { min-width: 70px; }
+#battery { min-width: 74px; }
+#custom-clock { min-width: 52px; }
+
+/* icon-only buttons read better a step larger */
+#custom-theme, #custom-notifications, #custom-power, #custom-privacy,
+#custom-recording {
+    font-size: 17px;
+}
 
 /* privacy chip: quietly alarming while a mic/camera is in use */
 #custom-privacy.active {
