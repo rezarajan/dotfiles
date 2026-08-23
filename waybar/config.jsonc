@@ -195,7 +195,8 @@
         "on-click-right": "playerctl play-pause",
         "on-scroll-up": "playerctl next",
         "on-scroll-down": "playerctl previous",
-        "tooltip-format": "{player}: {title}\n{artist} — {album}\nClick: media panel · right: play/pause · scroll: track"
+        // no hover tooltip: the click popup is the detail surface
+        "tooltip": false
     },
 
     "custom/notifications": {
