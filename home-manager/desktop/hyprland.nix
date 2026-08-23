@@ -41,6 +41,7 @@ in
       hyprpaper
       swaybg # wallpaper fallback where hyprpaper's GL init fails (VMs)
       swaylock # lock fallback where hyprlock's GL init fails
+      imagemagick # composes the swaylock wallpaper/clock lock image
       hypridle
       hyprlock
       grim

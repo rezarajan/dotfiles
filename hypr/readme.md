@@ -77,7 +77,7 @@ hyprland waybar swaync rofi-wayland swww swaybg hypridle hyprlock swaylock
 hyprpolkitagent xdg-desktop-portal-hyprland xdg-desktop-portal-gtk
 pipewire wireplumber pipewire-pulse pavucontrol
 grim slurp swappy wf-recorder cliphist wl-clipboard libnotify
-brightnessctl playerctl jq psmisc
+brightnessctl playerctl jq psmisc imagemagick
 networkmanager nm-connection-editor network-manager-applet blueman
 inter-font ttf-jetbrains-mono ttf-nerd-fonts-symbols
 qt6-wayland plasma-integration qt6ct kvantum breeze breeze-gtk breeze-icons polkit
