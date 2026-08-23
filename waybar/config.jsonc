@@ -58,10 +58,11 @@
         "format-wifi": "<span size='130%'>󰤨</span> {essid}",
         "format-ethernet": "<span size='130%'>󰈀</span>",
         "format-disconnected": "<span size='130%'>󰤭</span>",
-        "tooltip-format": "{ifname}: {ipaddr}\n↓ {bandwidthDownBytes}  ↑ {bandwidthUpBytes}\nClick: network settings",
+        "tooltip-format": "{ifname}: {ipaddr}\n↓ {bandwidthDownBytes}  ↑ {bandwidthUpBytes}\nClick: networks · right-click: editor",
         "interval": 5,
         "max-length": 18,
-        "on-click": "bash ~/.config/hypr/scripts/panel.sh network"
+        "on-click": "bash ~/.config/hypr/scripts/network-menu.sh",
+        "on-click-right": "bash ~/.config/hypr/scripts/panel.sh network"
     },
 
     "bluetooth": {

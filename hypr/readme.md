@@ -58,9 +58,14 @@ Bound to **Super+Shift+W**.
   microphone mid-call (streams migrate immediately). A privacy chip
   appears in the bar whenever an app holds the microphone or camera
   (tooltip names the apps; click opens the mixer on the live streams).
-- **Bar applets**: clicking the volume, network or bluetooth icons drops
-  the matching settings panel down from the bar (dismissed on focus loss,
-  like plasma popups); the sun/moon button toggles light/dark.
+- **Bar applets**: the volume and bluetooth icons drop their settings
+  panel down from the bar (dismissed on focus loss or click-outside, like
+  plasma popups); the network icon opens a plasma-nm-style rofi menu
+  (Wi-Fi list with signal strength, one-click connect with password
+  prompt, Wi-Fi toggle, VPN activation — right-click for the connection
+  editor). A watcher raises a KDE-style "Sign-in required" notification
+  with an "Open sign-in page" button on captive-portal networks. The
+  sun/moon button toggles light/dark.
 - **Super+Shift+R** toggles screen recording (wf-recorder); the bar shows a
   red ● REC chip while active.
 - **Super+V** clipboard history, **Super+Shift+S** region screenshot.

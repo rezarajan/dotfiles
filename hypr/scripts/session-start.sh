@@ -77,6 +77,11 @@ fi
 start nm-applet
 start blueman-applet
 
+# 7. captive-portal / connectivity watcher (KDE-style sign-in notification)
+if command -v nmcli >/dev/null 2>&1; then
+    pgrep -f "net-watch.sh" >/dev/null 2>&1 || bash "$here/net-watch.sh" &
+fi
+
 # re-run the theme apply once the session has settled: at the very first
 # seconds of a session dconf/dbus may not be ready for gsettings writes
 (sleep 4; bash "$here/theme-mode.sh" apply) &
