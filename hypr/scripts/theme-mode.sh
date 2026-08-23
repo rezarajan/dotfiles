@@ -172,6 +172,6 @@ if [ "$cmd" != apply ] && [ -n "${HYPRLAND_INSTANCE_SIGNATURE:-}" ]; then
     pkill -SIGRTMIN+9 waybar 2>/dev/null   # refresh the custom/theme button
     command -v swaync-client >/dev/null 2>&1 && swaync-client -rs >/dev/null 2>&1
     command -v notify-send >/dev/null 2>&1 && \
-        notify-send -a "Theme" -i preferences-desktop-theme \
+        notify-send -a "Theme" -i color-select-symbolic \
             "Gruvbox $MODE" "Switched to the $MODE variant"
 fi

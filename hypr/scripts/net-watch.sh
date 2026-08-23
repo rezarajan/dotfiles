@@ -12,7 +12,7 @@ PORTAL_URL="http://nmcheck.gnome.org"   # any http page — the portal hijacks i
 
 portal_notify() {
     command -v notify-send >/dev/null 2>&1 || return
-    action="$(notify-send -a Network -i network-wireless-hotspot \
+    action="$(notify-send -a Network -i network-wireless-hotspot-symbolic \
         -A open="Open sign-in page" -u critical \
         "Sign-in required" \
         "This network requires you to log in before it grants access.")"
@@ -37,13 +37,14 @@ nmcli monitor 2>/dev/null | while IFS= read -r line; do
     case "$line" in
         *"Connectivity is now 'portal'"*)
             portal_notify &  # blocks until clicked/dismissed — keep the loop live
+            ;;
         *"Connectivity is now 'full'"*)
             : ;; # back online quietly
         *"disconnected"*)
             case "$line" in
                 *device*) ;; # per-device noise
                 *) command -v notify-send >/dev/null 2>&1 && \
-                    notify-send -a Network -i network-offline "Disconnected" \
+                    notify-send -a Network -i network-offline-symbolic "Disconnected" \
                         "Network connection lost" ;;
             esac ;;
     esac

@@ -74,7 +74,7 @@ X-KDE-Priority=TopLevel
 
 [Desktop Action setAsWallpaper]
 Name=Set as Wallpaper
-Icon=preferences-desktop-wallpaper
+Icon=preferences-desktop-wallpaper-symbolic
 Exec=bash "$here/wallpaper.sh" set %f
 EOF
 chmod +x "$DATA/kio/servicemenus/gruvbox-wallpaper.desktop"

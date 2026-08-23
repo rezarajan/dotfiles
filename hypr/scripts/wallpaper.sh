@@ -88,7 +88,7 @@ case "${1:-pick}" in
         img="${img#file://}"   # dolphin service menus may hand over a URL
         if apply "$img"; then
             command -v notify-send >/dev/null 2>&1 && \
-                notify-send -a Wallpaper -i preferences-desktop-wallpaper \
+                notify-send -a Wallpaper -i preferences-desktop-wallpaper-symbolic \
                     "Wallpaper updated" "$(basename "$img") — desktop and lock screen"
         else
             command -v notify-send >/dev/null 2>&1 && \

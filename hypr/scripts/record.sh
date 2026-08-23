@@ -18,7 +18,7 @@ if [ -f "$STATE" ]; then
     rm -f "$STATE"
     poke_waybar
     command -v notify-send >/dev/null 2>&1 && \
-        notify-send -a Recorder -i media-playback-stop \
+        notify-send -a Recorder -i media-playback-stop-symbolic \
             "Recording stopped" "${file##*/}"
     exit 0
 fi
@@ -40,7 +40,7 @@ esac
 printf '%s\n' "$file" > "$STATE"
 poke_waybar
 command -v notify-send >/dev/null 2>&1 && \
-    notify-send -a Recorder -i media-record "Recording started" "${file##*/}"
+    notify-send -a Recorder -i media-record-symbolic "Recording started" "${file##*/}"
 
 wf-recorder "${args[@]}"
 # wf-recorder exited on its own (error or INT from elsewhere): clear state

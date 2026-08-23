@@ -59,15 +59,15 @@ build_menu() {
 choice="$(build_menu | rofi -dmenu -i -p 'Network')" || exit 0
 
 case "$choice" in
-    *"Wi-Fi: on"*)  nmcli radio wifi off; notify -i network-wireless-offline "Wi-Fi disabled" ;;
-    *"Wi-Fi: off"*) nmcli radio wifi on; notify -i network-wireless "Wi-Fi enabled" ;;
+    *"Wi-Fi: on"*)  nmcli radio wifi off; notify -i network-wireless-offline-symbolic "Wi-Fi disabled" ;;
+    *"Wi-Fi: off"*) nmcli radio wifi on; notify -i network-wireless-symbolic "Wi-Fi enabled" ;;
     *"Rescan"*)     nmcli device wifi rescan 2>/dev/null; exec "$0" ;;
     *"Advanced settings"*) exec bash "$here/panel.sh" network ;;
     *"VPN ▸ connect")
         name="${choice#󰖂  }"; name="${name% — VPN ▸ connect}"
         nmcli connection up "$name" >/dev/null 2>&1 \
-            && notify -i network-vpn "VPN connected" "$name" \
-            || notify -i dialog-error "VPN failed" "$name" ;;
+            && notify -i network-vpn-symbolic "VPN connected" "$name" \
+            || notify -i dialog-error-symbolic "VPN failed" "$name" ;;
     *"VPN active ▸ disconnect")
         name="${choice#󰖂  }"; name="${name% — VPN active ▸ disconnect}"
         nmcli connection down "$name" >/dev/null 2>&1 \
@@ -108,19 +108,19 @@ case "$choice" in
         esac
         if nmcli -t -f NAME connection show | grep -qFx "$ssid"; then
             nmcli connection up "$ssid" >/dev/null 2>&1 \
-                && notify -i network-wireless "Connected" "$ssid" \
-                || notify -i dialog-error "Connection failed" "$ssid"
+                && notify -i network-wireless-symbolic "Connected" "$ssid" \
+                || notify -i dialog-error-symbolic "Connection failed" "$ssid"
         else
             secured=""; printf '%s' "$choice" | grep -q '󰌾' && secured=1
             if [ -n "$secured" ]; then
                 pw="$(rofi -dmenu -password -p "Password for $ssid")" || exit 0
                 nmcli device wifi connect "$ssid" password "$pw" >/dev/null 2>&1 \
-                    && notify -i network-wireless "Connected" "$ssid" \
-                    || notify -i dialog-error "Connection failed" "$ssid — wrong password?"
+                    && notify -i network-wireless-symbolic "Connected" "$ssid" \
+                    || notify -i dialog-error-symbolic "Connection failed" "$ssid — wrong password?"
             else
                 nmcli device wifi connect "$ssid" >/dev/null 2>&1 \
-                    && notify -i network-wireless "Connected" "$ssid" \
-                    || notify -i dialog-error "Connection failed" "$ssid"
+                    && notify -i network-wireless-symbolic "Connected" "$ssid" \
+                    || notify -i dialog-error-symbolic "Connection failed" "$ssid"
             fi
         fi ;;
 esac

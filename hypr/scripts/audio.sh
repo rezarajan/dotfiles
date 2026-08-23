@@ -6,8 +6,8 @@ set -u
 kind="${1:-sink}"   # sink | source
 
 case "$kind" in
-    sink)   label="Audio output"; icon=audio-volume-high ;;
-    source) label="Microphone";   icon=audio-input-microphone ;;
+    sink)   label="Audio output"; icon=audio-volume-high-symbolic ;;
+    source) label="Microphone";   icon=audio-input-microphone-symbolic ;;
     *) echo "usage: audio.sh sink|source" >&2; exit 2 ;;
 esac
 
