@@ -6,6 +6,9 @@
 * {
     font-family: "Inter", "Symbols Nerd Font", sans-serif;
     font-size: 13.5px;
+    /* tabular figures: digits all share one width, so live values
+     * (volume %, memory, clock) never change a module's size */
+    font-feature-settings: "tnum";
     min-height: 0;
     margin: 0;
     padding: 0;
@@ -59,20 +62,27 @@ tooltip label { padding: 4px; }
 window#waybar.empty #window { background: transparent; }
 
 /* right-side modules: quiet text chips with a hover wash */
-#memory, #network, #bluetooth, #pulseaudio, #battery, #clock, #tray,
-#custom-notifications, #custom-recording, #custom-privacy, #custom-theme {
+#memory, #network, #bluetooth, #pulseaudio, #battery, #custom-clock, #tray,
+#custom-notifications, #custom-recording, #custom-privacy, #custom-theme,
+#custom-power {
     padding: 0 10px;
     margin: 4px 1px;
     border-radius: 6px;
     color: @fg;
     background: transparent;
-    transition: background 150ms ease;
+    transition: all 200ms cubic-bezier(0.2, 0, 0, 1);
 }
 #memory:hover, #network:hover, #bluetooth:hover, #pulseaudio:hover,
-#battery:hover, #clock:hover, #custom-notifications:hover,
-#custom-privacy:hover, #custom-theme:hover {
+#battery:hover, #custom-clock:hover, #custom-notifications:hover,
+#custom-privacy:hover, #custom-theme:hover, #custom-power:hover {
     background: alpha(@fg, 0.12);
 }
+
+/* fixed widths so changing values never resize (and jitter) the chips */
+#pulseaudio { min-width: 64px; }
+#memory { min-width: 62px; }
+#battery { min-width: 64px; }
+#custom-clock { min-width: 48px; }
 
 /* privacy chip: quietly alarming while a mic/camera is in use */
 #custom-privacy.active {
@@ -81,9 +91,17 @@ window#waybar.empty #window { background: transparent; }
     font-weight: 600;
 }
 
-#clock {
+#custom-clock {
     font-weight: 500;
+}
+
+#custom-power {
+    color: @fg_muted;
     margin-right: 4px;
+}
+#custom-power:hover {
+    color: @on_accent;
+    background: alpha(@negative, 0.85);
 }
 
 #battery.warning { color: @neutral; }

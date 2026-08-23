@@ -34,20 +34,29 @@ fi
 start waybar
 start hypridle
 
-# wallpaper: hyprpaper on real GPUs; swaybg (shm, no GL) as the fallback for
-# software-rendered environments like VMs, where hyprpaper's GL init fails —
-# sometimes leaving the process alive without ever mapping a layer, so check
-# for the actual background layer rather than the process
-start hyprpaper
-(
-    sleep 3
-    if ! hyprctl layers 2>/dev/null | grep -qE "namespace: (hyprpaper|wallpaper)"; then
-        pkill -x hyprpaper 2>/dev/null
-        if have swaybg && ! running swaybg; then
-            swaybg -i "$CONF/hypr/wallpaper.jpg" -m fill &
-        fi
+# wallpaper: swww when installed (animated transitions, CPU-rendered —
+# powers scripts/wallpaper.sh); otherwise hyprpaper with a swaybg fallback
+# for software-rendered environments like VMs, where hyprpaper's GL init
+# fails — sometimes leaving the process alive without ever mapping a
+# layer, so check for the actual background layer rather than the process
+SWWW_DAEMON="$(command -v swww-daemon 2>/dev/null || command -v awww-daemon 2>/dev/null || true)"
+if [ -n "$SWWW_DAEMON" ]; then
+    if ! running swww-daemon && ! running awww-daemon; then
+        "$SWWW_DAEMON" &
     fi
-) &
+    (sleep 2; bash "$here/wallpaper.sh" restore >/dev/null 2>&1) &
+else
+    start hyprpaper
+    (
+        sleep 3
+        if ! hyprctl layers 2>/dev/null | grep -qE "namespace: (hyprpaper|wallpaper)"; then
+            pkill -x hyprpaper 2>/dev/null
+            if have swaybg && ! running swaybg; then
+                swaybg -i "$CONF/hypr/wallpaper.jpg" -m fill &
+            fi
+        fi
+    ) &
+fi
 if have swaync; then
     if running swaync; then
         swaync-client -rs >/dev/null 2>&1   # re-read css now that tokens exist

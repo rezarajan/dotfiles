@@ -37,8 +37,10 @@ in
       swaynotificationcenter
       rofi-wayland
       wlogout
+      swww # animated wallpaper transitions (scripts/wallpaper.sh)
       hyprpaper
       swaybg # wallpaper fallback where hyprpaper's GL init fails (VMs)
+      swaylock # lock fallback where hyprlock's GL init fails
       hypridle
       hyprlock
       grim

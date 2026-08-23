@@ -28,7 +28,9 @@ M.screenshot_window = script("screenshot.sh", "window")
 M.record_toggle = script("record.sh", "toggle")
 M.theme_toggle = script("theme-mode.sh", "toggle")
 M.lock = script("lock.sh")
-M.logout_menu = "wlogout -p layer-shell"
+M.logout_menu = script("power-menu.sh")
+M.wallpaper_pick = script("wallpaper.sh", "pick")
+M.wallpaper_next = script("wallpaper.sh", "next")
 M.keybinds_help = script("keybinds-help.sh")
 
 return M

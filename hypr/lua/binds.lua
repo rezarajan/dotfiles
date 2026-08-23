@@ -88,8 +88,10 @@ bind(mod .. " + CTRL + S", hl.dsp.window.move({ workspace = "special:scratch" })
 
 -- ------------------------------------------------------ desktop utilities
 bind(mod .. " + CTRL + L", hl.dsp.exec_cmd(apps.lock), { description = "Lock screen" })
-bind(mod .. " + BackSpace", hl.dsp.exec_cmd(apps.logout_menu), { description = "Session menu" })
+bind(mod .. " + BackSpace", hl.dsp.exec_cmd(apps.logout_menu), { description = "Session menu (lock/power)" })
 bind(mod .. " + SHIFT + W", hl.dsp.exec_cmd(apps.theme_toggle), { description = "Toggle dark/light" })
+bind(mod .. " + W", hl.dsp.exec_cmd(apps.wallpaper_pick), { description = "Wallpaper carousel" })
+bind(mod .. " + ALT + W", hl.dsp.exec_cmd(apps.wallpaper_next), { description = "Next wallpaper" })
 bind(mod .. " + A", hl.dsp.exec_cmd(apps.audio_out), { description = "Switch audio output" })
 bind(mod .. " + SHIFT + A", hl.dsp.exec_cmd(apps.audio_in), { description = "Switch microphone" })
 bind(mod .. " + N", hl.dsp.exec_cmd("swaync-client -t -sw"), { description = "Notification center" })

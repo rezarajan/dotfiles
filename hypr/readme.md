@@ -68,7 +68,7 @@ Bound to **Super+Shift+W**.
 ## Packages (Arch names)
 
 ```
-hyprland waybar swaync rofi-wayland wlogout hyprpaper swaybg hypridle hyprlock
+hyprland waybar swaync rofi-wayland swww swaybg hypridle hyprlock swaylock
 hyprpolkitagent xdg-desktop-portal-hyprland xdg-desktop-portal-gtk
 pipewire wireplumber pipewire-pulse pwvucontrol pavucontrol
 grim slurp swappy wf-recorder cliphist wl-clipboard libnotify
@@ -88,7 +88,9 @@ used to own — the GTK `colors.css` named-color sheet, `qt6ct.conf`
 generated template otherwise). GTK apps, Chromium, ghostty, and Qt/KDE
 apps like Dolphin all follow the same palette and the light/dark toggle.
 
-`wlogout` is AUR-only on Arch (`yay -S wlogout`). Tested end-to-end on
+The session menu (lock/logout/power) is rofi-based (`scripts/power-menu.sh`,
+Super+Backspace or the bar's ⏻ button); the `wlogout/` config remains for
+those who prefer it (AUR: `yay -S wlogout`). Tested end-to-end on
 Hyprland 0.56.2 in a VirtualBox VM (waybar, rofi, swaync, theming toggle,
 screenshots, recording, portals); hyprpaper/hyprlock need a real GPU — in
 VMs the session falls back to swaybg automatically, and swaylock can stand

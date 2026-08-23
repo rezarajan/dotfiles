@@ -1,0 +1,73 @@
+/* rofi — wallpaper carousel: a thumbnail grid over the acrylic popup.
+ * Invoked by hypr/scripts/wallpaper.sh pick (Super+W). */
+@import "colors.rasi"
+
+* {
+    background-color: transparent;
+    text-color: @fg;
+}
+
+window {
+    width: 1100px;
+    location: center;
+    background-color: @bg-popup;
+    border: 1px;
+    border-color: @hairline;
+    border-radius: 12px;
+    padding: 12px;
+}
+
+mainbox {
+    spacing: 10px;
+}
+
+inputbar {
+    spacing: 8px;
+    padding: 8px 14px;
+    background-color: @field;
+    border: 1px;
+    border-color: @hairline;
+    border-radius: 8px;
+    children: [ "prompt", "entry" ];
+}
+
+prompt {
+    text-color: @accent;
+}
+
+entry {
+    placeholder: "Filter…";
+    placeholder-color: @fg-muted;
+    text-color: @fg-bright;
+}
+
+listview {
+    columns: 3;
+    lines: 2;
+    flow: horizontal;
+    fixed-height: false;
+    spacing: 10px;
+    scrollbar: false;
+}
+
+element {
+    orientation: vertical;
+    padding: 8px;
+    spacing: 6px;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+element-icon {
+    size: 320px;
+    horizontal-align: 0.5;
+}
+
+element-text {
+    horizontal-align: 0.5;
+}
+
+element selected.normal {
+    background-color: @accent;
+    text-color: @on-accent;
+}

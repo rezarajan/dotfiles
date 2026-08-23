@@ -18,9 +18,10 @@
         "bluetooth",
         "group/audio",
         "battery",
-        "clock",
+        "custom/clock",
         "custom/theme",
-        "custom/notifications"
+        "custom/notifications",
+        "custom/power"
     ],
 
     "hyprland/workspaces": {
@@ -66,6 +67,7 @@
     "bluetooth": {
         "format": "󰂯",
         "format-disabled": "",
+        "format-no-controller": "",
         "format-connected": "󰂱 {num_connections}",
         "tooltip-format": "{status}\nClick: bluetooth settings",
         "tooltip-format-connected": "{device_enumerate}\nClick: bluetooth settings",
@@ -129,10 +131,18 @@
         "tooltip-format": "{timeTo}"
     },
 
-    "clock": {
-        "format": "{:%H:%M}",
-        "tooltip-format": "<big>{:%A, %B %d}</big>\n<tt>{calendar}</tt>",
-        "calendar": { "format": { "today": "<b><u>{}</u></b>" } }
+    // script-backed clock: Gregorian + Hijri in the tooltip (the calendar
+    // list is configurable at the top of scripts/clock.sh)
+    "custom/clock": {
+        "exec": "bash ~/.config/hypr/scripts/clock.sh",
+        "return-type": "json",
+        "interval": 30
+    },
+
+    "custom/power": {
+        "format": "󰐥",
+        "tooltip-format": "Session menu",
+        "on-click": "bash ~/.config/hypr/scripts/power-menu.sh"
     },
 
     "custom/notifications": {
