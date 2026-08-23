@@ -61,6 +61,11 @@ local applet_rules = {
         move = { "monitor_w*0.5-200", 46 } },
     { "media-panel.py", size = { 400, 470 },
         move = { "monitor_w*0.5-200", 46 } },
+    -- calendar drops under the clock, right of centre
+    { "gruvbox-calendar", size = { 400, 395 },
+        move = { "monitor_w-470", 46 } },
+    { "calendar-panel.py", size = { 400, 395 },
+        move = { "monitor_w-470", 46 } },
 }
 for _, entry in ipairs(applet_rules) do
     hl.window_rule({

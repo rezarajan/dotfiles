@@ -18,6 +18,8 @@ local APPLET_CLASSES = {
     [".blueman-manager-wrapped"] = true,  -- nix wrapper name
     ["gruvbox-media"] = true,             -- media popup (media-panel.py)
     ["media-panel.py"] = true,            -- its fallback app id
+    ["gruvbox-calendar"] = true,          -- calendar popup
+    ["calendar-panel.py"] = true,
 }
 
 local open_applets = 0

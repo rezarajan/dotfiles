@@ -49,8 +49,8 @@ PYEOF
     esac
 done
 
-# piped cal emits no highlight escapes, so the grid is already plain text
-grid="$(cal 2>/dev/null | sed -e 's/&/\&amp;/g' -e 's/</\&lt;/g')"
-tooltip="$(printf '%b\n<tt>%s</tt>' "$lines" "$grid")"
+# hover stays brief (dates only) — the click opens the calendar panel
+tooltip="$(printf '%b' "$lines")"
+tooltip="${tooltip%\\n}"
 
-jq -cn --arg t "$text" --arg tt "$tooltip" '{text: $t, tooltip: $tt}'
+jq -cn --arg t "$text" --arg tt "$tooltip" '{text: $t, tooltip: ($tt | rtrimstr("\n"))}'

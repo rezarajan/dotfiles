@@ -34,9 +34,17 @@ config hot-reloads on save; `hyprctl configerrors` shows problems.
 
 ## Theming — one source of truth
 
-Colors are **generated**, never hand-written. The palette lives in
-`home-manager/desktop/kvantum/tools/palette.py`; running `generate_all.py`
-(or just `hyprland_gen.py`) re-emits:
+Colors are **generated**, never hand-written. Palettes are swappable
+modules in `home-manager/desktop/kvantum/tools/palettes/`; switching the
+whole desktop to a new one is three steps:
+
+1. copy `palettes/gruvbox_dragon.py` to `palettes/<name>.py` and edit the
+   hex tables (dark + light variants, accents, opacities)
+2. set `ACTIVE_PALETTE = "<name>"` in `tools/palette.py`
+3. run `tools/generate_all.py`, then `theme-mode.sh apply` (Hyprland) or
+   `home-manager switch` (KDE machines)
+
+`generate_all.py` re-emits every palette-derived artifact, including:
 
 - `hypr/lua/palette.lua` (borders, groupbar, misc colors)
 - `waybar/colors-{dark,light}.css`, `rofi/colors-{dark,light}.rasi`,
@@ -103,6 +111,47 @@ screenshots, recording, portals); hyprpaper/hyprlock need a real GPU — in
 VMs the session falls back to swaybg automatically, and swaylock can stand
 in for hyprlock.
 
-Deploy by symlinking this directory to `~/.config/hypr` (plus `waybar`,
-`rofi`, `swaync`, `wlogout` similarly), or via the
-`home-manager/desktop/hyprland.nix` module.
+## Install
+
+### With home-manager (NixOS or any distro)
+
+Enable the module in `home-manager/flake.nix` (already imported) and set:
+
+```nix
+cascadura.hyprland.enable = true;    # config symlinks
+cascadura.hyprland.packages = true;  # companion packages from nixpkgs
+```
+
+On non-NixOS hosts every GUI/GL package is wrapped with **nixGL**
+(`../nixgl.nix` configures `targets.genericLinux.nixGL`), so hyprlock,
+hyprpaper, swww, waybar and friends find the host's GL drivers. Hyprland
+itself still comes from the distro (`pacman -S hyprland`) — a nix-built
+compositor session under nixGL is fragile.
+
+### Manual install (no Nix)
+
+1. Install the packages from the list above (Arch names; `wlogout` and
+   `pwvucontrol` are AUR and optional).
+2. Clone this repo to `~/git/dotfiles` and symlink the configs:
+
+   ```sh
+   for d in hypr waybar rofi swaync wlogout; do
+     ln -sfn ~/git/dotfiles/$d ~/.config/$d
+   done
+   mkdir -p ~/.config/xdg-desktop-portal
+   ln -sf ~/git/dotfiles/xdg-desktop-portal/hyprland-portals.conf \
+     ~/.config/xdg-desktop-portal/hyprland-portals.conf
+   ```
+
+3. Link the theme assets (cursors, GTK/Kvantum themes, KDE color
+   schemes, Dolphin integration) and fetch the icon pack:
+
+   ```sh
+   bash ~/git/dotfiles/hypr/scripts/install-theme-assets.sh --icons
+   ```
+
+4. Log into Hyprland (via a display manager, `start-hyprland` from a
+   tty, or an autologin getty). `session-start.sh` runs everything else:
+   theme application, bar, notifications, wallpaper, idle, watchers.
+5. Per-machine monitors/env: copy `hypr/lua/local.lua.example` to
+   `hypr/lua/local.lua` and edit (gitignored).

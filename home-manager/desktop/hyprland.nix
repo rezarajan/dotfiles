@@ -14,6 +14,11 @@ let
   cfg = config.cascadura.hyprland;
   dotfiles = "${config.home.homeDirectory}/git/dotfiles";
   link = path: config.lib.file.mkOutOfStoreSymlink "${dotfiles}/${path}";
+  # On non-NixOS hosts, nix-built GL/GUI programs need the nixGL shim
+  # (configured in ../nixgl.nix via targets.genericLinux.nixGL) or they
+  # fail to find the host's GL drivers. wrap is a no-op burden for
+  # non-GL tools, so every GUI binary gets it for uniformity.
+  wrapGL = config.lib.nixGL.wrap;
 in
 {
   options.cascadura.hyprland = {
@@ -32,36 +37,44 @@ in
         link "xdg-desktop-portal/hyprland-portals.conf";
     };
 
-    home.packages = lib.mkIf cfg.packages (with pkgs; [
-      waybar
-      swaynotificationcenter
-      rofi-wayland
-      wlogout
-      swww # animated wallpaper transitions (scripts/wallpaper.sh)
-      hyprpaper
-      swaybg # wallpaper fallback where hyprpaper's GL init fails (VMs)
-      swaylock # lock fallback where hyprlock's GL init fails
-      imagemagick # composes the swaylock wallpaper/clock lock image
-      (python3.withPackages (p: [ p.pygobject3 ])) # media popup applet
-      hypridle
-      hyprlock
-      grim
-      slurp
-      swappy
-      wf-recorder
-      cliphist
-      wl-clipboard
-      brightnessctl
-      playerctl
-      pwvucontrol # audio mixer, shown as a bar dropdown applet
-      pavucontrol # fallback mixer
-      libnotify
-      jq
-      kdePackages.plasma-integration # Qt reads kdeglobals like under KDE
-      qt6ct # fallback platform theme for machines without the above
-      networkmanagerapplet # nm-connection-editor + tray applet
-      blueman
-      psmisc # fuser, for the camera-in-use indicator
-    ]);
+    home.packages = lib.mkIf cfg.packages (
+      # GUI / GL programs go through the nixGL shim so they run on
+      # non-NixOS hosts (hyprlock, hyprpaper and swww hard-require
+      # working GL; GTK4 apps like swaync use the GL renderer too)
+      (map wrapGL (with pkgs; [
+        waybar
+        swaynotificationcenter
+        rofi-wayland
+        wlogout
+        swww # animated wallpaper transitions (scripts/wallpaper.sh)
+        hyprpaper
+        swaybg # wallpaper fallback where hyprpaper's GL init fails (VMs)
+        swaylock # lock fallback where hyprlock's GL init fails
+        hypridle
+        hyprlock
+        swappy
+        pwvucontrol # audio mixer, shown as a bar dropdown applet
+        pavucontrol # fallback mixer
+        networkmanagerapplet # nm-connection-editor + tray applet
+        blueman
+        qt6ct # fallback platform theme without plasma-integration
+      ]))
+      ++ (with pkgs; [
+        # CLI tools — no GL, no wrapping needed
+        imagemagick # composes the swaylock wallpaper/clock lock image
+        (python3.withPackages (p: [ p.pygobject3 ])) # media/calendar applets
+        grim
+        slurp
+        wf-recorder
+        cliphist
+        wl-clipboard
+        brightnessctl
+        playerctl
+        libnotify
+        jq
+        psmisc # fuser, for the camera-in-use indicator
+        kdePackages.plasma-integration # Qt reads kdeglobals like under KDE
+      ])
+    );
   };
 }

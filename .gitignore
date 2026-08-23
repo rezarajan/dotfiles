@@ -12,3 +12,6 @@ hypr/lua/local.lua
 
 # user-selected wallpaper (seeded from wallpapers/ on first start)
 hypr/wallpaper.jpg
+
+# python bytecode from running the generators
+__pycache__/

@@ -166,12 +166,13 @@
         "tooltip-format": "{timeTo}"
     },
 
-    // script-backed clock: Gregorian + Hijri in the tooltip (the calendar
-    // list is configurable at the top of scripts/clock.sh)
+    // script-backed clock: brief Gregorian + Hijri dates on hover, the
+    // full themed calendar panel on click
     "custom/clock": {
         "exec": "bash ~/.config/hypr/scripts/clock.sh",
         "return-type": "json",
-        "interval": 30
+        "interval": 30,
+        "on-click": "bash ~/.config/hypr/scripts/panel.sh calendar"
     },
 
     "custom/power": {

@@ -11,10 +11,17 @@
 
 Run after editing palette.py, then `home-manager switch` to deploy.
 """
+import os
 import runpy
 import shutil
 import sys
 from pathlib import Path
+
+# UTF-8 everywhere: without this, Windows runs write cp1252 and corrupt
+# any non-ASCII byte (em-dashes) in the generated artifacts
+if os.environ.get("PYTHONUTF8") != "1":
+    os.environ["PYTHONUTF8"] = "1"
+    os.execv(sys.executable, [sys.executable] + sys.argv)
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))

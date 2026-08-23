@@ -22,6 +22,14 @@ case "${1:-audio}" in
             exec python3 "$here/media-panel.py"
         fi
         exit 0 ;;
+    calendar)
+        # month-view calendar with Gregorian + Hijri
+        if pgrep -f "calendar-panel.py" >/dev/null 2>&1; then
+            pkill -f "calendar-panel.py"
+        else
+            exec python3 "$here/calendar-panel.py"
+        fi
+        exit 0 ;;
     *) echo "usage: panel.sh audio|network|bluetooth|media" >&2; exit 2 ;;
 esac
 
