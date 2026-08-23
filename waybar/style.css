@@ -59,8 +59,8 @@ tooltip label { padding: 4px; }
 window#waybar.empty #window { background: transparent; }
 
 /* right-side modules: quiet text chips with a hover wash */
-#memory, #network, #bluetooth, #pulseaudio, #battery,
-#clock, #tray, #custom-notifications, #custom-recording {
+#memory, #network, #bluetooth, #pulseaudio, #battery, #clock, #tray,
+#custom-notifications, #custom-recording, #custom-privacy, #custom-theme {
     padding: 0 10px;
     margin: 4px 1px;
     border-radius: 6px;
@@ -69,8 +69,16 @@ window#waybar.empty #window { background: transparent; }
     transition: background 150ms ease;
 }
 #memory:hover, #network:hover, #bluetooth:hover, #pulseaudio:hover,
-#battery:hover, #clock:hover, #custom-notifications:hover {
+#battery:hover, #clock:hover, #custom-notifications:hover,
+#custom-privacy:hover, #custom-theme:hover {
     background: alpha(@fg, 0.12);
+}
+
+/* privacy chip: quietly alarming while a mic/camera is in use */
+#custom-privacy.active {
+    color: @on_accent;
+    background: alpha(@neutral, 0.9);
+    font-weight: 600;
 }
 
 #clock {

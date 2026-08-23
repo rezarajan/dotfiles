@@ -55,8 +55,12 @@ Bound to **Super+Shift+W**.
 - **Super+F1** — searchable keybinding cheatsheet (live from `hyprctl binds`).
 - **Video calls**: screen sharing runs through xdg-desktop-portal-hyprland
   (window/output picker). **Super+A / Super+Shift+A** switch speaker /
-  microphone mid-call (streams migrate immediately); clicking the waybar
-  volume module opens pavucontrol.
+  microphone mid-call (streams migrate immediately). A privacy chip
+  appears in the bar whenever an app holds the microphone or camera
+  (tooltip names the apps; click opens the mixer on the live streams).
+- **Bar applets**: clicking the volume, network or bluetooth icons drops
+  the matching settings panel down from the bar (dismissed on focus loss,
+  like plasma popups); the sun/moon button toggles light/dark.
 - **Super+Shift+R** toggles screen recording (wf-recorder); the bar shows a
   red ● REC chip while active.
 - **Super+V** clipboard history, **Super+Shift+S** region screenshot.
@@ -68,7 +72,8 @@ hyprland waybar swaync rofi-wayland wlogout hyprpaper swaybg hypridle hyprlock
 hyprpolkitagent xdg-desktop-portal-hyprland xdg-desktop-portal-gtk
 pipewire wireplumber pipewire-pulse pwvucontrol pavucontrol
 grim slurp swappy wf-recorder cliphist wl-clipboard libnotify
-brightnessctl playerctl jq
+brightnessctl playerctl jq psmisc
+networkmanager nm-connection-editor network-manager-applet blueman
 inter-font ttf-jetbrains-mono ttf-nerd-fonts-symbols
 qt6-wayland plasma-integration qt6ct kvantum breeze breeze-gtk breeze-icons polkit
 ```

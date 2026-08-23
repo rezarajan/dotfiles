@@ -12,6 +12,10 @@ local APPLET_CLASSES = {
     ["com.saivert.pwvucontrol"] = true,   -- audio mixer (preferred)
     ["org.pulseaudio.pavucontrol"] = true, -- audio mixer (fallback)
     ["pavucontrol"] = true,
+    ["nm-connection-editor"] = true,      -- network settings
+    ["blueman-manager"] = true,           -- bluetooth settings
+    ["Blueman-manager"] = true,
+    [".blueman-manager-wrapped"] = true,  -- nix wrapper name
 }
 
 local open_applets = 0

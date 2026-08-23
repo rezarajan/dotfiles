@@ -164,8 +164,9 @@ fi
 
 # --- 5. live reloads (skipped on plain `apply` at session start) --------------
 if [ "$cmd" != apply ] && [ -n "${HYPRLAND_INSTANCE_SIGNATURE:-}" ]; then
-    hyprctl reload >/dev/null 2>&1        # theme.lua re-reads the mode file
+    timeout 10 hyprctl reload >/dev/null 2>&1  # theme.lua re-reads the mode file
     pkill -SIGUSR2 waybar 2>/dev/null      # waybar re-parses its stylesheet
+    pkill -SIGRTMIN+9 waybar 2>/dev/null   # refresh the custom/theme button
     command -v swaync-client >/dev/null 2>&1 && swaync-client -rs >/dev/null 2>&1
     command -v notify-send >/dev/null 2>&1 && \
         notify-send -a "Theme" -i preferences-desktop-theme \

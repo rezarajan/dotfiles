@@ -45,13 +45,16 @@ hl.window_rule({
     rounding = 8,
 })
 
--- The audio mixer behaves like a KDE panel applet: a rounded panel that
--- slides down under the bar's right edge (waybar's volume module toggles
--- it; lua/applets.lua dismisses it on focus loss).
-for _, class in ipairs({ "com.saivert.pwvucontrol",
-    "org.pulseaudio.pavucontrol", "pavucontrol" }) do
+-- Settings panels behave like KDE panel applets: rounded dropdowns that
+-- slide down under the bar's right edge (their bar icons toggle them via
+-- scripts/panel.sh; lua/applets.lua dismisses them on focus loss).
+for _, class in ipairs({
+    "com.saivert.pwvucontrol", "org.pulseaudio.pavucontrol", "pavucontrol",
+    "nm-connection-editor",
+    "blueman-manager", "Blueman-manager", ".blueman-manager-wrapped",
+}) do
     hl.window_rule({
-        name = "audio-applet-" .. class,
+        name = "applet-" .. class,
         match = { class = "^(" .. class .. ")$" },
         float = true,
         size = { 440, 600 },
@@ -62,7 +65,6 @@ end
 
 -- Utility dialogs float, centered, sized like plasma applet popups.
 local floaters = {
-    "nm-connection-editor", "blueman-manager",
     "qalculate-gtk", "org.kde.polkit-kde-authentication-agent-1",
     "hyprland-share-picker",
 }
