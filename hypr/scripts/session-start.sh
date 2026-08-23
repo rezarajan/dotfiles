@@ -11,8 +11,11 @@ have() { command -v "$1" >/dev/null 2>&1; }
 running() { pgrep -x "$1" >/dev/null 2>&1; }
 start() { have "$1" && ! running "$1" && "$@" & }
 
-# 1. activate the persisted dark/light mode (writes colors.* copies,
-#    broadcasts portal color-scheme, sets cursor + kvantum)
+# 1. make sure the theme assets are reachable (no-op on home-manager
+#    machines; links cursors/gtk/kvantum/color-schemes elsewhere), then
+#    activate the persisted dark/light mode (writes colors.* copies,
+#    broadcasts portal color-scheme, sets cursor + kvantum + kdeglobals)
+bash "$here/install-theme-assets.sh" >/dev/null 2>&1
 bash "$here/theme-mode.sh" apply
 
 # 2. seed the wallpaper on first boot (hyprpaper + hyprlock read it)
@@ -32,12 +35,17 @@ start waybar
 start hypridle
 
 # wallpaper: hyprpaper on real GPUs; swaybg (shm, no GL) as the fallback for
-# software-rendered environments like VMs, where hyprpaper's GL init aborts
+# software-rendered environments like VMs, where hyprpaper's GL init fails —
+# sometimes leaving the process alive without ever mapping a layer, so check
+# for the actual background layer rather than the process
 start hyprpaper
 (
-    sleep 2
-    if ! running hyprpaper && have swaybg && ! running swaybg; then
-        swaybg -i "$CONF/hypr/wallpaper.jpg" -m fill &
+    sleep 3
+    if ! hyprctl layers 2>/dev/null | grep -qE "namespace: (hyprpaper|wallpaper)"; then
+        pkill -x hyprpaper 2>/dev/null
+        if have swaybg && ! running swaybg; then
+            swaybg -i "$CONF/hypr/wallpaper.jpg" -m fill &
+        fi
     fi
 ) &
 if have swaync; then
@@ -59,5 +67,9 @@ fi
 # 6. tray niceties (skipped when absent)
 start nm-applet
 start blueman-applet
+
+# re-run the theme apply once the session has settled: at the very first
+# seconds of a session dconf/dbus may not be ready for gsettings writes
+(sleep 4; bash "$here/theme-mode.sh" apply) &
 
 exit 0

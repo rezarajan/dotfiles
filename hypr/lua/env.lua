@@ -15,11 +15,12 @@ hl.env("QT_QPA_PLATFORM", "wayland;xcb")
 hl.env("SDL_VIDEODRIVER", "wayland")
 hl.env("ELECTRON_OZONE_PLATFORM_HINT", "auto")
 
--- Qt apps: Kvantum carries the Gruvbox Dragon widget style outside KDE.
--- (On the KDE session this is deliberately NOT set — see kde-gruvbox.nix —
--- because plasma pairs kvantum/kvantum-dark itself. Here theme-mode.sh
--- switches the Kvantum theme on toggle instead.)
-hl.env("QT_STYLE_OVERRIDE", "kvantum")
+-- Qt apps: plasma-integration reads kdeglobals (colors, fonts, icons,
+-- widgetStyle=kvantum) exactly as under the KDE session — theme-mode.sh
+-- maintains kdeglobals per mode, so Dolphin & friends match everything
+-- else. Requires the plasma-integration package; qt6ct.conf is also kept
+-- current as a fallback for machines without it (set "qt6ct" here then).
+hl.env("QT_QPA_PLATFORMTHEME", "kde")
 hl.env("QT_WAYLAND_DISABLE_WINDOWDECORATION", "1")
 
 -- Session identity for portals and app launchers

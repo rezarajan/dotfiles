@@ -8,6 +8,11 @@ Emits, per variant (dark / light):
   rofi/colors-*.rasi          -- rasi color block for the launcher
   swaync/colors-*.css         -- GTK @define-color tokens for notifications
   wlogout/colors-*.css        -- GTK @define-color tokens for the session menu
+  hypr/theme/gtk-colors-*.css -- GTK named colors; the standalone stand-in
+                                 for what kde-gtk-config writes under KDE
+  hypr/theme/kdeglobals-*     -- minimal kdeglobals for machines without a
+                                 KDE-managed one (Dolphin & friends)
+  hypr/theme/qt6ct-*.conf     -- Kvantum style + icons for Qt apps
 
 The active variant is selected at runtime by hypr/scripts/theme-mode.sh,
 which copies colors-<mode>.* over the gitignored colors.* files and lets
@@ -153,6 +158,120 @@ def emit_hyprlock():
         print(f"  {out.relative_to(ROOT)}")
 
 
+# ------------------------------------------------------- gtk named colors
+def _css_color(value):
+    """hex or hex+aa -> css color (GTK3 rejects 8-digit hex)."""
+    h = value.lstrip("#")
+    if len(h) == 8:
+        r, g, b, a = (int(h[i:i + 2], 16) for i in (0, 2, 4, 6))
+        return f"rgba({r},{g},{b},{round(a / 255, 3)})"
+    return f"#{h}"
+
+
+def emit_gtk_colors():
+    """The GTK named-color sheet kde-gtk-config would write under KDE.
+
+    Breeze's GTK css references these names, so redefining them in the
+    user's gtk config dir recolors the whole widget set per mode."""
+    for mode, variant in (("dark", DARK), ("light", LIGHT)):
+        q, s, t = variant["qt"], variant["scheme"], TOKENS[mode]
+        borders = t["border_inactive"]
+        colors = {
+            "theme_fg_color": q["window.text.color"],
+            "theme_text_color": q["text.color"],
+            "theme_bg_color": q["window.color"],
+            "theme_base_color": q["base.color"],
+            "content_view_bg": q["base.color"],
+            "theme_selected_bg_color": q["highlight.color"],
+            "theme_selected_fg_color": q["highlight.text.color"],
+            "theme_hovering_selected_bg_color": s["accent_hover"],
+            "theme_view_hover_decoration_color": s["accent_hover"],
+            "theme_view_active_decoration_color": t["accent"],
+            "theme_button_background_normal": q["button.color"],
+            "theme_button_foreground_normal": q["button.text.color"],
+            "theme_button_foreground_active": t["fg_bright"],
+            "theme_button_decoration_hover": s["accent_hover"],
+            "theme_button_decoration_focus": t["accent"],
+            "borders": borders,
+            "unfocused_borders": borders,
+            "insensitive_borders": borders,
+            "theme_unfocused_fg_color": t["fg_muted"],
+            "theme_unfocused_text_color": t["fg_muted"],
+            "theme_unfocused_bg_color": q["window.color"],
+            "theme_unfocused_base_color": q["base.color"],
+            "theme_unfocused_selected_bg_color": q["inactive.highlight.color"],
+            "theme_unfocused_selected_fg_color": q["text.color"],
+            "insensitive_fg_color": q["disabled.text.color"],
+            "insensitive_base_fg_color": q["disabled.text.color"],
+            "insensitive_bg_color": q["window.color"],
+            "insensitive_base_color": q["base.color"],
+            "unfocused_insensitive_color": q["disabled.text.color"],
+            "placeholder_text_color": t["fg_muted"],
+            "link_color": q["link.color"],
+            "link_visited_color": q["link.visited.color"],
+            "success_color": s["positive"],
+            "warning_color": s["neutral"],
+            "error_color": s["negative"],
+            "tooltip_text": q["tooltip.text.color"],
+            "tooltip_background": t["popup"],
+            "tooltip_border": borders,
+        }
+        lines = [f"/* {HEADER} */"]
+        lines += [f"@define-color {name} {_css_color(val)};"
+                  for name, val in colors.items()]
+        out = ROOT / "hypr" / "theme" / f"gtk-colors-{mode}.css"
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text("\n".join(lines) + "\n", encoding="utf-8", newline="\n")
+        print(f"  {out.relative_to(ROOT)}")
+
+
+# ------------------------------------------------------------- kdeglobals
+# Used only on machines whose kdeglobals is not already KDE/home-manager
+# managed (theme-mode.sh prefers kwriteconfig6 edits when a file exists).
+KDE_FONTS = {
+    "font": "Inter,10.5,-1,5,400,0,0,0,0,0,0,0,0,0,0,1",
+    "menuFont": "Inter,10.5,-1,5,400,0,0,0,0,0,0,0,0,0,0,1",
+    "toolBarFont": "Inter,10.5,-1,5,400,0,0,0,0,0,0,0,0,0,0,1",
+    "smallestReadableFont": "Inter,8,-1,5,400,0,0,0,0,0,0,0,0,0,0,1",
+    "fixed": "JetBrains Mono,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1",
+}
+
+
+def emit_kdeglobals():
+    for mode, scheme, icons, widget in (
+            ("dark", "GruvboxDragon", "Gruvbox-Plus-Dark", "kvantum-dark"),
+            ("light", "GruvboxDragonLight", "Gruvbox-Plus-Light", "kvantum")):
+        colors_src = (HERE.parents[1] / "color-schemes" / f"{scheme}.colors")
+        lines = [f"# {HEADER}",
+                 "[General]", f"ColorScheme={scheme}"]
+        lines += [f"{k}={v}" for k, v in KDE_FONTS.items()]
+        lines += ["XftAntialias=true", "XftHintStyle=hintslight",
+                  "XftSubPixel=none", "",
+                  "[Icons]", f"Theme={icons}", "",
+                  "[KDE]", f"widgetStyle={widget}",
+                  "AnimationDurationFactor=0.25", ""]
+        # inline the color groups so apps work even before the scheme file
+        # is discoverable under ~/.local/share/color-schemes
+        lines.append(colors_src.read_text(encoding="utf-8"))
+        out = ROOT / "hypr" / "theme" / f"kdeglobals-{mode}"
+        out.write_text("\n".join(lines), encoding="utf-8", newline="\n")
+        print(f"  {out.relative_to(ROOT)}")
+
+
+def emit_qt6ct():
+    for mode, icons, style in (("dark", "Gruvbox-Plus-Dark", "kvantum-dark"),
+                               ("light", "Gruvbox-Plus-Light", "kvantum")):
+        body = (f"# {HEADER}\n"
+                "[Appearance]\n"
+                f"style={style}\n"
+                f"icon_theme={icons}\n"
+                "custom_palette=false\n"
+                "standard_dialogs=default\n")
+        out = ROOT / "hypr" / "theme" / f"qt6ct-{mode}.conf"
+        out.write_text(body, encoding="utf-8", newline="\n")
+        print(f"  {out.relative_to(ROOT)}")
+
+
 if __name__ == "__main__":
     emit_lua()
     emit_css("waybar", "colors")
@@ -160,3 +279,6 @@ if __name__ == "__main__":
     emit_css("wlogout", "colors")
     emit_rasi()
     emit_hyprlock()
+    emit_gtk_colors()
+    emit_kdeglobals()
+    emit_qt6ct()

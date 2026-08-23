@@ -57,6 +57,83 @@ copy "$CONF/swaync/colors-$MODE.css"        "$CONF/swaync/colors.css"
 # wlogout stays on the dark tokens in both modes (its icons are light SVGs
 # over a dark scrim, like KDE's logout overlay)
 copy "$CONF/wlogout/colors-dark.css"        "$CONF/wlogout/colors.css"
+
+# GTK named colors — the standalone replacement for what kde-gtk-config
+# writes under KDE. The Gruvbox-Dragon theme is Breeze widgets + these
+# names + the acrylic overlay, so one theme serves both modes.
+for v in 3 4; do
+    mkdir -p "$CONF/gtk-$v.0"
+    copy "$CONF/hypr/theme/gtk-colors-$MODE.css" "$CONF/gtk-$v.0/colors.css"
+    gtkcss="$CONF/gtk-$v.0/gtk.css"
+    touch "$gtkcss"
+    grep -q "colors.css" "$gtkcss" 2>/dev/null || \
+        sed -i "1i @import 'colors.css';" "$gtkcss"
+    if [ -f "$CONF/gtk-$v.0/gruvbox-acrylic.css" ]; then
+        grep -q "gruvbox-acrylic.css" "$gtkcss" 2>/dev/null || \
+            printf "@import 'gruvbox-acrylic.css';\n" >> "$gtkcss"
+    fi
+done
+
+# GTK settings.ini — what kde-gtk-config writes under KDE. Chromium and
+# plain GTK3 apps read the theme name and dark preference from here.
+if [ "$MODE" = light ]; then GTK_DARK=false; else GTK_DARK=true; fi
+for v in 3 4; do
+    cat > "$CONF/gtk-$v.0/settings.ini" <<EOF
+# written by theme-mode.sh (hyprland session) — mode: $MODE
+[Settings]
+gtk-theme-name=$GTK_THEME
+gtk-icon-theme-name=$ICONS
+gtk-cursor-theme-name=$CURSOR
+gtk-cursor-theme-size=24
+gtk-font-name=Inter,  11
+gtk-application-prefer-dark-theme=$GTK_DARK
+gtk-decoration-layout=icon:minimize,maximize,close
+EOF
+done
+
+# Qt outside KDE: qt6ct carries the Kvantum style + icon theme
+mkdir -p "$CONF/qt6ct"
+copy "$CONF/hypr/theme/qt6ct-$MODE.conf" "$CONF/qt6ct/qt6ct.conf"
+
+# KDE apps (Dolphin & friends) read kdeglobals. On a machine where KDE /
+# home-manager manages that file, flip only the three theme keys (with
+# change notification so running apps restyle); otherwise install the
+# generated minimal kdeglobals.
+if [ "$MODE" = light ]; then
+    KDE_SCHEME=GruvboxDragonLight; KDE_WIDGET=kvantum
+else
+    KDE_SCHEME=GruvboxDragon; KDE_WIDGET=kvantum-dark
+fi
+SCHEME_FILE=""
+for dir in "${XDG_DATA_HOME:-$HOME/.local/share}/color-schemes" /usr/share/color-schemes; do
+    [ -f "$dir/$KDE_SCHEME.colors" ] && SCHEME_FILE="$dir/$KDE_SCHEME.colors" && break
+done
+if [ ! -f "$CONF/kdeglobals" ]; then
+    copy "$CONF/hypr/theme/kdeglobals-$MODE" "$CONF/kdeglobals"
+elif [ -n "$SCHEME_FILE" ]; then
+    # kdeglobals inlines [Colors:*] groups (plasma does the same on scheme
+    # apply) and those override the ColorScheme name — swap the color and
+    # WM groups wholesale, keep every other group untouched
+    awk 'BEGIN{skip=0} /^\[/{skip=($0~/^\[(Colors:|ColorEffects:|WM\])/)?1:0} !skip' \
+        "$CONF/kdeglobals" > "$CONF/kdeglobals.tmp"
+    awk 'BEGIN{keep=0} /^\[/{keep=($0~/^\[(Colors:|ColorEffects:|WM\])/)?1:0} keep' \
+        "$SCHEME_FILE" >> "$CONF/kdeglobals.tmp"
+    mv -f "$CONF/kdeglobals.tmp" "$CONF/kdeglobals"
+fi
+# (timeout-guarded: kwriteconfig6 can block when the session bus is odd)
+if command -v kwriteconfig6 >/dev/null 2>&1; then
+    timeout 5 kwriteconfig6 --file kdeglobals --group General --key ColorScheme "$KDE_SCHEME"
+    timeout 5 kwriteconfig6 --file kdeglobals --group Icons --key Theme "$ICONS"
+    timeout 5 kwriteconfig6 --file kdeglobals --group KDE --key widgetStyle "$KDE_WIDGET"
+fi
+# live palette reload for running KDE apps — the broadcast plasma sends
+# (0 = PaletteChanged, 4 = IconChanged, 2 = StyleChanged)
+if command -v dbus-send >/dev/null 2>&1; then
+    for change in 0 2 4; do
+        timeout 5 dbus-send --session --type=signal /KGlobalSettings \
+            org.kde.KGlobalSettings.notifyChange int32:$change int32:0 2>/dev/null
+    done
+fi
 copy "$CONF/hypr/theme/hyprlock-$MODE.conf" "$CONF/hypr/theme/hyprlock-colors.conf"
 
 # --- 3. portal / GTK broadcast ------------------------------------------------
@@ -77,7 +154,10 @@ if command -v gsettings >/dev/null 2>&1; then
 fi
 
 # --- 4. Qt (Kvantum) + cursor -------------------------------------------------
-command -v kvantummanager >/dev/null 2>&1 && kvantummanager --set "$KVANTUM" >/dev/null 2>&1
+# write the kvantum selection directly (kvantummanager --set pops its GUI
+# on some versions)
+mkdir -p "$CONF/Kvantum"
+printf '[General]\ntheme=%s\n' "$KVANTUM" > "$CONF/Kvantum/kvantum.kvconfig"
 if command -v hyprctl >/dev/null 2>&1 && [ -n "${HYPRLAND_INSTANCE_SIGNATURE:-}" ]; then
     hyprctl setcursor "$CURSOR" 24 >/dev/null 2>&1
 fi

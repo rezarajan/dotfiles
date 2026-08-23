@@ -53,6 +53,8 @@ in
       pavucontrol # fallback mixer
       libnotify
       jq
+      kdePackages.plasma-integration # Qt reads kdeglobals like under KDE
+      qt6ct # fallback platform theme for machines without the above
     ]);
   };
 }

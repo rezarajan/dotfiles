@@ -70,8 +70,18 @@ pipewire wireplumber pipewire-pulse pwvucontrol pavucontrol
 grim slurp swappy wf-recorder cliphist wl-clipboard libnotify
 brightnessctl playerctl jq
 inter-font ttf-jetbrains-mono ttf-nerd-fonts-symbols
-qt6-wayland kvantum polkit
+qt6-wayland plasma-integration qt6ct kvantum breeze breeze-gtk breeze-icons polkit
 ```
+
+Application theming without KDE: `scripts/install-theme-assets.sh` links
+the repo's cursors, GTK theme pair, Kvantum themes and KDE color schemes
+into `~/.local/share` / `~/.config/Kvantum` (add `--icons` to fetch the
+Gruvbox-Plus icon pack); `theme-mode.sh` then maintains the pieces KDE
+used to own — the GTK `colors.css` named-color sheet, `qt6ct.conf`
+(Kvantum style + icons) and the `kdeglobals` color scheme (edited via
+`kwriteconfig6 --notify` when the file is KDE-managed, installed from a
+generated template otherwise). GTK apps, Chromium, ghostty, and Qt/KDE
+apps like Dolphin all follow the same palette and the light/dark toggle.
 
 `wlogout` is AUR-only on Arch (`yay -S wlogout`). Tested end-to-end on
 Hyprland 0.56.2 in a VirtualBox VM (waybar, rofi, swaync, theming toggle,
