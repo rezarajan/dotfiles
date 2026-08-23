@@ -60,6 +60,42 @@ for v in 3 4; do
     echo "  $CONF/gtk-$v.0/gruvbox-acrylic.css"
 done
 
+echo "desktop integration:"
+# Dolphin's built-in "Set as Wallpaper" (kio-extras) talks to plasmashell,
+# which doesn't exist here — disable it and provide the same entry backed
+# by wallpaper.sh, so desktop and lock screen update together.
+mkdir -p "$DATA/kio/servicemenus"
+cat > "$DATA/kio/servicemenus/gruvbox-wallpaper.desktop" <<EOF
+[Desktop Entry]
+Type=Service
+MimeType=image/jpeg;image/png;image/webp;
+Actions=setAsWallpaper;
+X-KDE-Priority=TopLevel
+
+[Desktop Action setAsWallpaper]
+Name=Set as Wallpaper
+Icon=preferences-desktop-wallpaper
+Exec=bash "$here/wallpaper.sh" set %f
+EOF
+chmod +x "$DATA/kio/servicemenus/gruvbox-wallpaper.desktop"
+echo "  $DATA/kio/servicemenus/gruvbox-wallpaper.desktop"
+if command -v kwriteconfig6 >/dev/null 2>&1; then
+    timeout 5 kwriteconfig6 --file kservicemenurc --group Show \
+        --key wallpaperfileitemaction false
+fi
+command -v kbuildsycoca6 >/dev/null 2>&1 && kbuildsycoca6 >/dev/null 2>&1
+
+# xdg-open needs a default browser (portal sign-in button, links in apps)
+if command -v xdg-settings >/dev/null 2>&1; then
+    cur="$(timeout 5 xdg-settings get default-web-browser 2>/dev/null || true)"
+    if [ -z "$cur" ]; then
+        for b in chromium.desktop firefox.desktop; do
+            [ -f "/usr/share/applications/$b" ] \
+                && timeout 5 xdg-settings set default-web-browser "$b" && break
+        done
+    fi
+fi
+
 if [ "${1:-}" = "--icons" ] && [ ! -d "$DATA/icons/Gruvbox-Plus-Dark" ]; then
     # pinned to the same revision kde-gruvbox.nix builds from
     rev=a9b19b95ec653fa80574fbd7ffefc2d03abfc991
