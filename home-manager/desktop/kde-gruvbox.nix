@@ -143,13 +143,18 @@ in
 
   qt = {
     enable = true;
-    platformTheme = {
-      name = "kde";
-      package = [
-        pkgs.kdePackages.kio
-        pkgs.kdePackages.plasma-integration
-      ];
-    };
+    # NOTE: deliberately NO platformTheme here. Setting it makes
+    # home-manager export QT_PLUGIN_PATH=<this profile>, putting nixpkgs'
+    # Qt plugins AHEAD of the distro's for every Qt app on the host — and
+    # nixpkgs' Qt is almost never the distro's exact build. Qt accepts a
+    # plugin whose major.minor matches (6.11.1 vs 6.11.2 passes), loads it,
+    # and drags a second libQt6Gui into the process. That segfaulted KWin in
+    # QKdeTheme::createKdeTheme() on every Plasma login (plasma-integration)
+    # and silently lost pinentry's Kvantum widget style (qtstyleplugin-kvantum).
+    # On a non-NixOS host the distro owns the Qt plugin stack — kio and
+    # plasma-integration both come from pacman; QT_QPA_PLATFORMTHEME is set
+    # as a plain session variable below so the DISTRO's plasma-integration
+    # is what answers to "kde".
     # NOTE: no qt.style.name here — it would export QT_STYLE_OVERRIDE=kvantum,
     # which forces every Qt app onto the plain (light) Kvantum style at login
     # regardless of the active mode's widgetStyle (kvantum-dark). The widget
@@ -177,8 +182,25 @@ in
     };
   };
 
+  home.sessionVariables.QT_QPA_PLATFORMTHEME = "kde";
+
+  # qt.enable exports QT_PLUGIN_PATH and QML2_IMPORT_PATH into both the
+  # shell profile and the systemd user manager regardless of platformTheme.
+  # qt.enable is kept only for qt.kde.settings above, so force both empty:
+  # the distro owns the Qt plugin and QML stacks (pacman -S kvantum kio
+  # plasma-integration). Empty is safe — Qt falls back to its built-in path.
+  home.sessionSearchVariables = {
+    QT_PLUGIN_PATH = lib.mkForce [ ];
+    QML2_IMPORT_PATH = lib.mkForce [ ];
+  };
+  systemd.user.sessionVariables = {
+    QT_PLUGIN_PATH = lib.mkForce "";
+    QML2_IMPORT_PATH = lib.mkForce "";
+  };
+
+  # This repo supplies only the Kvantum *themes* under ~/.config/Kvantum —
+  # plain data, no ABI. Adding a nixpkgs Qt plugin here re-arms the footgun.
   home.packages = [
-    pkgs.kdePackages.qtstyleplugin-kvantum
     # build tool for ./kvantum/tools/cursor_gen.py (generate_all skips
     # cursor regeneration when it is absent)
     pkgs.xorg.xcursorgen

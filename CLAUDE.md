@@ -78,8 +78,13 @@ symlinks; see `hypr/readme.md` → Install.
    `hyprctl dispatch 'hl.dsp...'` over SSH and `VBoxManage controlvm
    keyboardputstring`/`keyboardputscancode` (no mouse injection exists).
 5. Commit with jj, conventional-commit style, one logical change each.
-   GPG signing needs the user present (`jj sign -r 'main..@'` after they
-   unlock the key).
+   Commits are GPG-signed via jj's own `signing.*` config (backend `gpg`,
+   key `070B6AA734C19166`, behavior `own`) — jj does NOT read git's
+   `commit.gpgsign`/`user.signingkey`, so a machine with git signing set
+   up can still commit unsigned through jj. `behavior = "own"` signs on
+   commit; `jj sign -r 'main..@'` backfills existing ones. gpg-agent
+   normally has the passphrase cached and neither prompts, but after a
+   fresh login or a cache expiry the user must be present to unlock.
 
 ## Pitfalls (each of these bit us once)
 
@@ -113,6 +118,37 @@ symlinks; see `hypr/readme.md` → Install.
   `[Colors:*]` groups which override the scheme name — switching
   schemes means swapping those groups wholesale (see theme-mode.sh awk).
   Broadcast `org.kde.KGlobalSettings.notifyChange` for live restyle.
+- **Never put nixpkgs' `plasma-integration` on `QT_PLUGIN_PATH` on a
+  non-NixOS host.** `qt.enable` puts the whole profile on that path, so the
+  DISTRO's Qt apps load nixpkgs' `KDEPlasmaPlatformTheme6.so` and end up
+  with two different libQt6Gui in one process. It stays invisible while
+  both Qts match, then the distro moves one point release ahead (Arch
+  6.11.2 vs nixpkgs 6.11.1) and **every Plasma login segfaults KWin** in
+  `QKdeTheme::createKdeTheme()`. plasmashell/powerdevil/kaccess then abort
+  with "no Qt platform plugin could be initialized" — a red herring, they
+  only fail because no compositor came up. Needs BOTH
+  `XDG_CURRENT_DESKTOP=KDE` and the nix path, so Hyprland is unaffected and
+  the breakage hides until someone tries KDE. The distro ships its own
+  plasma-integration built against its own Qt — use that.
+  Reproduce WITHOUT logging out (nested, takes 10s):
+  `env XDG_CURRENT_DESKTOP=KDE QT_QPA_PLATFORMTHEME=kde QT_PLUGIN_PATH=~/.nix-profile/lib/qt-6/plugins
+   timeout 10 kwin_wayland --socket=t --width 600 --height 400; echo $?`
+  (139 = broken, 124 = fine). Bisect by symlinking one plugin subdir at a
+  time into a scratch dir and pointing QT_PLUGIN_PATH at it.
+- **No nixpkgs Qt plugin may ever reach a distro Qt app.** `qt.enable`
+  exports `QT_PLUGIN_PATH` *and* `QML2_IMPORT_PATH` into both the shell
+  profile and the systemd user manager, independently of `platformTheme`,
+  putting this profile ahead of the distro's for every Qt process on the
+  host. Qt accepts a plugin whose major.minor matches (6.11.1 vs 6.11.2
+  passes), loads it, and drags a second libQt6Gui into the process — which
+  segfaulted KWin on every Plasma login (plasma-integration) and silently
+  dropped the Kvantum style in pinentry (qtstyleplugin-kvantum).
+  kde-gruvbox.nix keeps `qt.enable` ONLY for `qt.kde.settings` and forces
+  both search variables empty; empty is safe, Qt falls back to its built-in
+  path. The distro owns the Qt plugin/QML stack: `pacman -S kvantum kio
+  plasma-integration` (and `qt6ct` for a fallback theme). This repo supplies
+  only the Kvantum *themes* under `~/.config/Kvantum` — plain data, no ABI.
+  Audit with `find ~/.nix-profile/lib/qt-* -name '*.so'`; it must be empty.
 - `kwriteconfig6`/dbus tools can hang on an odd session bus — always
   `timeout 5` them.
 - Icon caches: `~/.cache/icon-cache.kcache` makes KDE apps keep stale
@@ -130,6 +166,24 @@ symlinks; see `hypr/readme.md` → Install.
 - Chromium exposes ONE MPRIS player per browser process regardless of
   tab count (tabs aggregate; the browser re-routes on pause). Same for
   plasma/GNOME applets — don't chase per-tab players.
+- A nix-built **lock screen cannot authenticate** on a non-NixOS host:
+  the binary links nixpkgs' libpam (whose module dir is the nix store, not
+  `/usr/lib/security`) and nixpkgs' `unix_chkpwd` is not setuid root, so
+  `pam_unix` never reads `/etc/shadow`. No `/etc/pam.d/hyprlock` exists
+  either — only the distro package ships it. Symptom: the lock screen
+  renders, the CORRECT password is rejected, and the session is
+  unrecoverable without a reboot. hyprlock/swaylock must come from the
+  distro (`pacman -S hyprlock swaylock`); they are deliberately absent
+  from the nix package set. Recovery without rebooting: `pkill -x
+  hyprlock` then `hyprctl eval 'hl.clear_crashed_lockscreen()'`.
+- **Screen recording needs `xdg-desktop-portal-hyprland` installed.**
+  `hyprland-portals.conf` asks for `default=hyprland;gtk`, but if the
+  hyprland backend is not present the request falls through to
+  xdg-desktop-portal-gtk, which implements no `ScreenCast` interface off
+  GNOME. OBS then shows NO screen-capture source at all (its
+  `linux-pipewire.so` plugin has nothing to talk to). The config alone is
+  not enough — `pacman -S xdg-desktop-portal-hyprland`, then restart
+  `xdg-desktop-portal.service`.
 - The generators must run under UTF-8 (`generate_all.py` re-execs with
   PYTHONUTF8=1); a cp1252 Windows run once corrupted em-dashes across
   the committed artifacts.

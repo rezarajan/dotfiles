@@ -1,7 +1,7 @@
 { config, nixgl, lib, pkgs, ... }:
 
 let
-  cfg = config.cascadura.nixGL;
+  cfg = config.dotfiles.nixGL;
 
   # NOTE (Using PURE eval) Change the version to match the host-installed version;
   # not necessary for --impure eval
@@ -48,7 +48,7 @@ let
     installScripts = [ "nvidia" ];
   };
 in {
-  options.cascadura.nixGL.pureNvidia = lib.mkOption {
+  options.dotfiles.nixGL.pureNvidia = lib.mkOption {
     type = lib.types.bool;
     default = false;
     description = ''

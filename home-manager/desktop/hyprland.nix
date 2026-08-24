@@ -8,10 +8,10 @@
 # Hyprland itself comes from the distro (Arch: `pacman -S hyprland`) —
 # a nix-built compositor needs working GL, which nixGL makes painful for a
 # session. Everything else (bar, launcher, tools) can come from nixpkgs by
-# enabling `cascadura.hyprland.packages`.
+# enabling `dotfiles.hyprland.packages`.
 
 let
-  cfg = config.cascadura.hyprland;
+  cfg = config.dotfiles.hyprland;
   dotfiles = "${config.home.homeDirectory}/git/dotfiles";
   link = path: config.lib.file.mkOutOfStoreSymlink "${dotfiles}/${path}";
   # On non-NixOS hosts, nix-built GL/GUI programs need the nixGL shim
@@ -21,7 +21,7 @@ let
   wrapGL = config.lib.nixGL.wrap;
 in
 {
-  options.cascadura.hyprland = {
+  options.dotfiles.hyprland = {
     enable = lib.mkEnableOption "Hyprland session configs (Lua)";
     packages = lib.mkEnableOption "companion packages from nixpkgs";
   };
@@ -44,20 +44,28 @@ in
       (map wrapGL (with pkgs; [
         waybar
         swaynotificationcenter
-        rofi-wayland
+        rofi # rofi-wayland was merged into rofi upstream
         wlogout
         swww # animated wallpaper transitions (scripts/wallpaper.sh)
         hyprpaper
         swaybg # wallpaper fallback where hyprpaper's GL init fails (VMs)
-        swaylock # lock fallback where hyprlock's GL init fails
         hypridle
-        hyprlock
+        # NOTE: hyprlock and swaylock deliberately come from the distro, not
+        # here. A nix-built lock screen cannot authenticate on a non-NixOS
+        # host — it links nixpkgs' libpam (module dir = the nix store, not
+        # /usr/lib/security) and nixpkgs' unix_chkpwd is not setuid root, so
+        # pam_unix never reads /etc/shadow. The distro packages also ship the
+        # /etc/pam.d/ service files, which nix cannot install. Installing
+        # them here rejects the correct password and strands the session.
+        #   Arch: pacman -S hyprlock swaylock
         swappy
         pwvucontrol # audio mixer, shown as a bar dropdown applet
         pavucontrol # fallback mixer
         networkmanagerapplet # nm-connection-editor + tray applet
         blueman
-        qt6ct # fallback platform theme without plasma-integration
+        # NOTE: no qt6ct from nixpkgs — its style plugin lands in this
+        # profile's qt-6/plugins/styles and would be found before the
+        # distro's. Take a fallback theme from the distro (pacman -S qt6ct).
       ]))
       ++ (with pkgs; [
         # CLI tools — no GL, no wrapping needed
@@ -73,7 +81,11 @@ in
         libnotify
         jq
         psmisc # fuser, for the camera-in-use indicator
-        kdePackages.plasma-integration # Qt reads kdeglobals like under KDE
+        # NOTE: plasma-integration deliberately NOT from nixpkgs — see the
+        # note in kde-gruvbox.nix. The distro package provides the same
+        # "kde" platform theme built against the distro's Qt, so KDE apps
+        # still read kdeglobals under Hyprland without the ABI mismatch
+        # that makes a Plasma login segfault.
       ])
     );
   };

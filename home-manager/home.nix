@@ -8,7 +8,7 @@
 
   # Pin to pureNvidia for nixGL; must manually update version and hash in ./nixgl.nix
   # Set to `false` if you want to fetch the latest version; requires --impure flag
-  cascadura.nixGL.pureNvidia = true;
+  dotfiles.nixGL.pureNvidia = true;
 
   # This value determines the Home Manager release that your configuration is
   # compatible with. This helps avoid breakage when a new Home Manager release
@@ -69,6 +69,9 @@
 
   # Display Manager
   # wayland.windowManager.hyprland.enable = true;
+
+  dotfiles.hyprland.enable = true;
+  dotfiles.hyprland.packages = true;
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
