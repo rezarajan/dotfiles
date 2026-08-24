@@ -14,3 +14,16 @@ for _, ev in ipairs({
 }) do
     hl.on(ev, poke)
 end
+
+-- The displays chip (RTMIN+6) has to react to outputs appearing and
+-- disappearing, which is the whole point of it — plugging a projector in
+-- should light the chip up without waiting out a poll interval.
+local function poke_displays()
+    hl.exec_cmd("pkill -SIGRTMIN+6 waybar")
+end
+
+for _, ev in ipairs({
+    "monitor.added", "monitor.removed", "monitor.layout_changed",
+}) do
+    hl.on(ev, poke_displays)
+end

@@ -10,6 +10,9 @@ hypr/theme/hyprlock-colors.conf
 # per-machine hyprland overrides (start from hypr/lua/local.lua.example)
 hypr/lua/local.lua
 
+# live monitor layout, written by hypr/scripts/monitors.sh save
+hypr/lua/monitors-local.lua
+
 # user-selected wallpaper (seeded from wallpapers/ on first start)
 hypr/wallpaper.jpg
 

@@ -80,7 +80,7 @@ window#waybar.empty #window { background: transparent; }
 /* right-side modules: quiet text chips with a hover wash */
 #memory, #network, #bluetooth, #pulseaudio, #battery, #custom-clock, #tray,
 #custom-notifications, #custom-recording, #custom-privacy, #custom-theme,
-#custom-power, #custom-help {
+#custom-power, #custom-help, #custom-displays {
     padding: 0 10px;
     margin: 4px 1px;
     border-radius: 9px;
@@ -91,7 +91,7 @@ window#waybar.empty #window { background: transparent; }
 #memory:hover, #network:hover, #bluetooth:hover, #pulseaudio:hover,
 #battery:hover, #custom-clock:hover, #custom-notifications:hover,
 #custom-privacy:hover, #custom-theme:hover, #custom-power:hover,
-#custom-help:hover {
+#custom-help:hover, #custom-displays:hover {
     background: alpha(@fg, 0.12);
 }
 
@@ -125,6 +125,13 @@ window#waybar.empty #window { background: transparent; }
 #custom-power:hover {
     color: @on_accent;
     background: alpha(@negative, 0.85);
+}
+
+/* displays chip — only ever rendered with more than one output attached,
+ * so it reads as "extra screens present" rather than as constant chrome */
+#custom-displays {
+    color: @fg;
+    font-weight: 500;
 }
 
 #battery.warning { color: @neutral; }

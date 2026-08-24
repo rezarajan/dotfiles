@@ -203,7 +203,7 @@ in
   home.packages = [
     # build tool for ./kvantum/tools/cursor_gen.py (generate_all skips
     # cursor regeneration when it is absent)
-    pkgs.xorg.xcursorgen
+    pkgs.xcursorgen
   ];
 
   # A stale QT_STYLE_OVERRIDE=kvantum persists in the systemd user manager:

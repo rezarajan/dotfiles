@@ -98,6 +98,24 @@ symlinks; see `hypr/readme.md` → Install.
   throw (pcall the optional `lua/local`).
 - Window objects are userdata: fields are `.at.x/.at.y/.size.x/.size.y`,
   `.class`; `pairs()` does not work on them.
+- `hyprctl keyword` is dead too: it answers "keyword can't work with
+  non-legacy parsers. Use eval." Runtime config changes go through
+  `hyprctl eval 'hl.monitor({...})'`. This is why **nwg-displays cannot
+  be used** for monitor management (it applies via `hyprctl keyword
+  monitor`) — wdisplays drives `zwlr_output_manager_v1` instead and works,
+  but leaves no monitor rule behind, so `scripts/monitors.sh save`
+  persists the result into `lua/monitors-local.lua`.
+- Monitor rules ACCUMULATE. Emit the full field set (`mode`, `position`,
+  `scale`, `mirror`, `disabled`) on every `hl.monitor` call: omit `mirror`
+  and an earlier mirror stays in force, pinning the output on top of its
+  source whatever `position` says. `hl.monitor` validates field names, so
+  a typo errors rather than passing silently.
+- `mode = "preferred"` takes the EDID's nominated mode, which on
+  high-refresh panels is routinely the 60 Hz fallback (an AW3423DW sat at
+  59.97 Hz on a 175 Hz screen). Use `highrr`.
+- `hyprctl eval` prints only errors — its "ok" is an ack, NOT your return
+  value. Never conclude anything from "ok"; a `pcall` inside eval prints
+  "ok" whether or not the call failed.
 - Replacing config files with tar while Hyprland runs fires the
   file-watcher mid-extract → transient "config error" banner. Reload +
   `hyprctl dismissnotify` after every deploy.
@@ -166,6 +184,21 @@ symlinks; see `hypr/readme.md` → Install.
 - Chromium exposes ONE MPRIS player per browser process regardless of
   tab count (tabs aggregate; the browser re-routes on pause). Same for
   plasma/GNOME applets — don't chase per-tab players.
+- The GTK applets need an interpreter whose `gi.require_version("Gtk",
+  "3.0")` resolves. `python3.withPackages [pygobject3]` ships the
+  bindings WITHOUT the typelibs and shadows the distro python in PATH, so
+  a bare `python3` breaks every applet ("Namespace Gtk not available").
+  `scripts/panel.sh` probes for a working one (`GRUVBOX_PYTHON` overrides).
+- Chromium derives its cookie/password key from the detected desktop:
+  KDE gets KWallet, `XDG_CURRENT_DESKTOP=Hyprland` is unrecognised and
+  falls back to `basic` (a hardcoded key), silently DROPPING everything
+  encrypted under the KDE session. Both halves of the fix are required —
+  `--password-store=kwallet6` in `chromium-flags.conf`, and
+  `org.freedesktop.impl.portal.Secret=kwallet` in
+  `hyprland-portals.conf` (xdg-desktop-portal-gtk implements no Secret
+  interface at all, and `kwallet.portal` is `UseIn=kde`). Check with
+  `os_crypt.portal.prev_init_success` in `Local State` and the `v10`/`v11`
+  tag on a fresh cookie.
 - A nix-built **lock screen cannot authenticate** on a non-NixOS host:
   the binary links nixpkgs' libpam (whose module dir is the nix store, not
   `/usr/lib/security`) and nixpkgs' `unix_chkpwd` is not setuid root, so
@@ -174,16 +207,14 @@ symlinks; see `hypr/readme.md` → Install.
   renders, the CORRECT password is rejected, and the session is
   unrecoverable without a reboot. hyprlock/swaylock must come from the
   distro (`pacman -S hyprlock swaylock`); they are deliberately absent
-  from the nix package set. Recovery without rebooting: `pkill -x
-  hyprlock` then `hyprctl eval 'hl.clear_crashed_lockscreen()'`.
+  from the nix package set.
 - **Screen recording needs `xdg-desktop-portal-hyprland` installed.**
   `hyprland-portals.conf` asks for `default=hyprland;gtk`, but if the
   hyprland backend is not present the request falls through to
   xdg-desktop-portal-gtk, which implements no `ScreenCast` interface off
   GNOME. OBS then shows NO screen-capture source at all (its
   `linux-pipewire.so` plugin has nothing to talk to). The config alone is
-  not enough — `pacman -S xdg-desktop-portal-hyprland`, then restart
-  `xdg-desktop-portal.service`.
+  not enough — `pacman -S xdg-desktop-portal-hyprland`.
 - The generators must run under UTF-8 (`generate_all.py` re-execs with
   PYTHONUTF8=1); a cp1252 Windows run once corrupted em-dashes across
   the committed artifacts.

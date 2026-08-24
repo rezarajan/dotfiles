@@ -97,6 +97,9 @@ bind(mod .. " + ALT + W", hl.dsp.exec_cmd(apps.wallpaper_next), { description = 
 bind(mod .. " + A", hl.dsp.exec_cmd(apps.audio_out), { description = "Switch audio output" })
 bind(mod .. " + SHIFT + A", hl.dsp.exec_cmd(apps.audio_in), { description = "Switch microphone" })
 bind(mod .. " + N", hl.dsp.exec_cmd("swaync-client -t -sw"), { description = "Notification center" })
+-- Super+P is keyboard passthrough, so displays take D
+bind(mod .. " + D", hl.dsp.exec_cmd(apps.displays), { description = "Displays" })
+bind(mod .. " + SHIFT + D", hl.dsp.exec_cmd(apps.displays_gui), { description = "Arrange displays" })
 
 -- screenshots & recording
 bind(mod .. " + SHIFT + S", hl.dsp.exec_cmd(apps.screenshot_region), { description = "Screenshot region" })

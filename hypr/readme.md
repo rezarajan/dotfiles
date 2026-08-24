@@ -15,7 +15,8 @@ hypr/
 │   ├── theme.lua       design tokens + active dark/light variant
 │   ├── apps.lua        default applications, script paths
 │   ├── env.lua         environment variables
-│   ├── monitors.lua    catch-all monitor default
+│   ├── monitors.lua    monitor defaults + the saved layout, if any
+│   │                     (monitors-local.lua, gitignored)
 │   ├── options.lua     general / decoration / input / layouts
 │   ├── animations.lua  curves + animation tree
 │   ├── rules.lua       window / layer / workspace rules
@@ -74,6 +75,34 @@ Bound to **Super+Shift+W**.
   editor). A watcher raises a KDE-style "Sign-in required" notification
   with an "Open sign-in page" button on captive-portal networks. The
   sun/moon button toggles light/dark.
+- **Displays**: **Super+D** opens the displays applet — Extend / Mirror /
+  Solo presets, a per-output on/off switch, and a click-to-cycle refresh
+  rate (handy because EDID-preferred is routinely the 60 Hz mode on a
+  high-refresh panel). A chip appears in the bar whenever more than one
+  output is attached, showing how many are lit. **Super+Shift+D** (or
+  *Arrange…*) opens `wdisplays` for full drag-and-drop placement.
+  *Save layout* writes `lua/monitors-local.lua`, which the config reloads
+  on every start.
+
+  Note `nwg-displays` cannot be used here: it applies changes with
+  `hyprctl keyword monitor`, and the Lua parser rejects that outright
+  ("keyword can't work with non-legacy parsers"). Everything in
+  `scripts/monitors.sh` goes through `hyprctl eval 'hl.monitor{…}'`
+  instead, and `wdisplays` drives the compositor over
+  `zwlr_output_manager_v1`, which is unaffected.
+- **Credentials / keyring**: browsers derive their cookie and password
+  encryption key from the desktop they detect. `XDG_CURRENT_DESKTOP=Hyprland`
+  is not a desktop Chromium recognises, so it used to fall back to its
+  `basic` store — a hardcoded key — and silently discard everything the
+  KDE session had encrypted through KWallet, profile by profile. Two
+  pieces fix it, and both are needed for the two sessions to behave
+  identically:
+  `xdg-desktop-portal/hyprland-portals.conf` names `kwallet` for
+  `org.freedesktop.impl.portal.Secret` (no hyprland or gtk backend
+  implements Secret at all, and `kwallet.portal` ships `UseIn=kde`), and
+  `chromium-flags.conf` pins `--password-store=kwallet6`. Verify with
+  `jq .os_crypt "~/.config/chromium/Local State"` — `portal.prev_init_success`
+  must be `true`; a freshly written cookie should carry a `v11` tag, not `v10`.
 - **Super+Shift+R** toggles screen recording (wf-recorder); the bar shows a
   red ● REC chip while active.
 - **Super+V** clipboard history, **Super+Shift+S** region screenshot.
@@ -85,7 +114,7 @@ hyprland waybar swaync rofi-wayland swww swaybg hypridle hyprlock swaylock
 hyprpolkitagent xdg-desktop-portal-hyprland xdg-desktop-portal-gtk
 pipewire wireplumber pipewire-pulse pavucontrol
 grim slurp swappy wf-recorder cliphist wl-clipboard libnotify
-brightnessctl playerctl jq psmisc imagemagick python-gobject
+brightnessctl playerctl jq psmisc imagemagick python-gobject wdisplays
 networkmanager nm-connection-editor network-manager-applet blueman
 inter-font ttf-jetbrains-mono ttf-nerd-fonts-symbols
 qt6-wayland plasma-integration qt6ct kvantum breeze breeze-gtk breeze-icons polkit
@@ -100,6 +129,14 @@ used to own — the GTK `colors.css` named-color sheet, `qt6ct.conf`
 `kwriteconfig6 --notify` when the file is KDE-managed, installed from a
 generated template otherwise). GTK apps, Chromium, ghostty, and Qt/KDE
 apps like Dolphin all follow the same palette and the light/dark toggle.
+
+`python-gobject` must be the one carrying the GTK 3 typelibs — the GTK
+applets (media, calendar, displays) need `gi.require_version("Gtk",
+"3.0")` to resolve, which PyGObject alone does not provide. A nix
+`python3.withPackages [pygobject3]` env satisfies the import but not the
+typelib and shadows the distro interpreter in `PATH`, so `scripts/panel.sh`
+probes for a python that actually reaches GTK rather than trusting
+`python3` (override with `GRUVBOX_PYTHON`).
 
 The audio applet prefers `pwvucontrol` when present (AUR on Arch,
 `pwvucontrol` in nixpkgs) and falls back to `pavucontrol`.

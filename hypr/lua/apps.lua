@@ -32,5 +32,7 @@ M.logout_menu = script("power-menu.sh")
 M.wallpaper_pick = script("wallpaper.sh", "pick")
 M.wallpaper_next = script("wallpaper.sh", "next")
 M.keybinds_help = script("keybinds-help.sh")
+M.displays = script("panel.sh", "displays")
+M.displays_gui = script("monitors.sh", "gui")
 
 return M

@@ -66,24 +66,36 @@ local applet_rules = {
         move = { "monitor_w-470", 46 } },
     { "calendar-panel.py", size = { 400, 395 },
         move = { "monitor_w-470", 46 } },
+    -- displays drops under its chip, left of the clock. Sized for the
+    -- common two outputs; beyond that the list scrolls inside the panel
+    -- size = false: this one lists however many outputs are attached,
+    -- so let GTK decide the height instead of pinning empty space below
+    -- two monitors and clipping the fifth
+    { "gruvbox-displays", size = false, move = { "monitor_w-600", 46 } },
+    { "displays-panel.py", size = false, move = { "monitor_w-600", 46 } },
 }
 for _, entry in ipairs(applet_rules) do
-    hl.window_rule({
+    local rule = {
         name = "applet-" .. entry[1],
         match = { class = "^(" .. entry[1] .. ")$" },
         float = true,
-        size = entry.size or { 560, 660 },
         move = entry.move or { "monitor_w-568", 46 },
         animation = "slidevert",
         -- acrylic: translucent surface, compositor blur behind
         opacity = "0.92 0.92",
-    })
+    }
+    -- entry.size == false means "whatever the toolkit asks for"
+    if entry.size ~= false then
+        rule.size = entry.size or { 560, 660 }
+    end
+    hl.window_rule(rule)
 end
 
 -- Utility dialogs float, centered, sized like plasma applet popups.
 local floaters = {
     "qalculate-gtk", "org.kde.polkit-kde-authentication-agent-1",
     "hyprland-share-picker",
+    "wdisplays",   -- full monitor arrangement GUI (scripts/monitors.sh gui)
 }
 for _, class in ipairs(floaters) do
     hl.window_rule({

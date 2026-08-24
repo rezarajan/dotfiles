@@ -20,6 +20,8 @@ local APPLET_CLASSES = {
     ["media-panel.py"] = true,            -- its fallback app id
     ["gruvbox-calendar"] = true,          -- calendar popup
     ["calendar-panel.py"] = true,
+    ["gruvbox-displays"] = true,          -- display switcher (displays-panel.py)
+    ["displays-panel.py"] = true,
 }
 
 local open_applets = 0

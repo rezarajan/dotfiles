@@ -5,8 +5,15 @@ let
 
   # NOTE (Using PURE eval) Change the version to match the host-installed version;
   # not necessary for --impure eval
-  nvidiaVersion = "610.43.03";
-  nvidiaHash = "sha256-ReLUwTSiPDXlDyU6SqY+fl6NF+PRhdSgfIpY6WEu05I=";
+  # Must match the RUNNING kernel module exactly — NVIDIA's userspace GL
+  # refuses a version-mismatched driver, and every nixGL-wrapped GL app
+  # then dies with "No GL implementation is available" (wdisplays' canvas,
+  # hyprlock, hyprpaper/awww). Check with `cat /proc/driver/nvidia/version`
+  # after every driver update; get the hash with
+  #   nix-prefetch-url https://download.nvidia.com/XFree86/Linux-x86_64/$V/NVIDIA-Linux-x86_64-$V.run
+  #   nix hash convert --hash-algo sha256 --to sri <base32>
+  nvidiaVersion = "610.57.04";
+  nvidiaHash = "sha256-suk1xmuDuwDAyFe8jg7g/VLekoa0DJzB7sKafOfrEW0=";
   nixGLPkgs = import nixgl.inputs.nixpkgs {
     system = pkgs.stdenv.hostPlatform.system;
     config.allowUnfree = true;

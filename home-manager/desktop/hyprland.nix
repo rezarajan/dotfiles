@@ -46,7 +46,7 @@ in
         swaynotificationcenter
         rofi # rofi-wayland was merged into rofi upstream
         wlogout
-        swww # animated wallpaper transitions (scripts/wallpaper.sh)
+        awww # animated wallpaper transitions (scripts/wallpaper.sh)
         hyprpaper
         swaybg # wallpaper fallback where hyprpaper's GL init fails (VMs)
         hypridle
@@ -59,6 +59,12 @@ in
         # them here rejects the correct password and strands the session.
         #   Arch: pacman -S hyprlock swaylock
         swappy
+        # monitor arrangement GUI. NOT nwg-displays: that one applies its
+        # changes with `hyprctl keyword monitor`, which the Lua config
+        # parser rejects outright ("keyword can't work with non-legacy
+        # parsers"). wdisplays drives zwlr_output_manager_v1 instead, so
+        # it works — scripts/monitors.sh persists the result afterwards.
+        wdisplays
         pwvucontrol # audio mixer, shown as a bar dropdown applet
         pavucontrol # fallback mixer
         networkmanagerapplet # nm-connection-editor + tray applet
@@ -70,7 +76,13 @@ in
       ++ (with pkgs; [
         # CLI tools — no GL, no wrapping needed
         imagemagick # composes the swaylock wallpaper/clock lock image
-        (python3.withPackages (p: [ p.pygobject3 ])) # media/calendar applets
+        # NOTE: this env carries the PyGObject bindings but none of the
+        # GTK typelibs, so gi.require_version("Gtk", "3.0") fails inside
+        # it — and it shadows the distro python in PATH. scripts/panel.sh
+        # probes for an interpreter that can actually reach GTK rather
+        # than trusting `python3`; on non-NixOS that lands on the
+        # distro's python-gobject.
+        (python3.withPackages (p: [ p.pygobject3 ])) # media/calendar/displays applets
         grim
         slurp
         wf-recorder
