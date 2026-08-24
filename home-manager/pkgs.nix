@@ -24,6 +24,7 @@
         # pkgs.binutils
         pkgs.bun
         pkgs.cargo
+        pkgs.croc
         pkgs.claude-code
         pkgs.phpPackages.composer
         pkgs.codex
