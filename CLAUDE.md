@@ -128,6 +128,13 @@ symlinks; see `hypr/readme.md` → Install.
   CSS (600). App-level styling that must win needs
   `Gtk.STYLE_PROVIDER_PRIORITY_USER + 100`.
 - GTK3 CSS rejects `#rrggbbaa` — emit `rgba(r,g,b,a)`.
+- In `gtk-tweaks.css`, tint widgets with `background-color`, never the
+  `background` SHORTHAND: it resets `background-clip` to `border-box`.
+  Adwaita and Breeze size scrollbar sliders with a fat *transparent*
+  border plus `background-clip: padding-box`, so the shorthand paints
+  that border too — a 3px overlay indicator became a 19px slab in every
+  GTK app (ghostty most visibly). Same reason not to restate
+  `min-width`/`min-height` there: the theme owns scrollbar geometry.
 - PyGObject initializes GTK **at import**: `GLib.set_prgname()` (the
   Wayland app-id!) must run before `from gi.repository import Gtk`, and
   Gdk/GdkPixbuf need explicit `gi.require_version` or the import crashes.

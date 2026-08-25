@@ -68,19 +68,34 @@ scale marks indicator {
     background: alpha(@theme_fg_color, 0.3);
 }
 
-/* ---- scrollbars: slim overlay style ---- */
+/* ---- scrollbars: palette-tinted hairline ----
+ * Colour only; the theme owns the geometry (hairline when idle, wider
+ * while hovered/dragged). Three rules earned the hard way:
+ *   - never the `background` SHORTHAND, only background-color. The
+ *     shorthand resets background-clip to border-box, and both Adwaita
+ *     and Breeze size the slider with a fat TRANSPARENT border plus
+ *     background-clip: padding-box — so the shorthand paints that border
+ *     too and a 3px indicator becomes a 19px slab (measured in ghostty).
+ *   - never restate min-width/min-height, for the same reason.
+ *   - a large radius, not 3px: the caps round the border box, so the
+ *     painted padding box keeps square ends unless the radius exceeds
+ *     the border width. 999px clamps to a pill at any thickness.
+ * background-image: none is for Breeze GTK3, which paints its slider
+ * with a gradient that background-color alone would not replace. */
 scrollbar {
     background: transparent;
     border: none;
 }
 scrollbar slider {
-    min-width: 6px;
-    min-height: 6px;
-    border-radius: 3px;
-    background: alpha(@theme_fg_color, 0.3);
+    border-radius: 999px;
+    background-image: none;
+    background-color: alpha(@theme_selected_bg_color_breeze, 0.6);
 }
 scrollbar slider:hover {
-    background: alpha(@theme_fg_color, 0.5);
+    background-color: alpha(@theme_selected_bg_color_breeze, 0.85);
+}
+scrollbar slider:active {
+    background-color: @theme_selected_bg_color_breeze;
 }
 
 /* ---- buttons / entries: soft, never boxy ---- */
