@@ -20,7 +20,12 @@
       # Dev Tools
       dev-tools = [
         # pkgs.aria2
-        pkgs.azure-cli
+        (let
+          containerapp-relaxed = pkgs.azure-cli-extensions.containerapp.overrideAttrs (old: {
+            pythonRelaxDeps = (old.pythonRelaxDeps or [ ]) ++ [ "kubernetes" ];
+          });
+        in
+        pkgs.azure-cli.withExtensions [ containerapp-relaxed ])
         # pkgs.binutils
         pkgs.bun
         pkgs.cargo
@@ -35,6 +40,7 @@
         # pkgs.fzf
         pkgs.gh
         # pkgs.glow
+        pkgs.herdr
         pkgs.hugo
         pkgs.jujutsu
         pkgs.k9s

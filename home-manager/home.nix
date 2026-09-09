@@ -70,8 +70,8 @@
   # Display Manager
   # wayland.windowManager.hyprland.enable = true;
 
-  dotfiles.hyprland.enable = true;
-  dotfiles.hyprland.packages = true;
+  dotfiles.hyprland.enable = false;
+  dotfiles.hyprland.packages = false;
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
