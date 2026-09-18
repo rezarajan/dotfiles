@@ -105,9 +105,21 @@ in
   # GTK config incl. xsettingsd and live-notifies apps); headless, seed the
   # files directly so the first login starts themed (the next in-session
   # switch then takes the service path and completes the rest).
+  #
+  # And it is one of the two, not always the dark one: GTK3/4 read their
+  # colors at runtime so either theme would do there, but gtk-2.0/gtkrc has
+  # no runtime mechanism and BAKES the palette, so the wrong variant leaves
+  # GTK2 apps dark in a light session. The look-and-feel packages cannot set
+  # this (there is no GTK key in a KDE defaults file), so pick it from the
+  # active color scheme here and let sync-gnome-portal-settings keep it in
+  # step on every later toggle.
   home.activation.gruvboxGtkTheme =
     lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-      theme="Gruvbox-Dragon"
+      case "$(/usr/bin/kreadconfig6 --file kdeglobals --group General \
+                --key ColorScheme 2>/dev/null || true)" in
+        *Light) theme="Gruvbox-Dragon-Light" ;;
+        *)      theme="Gruvbox-Dragon" ;;
+      esac
       cur="$(/usr/bin/qdbus6 org.kde.GtkConfig /GtkConfig org.kde.GtkConfig.gtkTheme 2>/dev/null || true)"
       if [ "$cur" = "$theme" ]; then
         : # already selected
@@ -372,13 +384,26 @@ in
           v="$(get "$2")"
           [ -n "$v" ] && /usr/bin/gsettings set org.gnome.desktop.interface "$1" "$v"
         }
+        case "$(get gtk-application-prefer-dark-theme)" in
+          true|1) scheme=prefer-dark; want=Gruvbox-Dragon ;;
+          *) scheme=prefer-light; want=Gruvbox-Dragon-Light ;;
+        esac
+
+        # The GTK theme name has to follow the toggle too, for gtk-2.0's
+        # baked palette (see gruvboxGtkTheme). Ask the GtkConfig service
+        # rather than editing settings.ini, so kde-gtk-config rewrites every
+        # GTK config consistently and notifies running apps. That rewrite
+        # re-triggers this unit's path watch — harmless, because the second
+        # run finds the theme already correct and changes nothing, so it
+        # settles after exactly one extra pass.
+        if [ "$(get gtk-theme-name)" != "$want" ]; then
+          timeout 5 /usr/bin/qdbus6 org.kde.GtkConfig /GtkConfig \
+            org.kde.GtkConfig.setGtkTheme "$want" 2>/dev/null || true
+        fi
+
         put icon-theme gtk-icon-theme-name
         put cursor-theme gtk-cursor-theme-name
         put gtk-theme gtk-theme-name
-        case "$(get gtk-application-prefer-dark-theme)" in
-          true|1) scheme=prefer-dark ;;
-          *) scheme=prefer-light ;;
-        esac
         /usr/bin/gsettings set org.gnome.desktop.interface color-scheme "$scheme"
       '';
     in

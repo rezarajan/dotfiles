@@ -162,6 +162,14 @@ symlinks; see `hypr/readme.md` → Install.
   stylesheet by, not the symlink target — which is the only reason this
   works at all, since home-manager links the theme dirs into the nix store.
   Verifying by hand needs the same: `readlink -f` reports false failures.
+- The GTK theme NAME has to follow the light/dark toggle, even though
+  GTK3/4 take their colors at runtime and would not care: `gtk-2.0/gtkrc`
+  has no runtime mechanism and bakes the palette, so the wrong variant
+  leaves GTK2 apps dark in a light session. No KDE defaults file can set a
+  GTK key, so kde-gruvbox.nix does it — once from the color scheme at
+  activation, then on every toggle from sync-gnome-portal-settings (via
+  `org.kde.GtkConfig.setGtkTheme`, so kde-gtk-config rewrites settings.ini,
+  ~/.gtkrc-2.0 and xsettingsd consistently and notifies running apps).
 - Disabled/insensitive colors are never stored anywhere — KDE DERIVES them
   from the normal ones via `[ColorEffects:Disabled]`, and Breeze's stock
   `ContrastAmount=0.65` puts this palette at 1.9:1 (light) / 2.5:1 (dark).
