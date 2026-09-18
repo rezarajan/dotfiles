@@ -167,6 +167,20 @@ symlinks; see `hypr/readme.md` → Install.
   `ContrastAmount=0.65` puts this palette at 1.9:1 (light) / 2.5:1 (dark).
   That is the "unreadable greyed-out text" bug, not a per-app problem;
   colorscheme_gen.py's `DISABLED_FADE` owns it.
+- Deploying an edited `.colors` file changes NOTHING by itself: Plasma
+  inlines `[Colors:*]`/`[ColorEffects:*]`/`[WM]` into kdeglobals on apply,
+  and those inlined values are what apps read. `plasma-apply-colorscheme
+  <the scheme already named in kdeglobals>` prints "already set", exits 0,
+  and re-inlines nothing — so the splice is done by hand (kde-gruvbox.nix
+  `gruvboxColorScheme`, mirroring theme-mode.sh's awk).
+- A raw edit of kdeglobals notifies nobody. kde-gtk-config — which owns
+  `~/.config/gtk-{3,4}.0/colors.css`, where GTK apps get KDE's colors —
+  listens on KConfigWatcher, which fires only for a write KConfig itself
+  marked dirty. `kwriteconfig6 --notify` with an UNCHANGED value is skipped
+  and fires nothing, so force a change (delete the key, write it back).
+  `org.kde.KGlobalSettings.notifyChange` does not trigger it, and neither
+  does `org.kde.GtkConfig.setGtkTheme` (that rewrites settings.ini only,
+  and short-circuits when the theme name is unchanged).
 - The user gtk.css loads at USER priority (800) which BEATS application
   CSS (600). App-level styling that must win needs
   `Gtk.STYLE_PROVIDER_PRIORITY_USER + 100`.
