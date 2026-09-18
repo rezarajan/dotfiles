@@ -127,6 +127,58 @@ in
       fi
     '';
 
+  # The Gruvbox-Dragon GTK themes are a thin shim over the distro's Breeze
+  # widget css, imported by a path RELATIVE to the themes directory. Park a
+  # mirror of Breeze there for it to resolve against. Why not just point at
+  # /usr/share/themes/Breeze: a flatpak has its own /usr with no Breeze in
+  # it, so the absolute import died and every flatpak GTK app silently fell
+  # back to Adwaita — LibreOffice rendered Adwaita-grey with square
+  # scrollbars over our colors.css. Dot-prefixed so no theme picker offers
+  # the mirror as a theme and it never shadows the distro's own Breeze.
+  #
+  # BOTH variants, under their own names, side by side — because Breeze's
+  # gtk-dark.css is a 50-byte shim that does
+  # `@import url("../../Breeze-Dark/gtk-3.0/gtk.css")`. Mirror Breeze alone
+  # and that sibling is missing, dark mode imports nothing, and GTK renders
+  # raw unstyled white while the (KWin-drawn) titlebar stays correctly dark.
+  # Whole directories, so Breeze's own ../assets/ urls keep resolving too.
+  home.activation.gruvboxBreezeMirror =
+    lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+      dst="${config.xdg.dataHome}/themes/.breeze-base"
+      if [ -d /usr/share/themes/Breeze/gtk-3.0 ] \
+         && [ -d /usr/share/themes/Breeze-Dark/gtk-3.0 ]; then
+        run rm -rf "$dst.new"
+        run mkdir -p "$dst.new"
+        for variant in Breeze Breeze-Dark; do
+          run cp -aL "/usr/share/themes/$variant" "$dst.new/$variant"
+        done
+        run rm -rf "$dst"
+        run mv "$dst.new" "$dst"
+      else
+        echo "kde-gruvbox: /usr/share/themes/Breeze{,-Dark} missing — GTK" \
+             "apps will fall back to Adwaita; install the distro's" \
+             "breeze-gtk" >&2
+      fi
+    '';
+
+  # Flatpak apps see neither the themes directory nor the GTK config dir by
+  # default: XDG_DATA_HOME is per-app inside the sandbox, so ~/.local/share
+  # /themes is simply absent (the host's icons ARE re-exported via
+  # /run/host/user-share, themes are not). Hand every flatpak read-only
+  # access to both, which is what makes the mirror above reachable. Global
+  # (no app id) and idempotent; `flatpak override --user --reset` undoes it.
+  home.activation.gruvboxFlatpakTheming =
+    lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+      # absolute path: home-manager activation runs without /usr/bin on PATH
+      if [ -x /usr/bin/flatpak ]; then
+        run /usr/bin/flatpak override --user \
+          --filesystem=xdg-data/themes:ro \
+          --filesystem=xdg-data/icons:ro \
+          --filesystem=xdg-config/gtk-3.0:ro \
+          --filesystem=xdg-config/gtk-4.0:ro || true
+      fi
+    '';
+
   # kde-gtk-config owns gtk.css but preserves user content; make sure our
   # acrylic stylesheet stays imported (idempotent).
   home.activation.gruvboxGtkCssImports =

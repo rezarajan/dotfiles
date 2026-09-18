@@ -44,6 +44,45 @@ done
 echo "gtk themes:"
 link "$desktop/gtk/themes/Gruvbox-Dragon" "$DATA/themes/Gruvbox-Dragon"
 link "$desktop/gtk/themes/Gruvbox-Dragon-Light" "$DATA/themes/Gruvbox-Dragon-Light"
+# Both themes are a shim over the distro's Breeze widget css, imported by a
+# path relative to this directory — mirror Breeze here so it resolves. An
+# absolute /usr/share/themes path cannot resolve inside a flatpak (its /usr
+# is the runtime's), which left flatpak GTK apps on Adwaita. Dot-prefixed so
+# no theme picker offers the mirror and it never shadows the distro's own.
+# BOTH variants as siblings under their own names: Breeze's gtk-dark.css is
+# a shim importing ../../Breeze-Dark/gtk-3.0/gtk.css, so mirroring Breeze
+# alone leaves dark mode importing nothing and GTK renders unstyled white.
+if [ -d /usr/share/themes/Breeze/gtk-3.0 ] \
+        && [ -d /usr/share/themes/Breeze-Dark/gtk-3.0 ]; then
+    rm -rf "$DATA/themes/.breeze-base.new"
+    mkdir -p "$DATA/themes/.breeze-base.new"
+    for variant in Breeze Breeze-Dark; do
+        cp -aL "/usr/share/themes/$variant" "$DATA/themes/.breeze-base.new/$variant"
+    done
+    rm -rf "$DATA/themes/.breeze-base"
+    mv "$DATA/themes/.breeze-base.new" "$DATA/themes/.breeze-base"
+    echo "  $DATA/themes/.breeze-base (mirror of Breeze + Breeze-Dark)"
+else
+    echo "  /usr/share/themes/Breeze{,-Dark} missing — install breeze-gtk," \
+         "or GTK apps fall back to Adwaita" >&2
+fi
+
+echo "flatpak theming:"
+# A flatpak's XDG_DATA_HOME is per-app, so ~/.local/share/themes is absent
+# inside the sandbox (host icons ARE re-exported via /run/host/user-share,
+# themes are not). Read-only access to the themes and gtk config dirs is
+# what lets the themes above reach flatpak apps. `flatpak override --user
+# --reset` undoes it.
+if command -v flatpak >/dev/null 2>&1; then
+    flatpak override --user \
+        --filesystem=xdg-data/themes:ro \
+        --filesystem=xdg-data/icons:ro \
+        --filesystem=xdg-config/gtk-3.0:ro \
+        --filesystem=xdg-config/gtk-4.0:ro \
+        && echo "  themes + gtk config shared with all flatpaks (read-only)"
+else
+    echo "  flatpak not installed — skipped"
+fi
 
 echo "kvantum:"
 link "$desktop/kvantum/Gruvbox" "$CONF/Kvantum/Gruvbox"

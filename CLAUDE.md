@@ -123,7 +123,45 @@ symlinks; see `hypr/readme.md` → Install.
 **GTK / theming**
 - Breeze-GTK ignores standard named colors: it reads `*_breeze` twins
   plus backdrop/insensitive/titlebar variants — the generator emits both
-  sets. Without them GTK apps keep stock Breeze colors.
+  sets. Without them GTK apps keep stock Breeze colors. Corollary: because
+  colors.css defines ONLY `*_breeze` names, a GTK app that fails to load
+  the Gruvbox-Dragon theme does not degrade to "gruvbox on Adwaita widgets"
+  — it degrades to **stock Adwaita**, since Adwaita defines the standard
+  names itself and hardcodes its own widget colors anyway.
+- **Flatpak apps see no themes at all by default**, and the failure is
+  silent. A sandbox has a per-app `XDG_DATA_HOME` (`~/.var/app/<id>/data`),
+  so `~/.local/share/themes` is simply absent; host *icons* ARE re-exported
+  (`/run/host/user-share/icons`, on `XDG_DATA_DIRS`), themes are not; and
+  flatpak only auto-mounts an `org.gtk.Gtk3theme.<name>` extension when the
+  host's gtk-theme name matches one that exists (ours never will).
+  `--filesystem=xdg-data/themes:ro` fixes the lookup — but not the import:
+  the Gruvbox-Dragon themes are a shim over the distro's Breeze widget css,
+  and `/usr` inside a sandbox is the runtime's, with no Breeze in it.
+  `--filesystem=/usr/share/themes/Breeze` cannot help either — flatpak
+  refuses: "Path /usr is reserved by Flatpak". Hence `.breeze-base`, a
+  mirror of the distro's Breeze themes parked beside ours (whole dirs, so
+  Breeze's own `../assets/` urls resolve) that the generated themes import
+  by RELATIVE path, so it resolves wherever the themes dir is mounted.
+  Symptom when this breaks: flatpak LibreOffice renders Adwaita grey with
+  square scrollbars and near-invisible greyed-out toolbar items. Reproduce
+  WITHOUT flatpak, in seconds, with bubblewrap:
+  `bwrap --dev-bind / / --tmpfs /usr/share/themes --bind
+   ~/.local/share/themes /tmp/fake/themes --setenv XDG_DATA_HOME /tmp/fake
+   --setenv GTK_THEME Gruvbox-Dragon <any gtk3 app>`
+- **The mirror must carry Breeze AND Breeze-Dark, as siblings under their
+  own names.** `Breeze/gtk-{3,4}.0/gtk-dark.css` is a 50-byte shim whose
+  entire content is `@import url("../../Breeze-Dark/gtk-3.0/gtk.css")`, so
+  mirroring Breeze alone leaves DARK mode importing nothing and GTK renders
+  raw unstyled white — while the KWin-drawn titlebar stays correctly dark,
+  which makes it read as "dark mode has light-mode artifacts". Light mode
+  looks perfect throughout, so test BOTH modes after touching the mirror.
+  `gtk_theme_gen.py` now walks every emitted import chain (2 themes x
+  gtk-3.0/gtk-4.0 x light/dark) against `MIRROR_VARIANTS` and refuses to
+  generate if one dead-ends — a dead `@import` is otherwise silent.
+- GTK resolves a relative `@import` against the LOGICAL path it opened the
+  stylesheet by, not the symlink target — which is the only reason this
+  works at all, since home-manager links the theme dirs into the nix store.
+  Verifying by hand needs the same: `readlink -f` reports false failures.
 - The user gtk.css loads at USER priority (800) which BEATS application
   CSS (600). App-level styling that must win needs
   `Gtk.STYLE_PROVIDER_PRIORITY_USER + 100`.
