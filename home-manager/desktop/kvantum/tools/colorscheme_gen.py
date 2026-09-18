@@ -9,12 +9,23 @@ from palette import G, rgb
 
 OUT = Path(__file__).resolve().parent.parent.parent / "color-schemes"
 
-EFFECTS = """\
+# Disabled (insensitive) colors are never stored: KDE derives them from the
+# normal ones with these effects, and every Qt app plus the GTK colors.css
+# kde-gtk-config generates follows along. Breeze ships ContrastAmount=0.65,
+# i.e. fade disabled text 65% into its own background; measured through that
+# real pipeline it puts this palette at 1.9:1 (light) and 2.5:1 (dark) — under
+# even the 3:1 non-text floor, which is why greyed-out items (LibreOffice's
+# Cut/Copy, disabled menu entries) read as blank rather than dim. 0.3 measures
+# 4.3:1 / 6.4:1 against enabled text's 10.2:1 / 13.1:1, so disabled still
+# reads as disabled with contrast to spare.
+DISABLED_FADE = "0.29999999999999999"
+
+EFFECTS = f"""\
 [ColorEffects:Disabled]
 Color=56,56,56
 ColorAmount=0
 ColorEffect=0
-ContrastAmount=0.65000000000000002
+ContrastAmount={DISABLED_FADE}
 ContrastEffect=1
 IntensityAmount=0.10000000000000001
 IntensityEffect=2

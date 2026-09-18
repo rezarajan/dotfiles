@@ -162,6 +162,11 @@ symlinks; see `hypr/readme.md` → Install.
   stylesheet by, not the symlink target — which is the only reason this
   works at all, since home-manager links the theme dirs into the nix store.
   Verifying by hand needs the same: `readlink -f` reports false failures.
+- Disabled/insensitive colors are never stored anywhere — KDE DERIVES them
+  from the normal ones via `[ColorEffects:Disabled]`, and Breeze's stock
+  `ContrastAmount=0.65` puts this palette at 1.9:1 (light) / 2.5:1 (dark).
+  That is the "unreadable greyed-out text" bug, not a per-app problem;
+  colorscheme_gen.py's `DISABLED_FADE` owns it.
 - The user gtk.css loads at USER priority (800) which BEATS application
   CSS (600). App-level styling that must win needs
   `Gtk.STYLE_PROVIDER_PRIORITY_USER + 100`.

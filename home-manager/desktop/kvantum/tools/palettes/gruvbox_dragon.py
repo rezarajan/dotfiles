@@ -38,6 +38,17 @@ G = dict(
 # text color used on top of the accent (menu hover chips), both variants
 ON_ACCENT = G["light0"]
 
+# Disabled text, for the paths that do NOT go through KDE: Kvantum's Qt
+# palette and the GTK colors.css theme-mode.sh writes for the Hyprland
+# session. Under KDE the same color is DERIVED instead, by
+# [ColorEffects:Disabled] in the .colors scheme (colorscheme_gen.py's
+# DISABLED_FADE) — so these alphas are chosen to land on the exact colors
+# that derivation produces (#706a5d light, #a4987d dark), which is what
+# keeps the two desktops identical. They were 0x78 and measured 2.5:1 /
+# 3.8:1 against their backgrounds — unreadable rather than merely dim.
+DISABLED_ALPHA_DARK = "a8"    # #ebdbb2 over #181616 -> 6.3:1
+DISABLED_ALPHA_LIGHT = "ba"   # #3c3836 over #fbf1c7 -> 4.7:1
+
 
 def rgb(hex_color):
     """'#rrggbb' -> 'r,g,b' as used by KDE .colors files."""
@@ -67,7 +78,7 @@ DARK = dict(
         "highlight.color": G["aqua"], "inactive.highlight.color": G["dark1"],
         "text.color": G["light1"], "window.text.color": G["light1"],
         "button.text.color": G["light1"],
-        "disabled.text.color": G["light1"] + "78",
+        "disabled.text.color": G["light1"] + DISABLED_ALPHA_DARK,
         "tooltip.text.color": G["light1"], "highlight.text.color": G["light1"],
         "link.color": G["blue_bright"], "link.visited.color": G["pink"],
         "progress.indicator.text.color": G["light1"],
@@ -121,7 +132,7 @@ LIGHT = dict(
         "highlight.color": G["aqua"], "inactive.highlight.color": G["light0"],
         "text.color": G["dark1"], "window.text.color": G["dark1"],
         "button.text.color": G["dark1"],
-        "disabled.text.color": G["dark1"] + "78",
+        "disabled.text.color": G["dark1"] + DISABLED_ALPHA_LIGHT,
         "tooltip.text.color": G["dark1"], "highlight.text.color": G["light0"],
         "link.color": G["blue_faded"], "link.visited.color": G["purple_faded"],
         "progress.indicator.text.color": G["dark1"],
