@@ -51,8 +51,8 @@ let
     packages = patchedNixGLPackages;
     # see: https://mynixos.com/home-manager/option/nixGL.defaultWrapper
     # NOTE: for nvidia, the --impure option must be passed to home-manager switch
-    defaultWrapper = "nvidia"; # "mesa" | "mesaPrime" | "nvidia" | "nvidiaPrime"
-    installScripts = [ "nvidia" ];
+    defaultWrapper = "mesa"; # "mesa" | "mesaPrime" | "nvidia" | "nvidiaPrime"
+    installScripts = [ "mesa" ];
   };
 in {
   options.dotfiles.nixGL.pureNvidia = lib.mkOption {
@@ -68,6 +68,6 @@ in {
   config = {
     nixpkgs.config.allowUnfree = true;
 
-    targets.genericLinux.nixGL = lib.mkIf pkgs.stdenv.isLinux nixGLConfig;
+    targets.genericLinux.nixGL = lib.mkIf pkgs.stdenv.hostPlatform.isLinux nixGLConfig;
   };
 }
