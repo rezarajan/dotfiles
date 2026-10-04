@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=X-GNOME-Metatheme
+Name=Rose-Pine
+Comment=Rosé Pine acrylic (dark), generated from palette.py
+Encoding=UTF-8
+
+[X-GNOME-Metatheme]
+GtkTheme=Rose-Pine
+MetacityTheme=Rose-Pine
+IconTheme=rose-pine
+CursorTheme=breeze_cursors

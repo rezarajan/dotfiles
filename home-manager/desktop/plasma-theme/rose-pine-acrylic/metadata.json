@@ -1,0 +1,17 @@
+{
+    "KPlugin": {
+        "Authors": [
+            {
+                "Email": "rezarajan@gmail.com",
+                "Name": "cascadura"
+            }
+        ],
+        "Category": "",
+        "Description": "Ros\u00e9 Pine acrylic Plasma style \u2014 follows the system color scheme",
+        "Id": "rose-pine-acrylic",
+        "License": "LGPL",
+        "Name": "Ros\u00e9 Pine Acrylic",
+        "Version": "1.0"
+    },
+    "X-Plasma-API": "5.0"
+}

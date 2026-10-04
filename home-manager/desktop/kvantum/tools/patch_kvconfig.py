@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Patch Kvantum kvconfigs: frame widths for the new rounded art, acrylic
-knobs, and gruvbox-consistent Qt palette colors."""
+knobs, and palette-consistent Qt palette colors."""
 from pathlib import Path
 
 import palette
@@ -96,7 +96,20 @@ def patch(path, overrides, replaces):
     print(f"patched {path.name}")
 
 
-dark = BASE / "GruvboxDark/GruvboxDark.kvconfig"
-light = BASE / "Gruvbox/Gruvbox.kvconfig"
-patch(dark, {**COMMON, **{k: {**COMMON.get(k, {}), **v} for k, v in DARK_COLORS.items()}}, DARK_REPLACES)
-patch(light, {**COMMON, **{k: {**COMMON.get(k, {}), **v} for k, v in LIGHT_COLORS.items()}}, LIGHT_REPLACES)
+def comment(variant):
+    return {"%General": {"comment": f"{palette.THEME['title']} acrylic {variant}"}}
+
+
+def merged(*tables):
+    out = {}
+    for t in tables:
+        for k, v in t.items():
+            out[k] = {**out.get(k, {}), **v}
+    return out
+
+
+dark_name, light_name = palette.THEME["kvantum"]
+dark = BASE / dark_name / f"{dark_name}.kvconfig"
+light = BASE / light_name / f"{light_name}.kvconfig"
+patch(dark, merged(COMMON, DARK_COLORS, comment("dark")), DARK_REPLACES)
+patch(light, merged(COMMON, LIGHT_COLORS, comment("light")), LIGHT_REPLACES)

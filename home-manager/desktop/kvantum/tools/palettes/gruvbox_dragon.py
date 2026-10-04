@@ -13,6 +13,27 @@ Layout per variant (DARK / LIGHT):
   a      — opacity table for the acrylic surfaces
 """
 
+# ------------------------------------------------------------------ names
+# What every artifact generated from this palette is called, (dark, light)
+# where a pair. These names are the deployed identities — kdeglobals,
+# kvantum.kvconfig, settings.ini and the look-and-feel defaults refer to
+# them — so renaming one is a migration, not a cosmetic change. A second
+# palette needs a disjoint set, which is what lets several be installed
+# side by side and picked with `dotfiles.kde.theme` (kde-gruvbox.nix).
+THEME = dict(
+    title="Gruvbox",
+    # Kvantum pairs by convention: style "kvantum" loads <light>,
+    # "kvantum-dark" loads <light>Dark — so dark MUST be light + "Dark"
+    kvantum=("GruvboxDark", "Gruvbox"),
+    scheme=("GruvboxDragon", "GruvboxDragonLight"),   # .colors file stems
+    gtk=("Gruvbox-Dragon", "Gruvbox-Dragon-Light"),
+    cursors=("Gruvbox-Dragon-Cursors", "Gruvbox-Dragon-Cursors-Light"),
+    icons=("Gruvbox-Plus-Dark", "Gruvbox-Plus-Light"),
+    plasma=("gruvbox-acrylic", "Gruvbox Acrylic"),    # (id, display name)
+    lnf=("gruvbox", "gruvbox-light"),                 # look-and-feel ids
+    lnf_names=("Gruvbox Dark", "Gruvbox Light"),
+)
+
 # ---------------------------------------------------------------- base hex
 G = dict(
     # dragon variant background
@@ -31,6 +52,9 @@ G = dict(
     red_kde="#da4453", red_faded="#9d0006",
     orange_kde="#f67400", orange_faded="#af3a03",
     green_kde="#27ae60", purple_faded="#8f3f71", pink="#d3869b",
+    # check/radio marks in the original Kvantum glyphs — no generator reads
+    # these, but kvantum_seed.py maps the glyphs through every slot
+    yellow_bright="#fabd2f", yellow_faded="#b57614",
     sel_link="#fdbc4b", sel_active="#fcfcfc", sel_visited="#bdc3c7",
     white="#ffffff", black="#000000",
 )

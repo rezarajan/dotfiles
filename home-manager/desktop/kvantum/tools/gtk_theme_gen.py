@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Generate the Gruvbox-Dragon GTK theme pair from the shared palette.
+"""Generate the palette's GTK theme pair (THEME["gtk"]) from the shared palette.
 
 GTK2 has no runtime color mechanism, so the palette is baked in: the
 gtkrc includes Breeze's engine-free widget styling and then re-declares
 every gtk-color-scheme name with palette values (later definitions win).
-Gruvbox-Dragon carries the dark palette, Gruvbox-Dragon-Light the light.
+The first name carries the dark palette, the second the light.
 
 GTK3/4 keep the runtime path: the theme imports Breeze's widget css,
 while colors keep flowing from the KDE color scheme via kde-gtk-config's
@@ -89,13 +89,13 @@ def gen_theme(name, P, variant):
     write(root / "index.theme", f"""[Desktop Entry]
 Type=X-GNOME-Metatheme
 Name={name}
-Comment=Gruvbox acrylic ({variant}), generated from palette.py
+Comment={palette.THEME['title']} acrylic ({variant}), generated from palette.py
 Encoding=UTF-8
 
 [X-GNOME-Metatheme]
 GtkTheme={name}
 MetacityTheme={name}
-IconTheme=Gruvbox-Plus-{"Dark" if variant == "dark" else "Light"}
+IconTheme={palette.THEME["icons"][0 if variant == "dark" else 1]}
 CursorTheme=breeze_cursors
 """)
 
@@ -124,8 +124,9 @@ include "{BREEZE_GTK2[variant]}/gtk-2.0/gtkrc"
 """)
 
 
-gen_theme("Gruvbox-Dragon", palette.DARK, "dark")
-gen_theme("Gruvbox-Dragon-Light", palette.LIGHT, "light")
+NAMES = palette.THEME["gtk"]
+gen_theme(NAMES[0], palette.DARK, "dark")
+gen_theme(NAMES[1], palette.LIGHT, "light")
 
 
 # ------------------------------------------------------------------ verify
@@ -170,7 +171,7 @@ def verify():
         print(f"  (import check skipped: no {MIRROR_SOURCE})")
         return
     bad = []
-    for name in ("Gruvbox-Dragon", "Gruvbox-Dragon-Light"):
+    for name in NAMES:
         for ver in ("gtk-3.0", "gtk-4.0"):
             for css in ("gtk.css", "gtk-dark.css"):
                 here = THEMES / name / ver / css

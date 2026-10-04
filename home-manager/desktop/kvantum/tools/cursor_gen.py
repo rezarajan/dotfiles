@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate the Gruvbox-Dragon cursor theme pair from the shared palette.
+"""Generate the palette's cursor theme pair (THEME["cursors"]) from the shared palette.
 
 Every cursor is drawn as SVG on a 128px design grid from palette colors —
 dark theme: ivory cursors with a charcoal rim; light theme: charcoal with
@@ -396,5 +396,7 @@ def gen_theme(name, v, comment):
 
 
 if __name__ == "__main__":
-    gen_theme("Gruvbox-Dragon-Cursors", DARK, "Gruvbox acrylic cursors (ivory on dark)")
-    gen_theme("Gruvbox-Dragon-Cursors-Light", LIGHT, "Gruvbox acrylic cursors (charcoal on light)")
+    title = palette.THEME["title"]
+    dark_name, light_name = palette.THEME["cursors"]
+    gen_theme(dark_name, DARK, f"{title} acrylic cursors (ivory on dark)")
+    gen_theme(light_name, LIGHT, f"{title} acrylic cursors (charcoal on light)")

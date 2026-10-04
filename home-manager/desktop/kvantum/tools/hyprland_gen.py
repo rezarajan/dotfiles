@@ -21,7 +21,7 @@ to be edited by hand — change palette.py and run generate_all.py.
 """
 from pathlib import Path
 
-from palette import DARK, LIGHT, G, PLASMA
+from palette import DARK, LIGHT, G, PLASMA, THEME
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[3]  # dotfiles repo root
@@ -283,8 +283,8 @@ KDE_FONTS = {
 
 def emit_kdeglobals():
     for mode, scheme, icons, widget in (
-            ("dark", "GruvboxDragon", "Gruvbox-Plus-Dark", "kvantum-dark"),
-            ("light", "GruvboxDragonLight", "Gruvbox-Plus-Light", "kvantum")):
+            ("dark", THEME["scheme"][0], THEME["icons"][0], "kvantum-dark"),
+            ("light", THEME["scheme"][1], THEME["icons"][1], "kvantum")):
         colors_src = (HERE.parents[1] / "color-schemes" / f"{scheme}.colors")
         lines = [f"# {HEADER}",
                  "[General]", f"ColorScheme={scheme}",
@@ -307,8 +307,8 @@ def emit_kdeglobals():
 
 
 def emit_qt6ct():
-    for mode, icons, style in (("dark", "Gruvbox-Plus-Dark", "kvantum-dark"),
-                               ("light", "Gruvbox-Plus-Light", "kvantum")):
+    for mode, icons, style in (("dark", THEME["icons"][0], "kvantum-dark"),
+                               ("light", THEME["icons"][1], "kvantum")):
         body = (f"# {HEADER}\n"
                 "[Appearance]\n"
                 f"style={style}\n"

@@ -1,0 +1,72 @@
+{
+  "gruvbox-dragon": {
+    "title": "Gruvbox",
+    "kvantum": [
+      "GruvboxDark",
+      "Gruvbox"
+    ],
+    "scheme": [
+      "GruvboxDragon",
+      "GruvboxDragonLight"
+    ],
+    "gtk": [
+      "Gruvbox-Dragon",
+      "Gruvbox-Dragon-Light"
+    ],
+    "cursors": [
+      "Gruvbox-Dragon-Cursors",
+      "Gruvbox-Dragon-Cursors-Light"
+    ],
+    "icons": [
+      "Gruvbox-Plus-Dark",
+      "Gruvbox-Plus-Light"
+    ],
+    "plasma": [
+      "gruvbox-acrylic",
+      "Gruvbox Acrylic"
+    ],
+    "lnf": [
+      "gruvbox",
+      "gruvbox-light"
+    ],
+    "lnf_names": [
+      "Gruvbox Dark",
+      "Gruvbox Light"
+    ]
+  },
+  "rose-pine": {
+    "title": "Rosé Pine",
+    "kvantum": [
+      "RosePineDark",
+      "RosePine"
+    ],
+    "scheme": [
+      "RosePine",
+      "RosePineDawn"
+    ],
+    "gtk": [
+      "Rose-Pine",
+      "Rose-Pine-Dawn"
+    ],
+    "cursors": [
+      "Rose-Pine-Cursors",
+      "Rose-Pine-Cursors-Dawn"
+    ],
+    "icons": [
+      "rose-pine",
+      "rose-pine-dawn"
+    ],
+    "plasma": [
+      "rose-pine-acrylic",
+      "Rosé Pine Acrylic"
+    ],
+    "lnf": [
+      "rose-pine",
+      "rose-pine-dawn"
+    ],
+    "lnf_names": [
+      "Rosé Pine",
+      "Rosé Pine Dawn"
+    ]
+  }
+}

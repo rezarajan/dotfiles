@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate the KDE color schemes (GruvboxDragon / GruvboxDragonLight) from
+"""Generate the active palette's KDE color scheme pair (THEME["scheme"]) from
 palette.py into ../../color-schemes/. Both variants share one template, so
 the schemes stay structural mirrors of each other."""
 from pathlib import Path
@@ -107,7 +107,7 @@ inactiveForeground={rgb(S["wm_inactive_fg"])}
     return "\n".join(parts)
 
 
-for fname, P in (("GruvboxDragon.colors", palette.DARK),
-                 ("GruvboxDragonLight.colors", palette.LIGHT)):
+for stem, P in zip(palette.THEME["scheme"], (palette.DARK, palette.LIGHT)):
+    fname = f"{stem}.colors"
     (OUT / fname).write_text(scheme(P))
     print(f"wrote {OUT / fname}")

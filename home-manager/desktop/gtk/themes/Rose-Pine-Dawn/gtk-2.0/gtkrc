@@ -1,0 +1,20 @@
+# Rose-Pine-Dawn — generated from palette.py, do not edit by hand.
+# Inherits Breeze's engine-free gtk2 widget styling; the color scheme
+# below overrides Breeze's (later gtk-color-scheme definitions win).
+include "/usr/share/themes/Breeze/gtk-2.0/gtkrc"
+
+gtk-color-scheme = "text_color:#575279"
+gtk-color-scheme = "base_color:#fffaf3"
+gtk-color-scheme = "insensitive_base_color:#f2e9e1"
+gtk-color-scheme = "fg_color:#575279"
+gtk-color-scheme = "bg_color:#faf4ed"
+gtk-color-scheme = "selected_fg_color:#faf4ed"
+gtk-color-scheme = "selected_bg_color:#286983"
+gtk-color-scheme = "button_fg_color:#575279"
+gtk-color-scheme = "tooltip_fg_color:#575279"
+gtk-color-scheme = "tooltip_bg_color:#faf4ed"
+gtk-color-scheme = "insensitive_fg_color:#9893a5"
+gtk-color-scheme = "insensitive_text_color:#9893a5"
+gtk-color-scheme = "button_insensitive_fg_color:#9893a5"
+gtk-color-scheme = "button_active:#286983"
+gtk-color-scheme = "border_color:#cecacd"

@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Regenerate Kvantum surface elements as a consistent rounded/acrylic design.
 
-Strips the old boxy 9-patch widget art from Gruvbox(.Dark).svg and appends
+Strips the old boxy 9-patch widget art from the palette's Kvantum SVG pair
+(THEME["kvantum"]; a new palette's pair is seeded by kvantum_seed.py) and appends
 script-generated replacements: rounded corners, hairline borders, translucent
 fills. Glyphs (arrows, checkboxes, radios, shadows, mdi, tree, spin) are kept.
 """
@@ -434,7 +435,7 @@ def rewrite_svg(path, nodes):
     return removed, len(kill)
 
 
-for theme, pal in (("GruvboxDark", DARK), ("Gruvbox", LIGHT)):
+for theme, pal in zip(palette.THEME["kvantum"], (DARK, LIGHT)):
     p = BASE / theme / f"{theme}.svg"
     nodes = build_nodes(pal)
     removed, total = rewrite_svg(p, nodes)

@@ -1,6 +1,6 @@
 [%General]
 author=Sourav Gope
-comment=Gruvbox acrylic dark 
+comment=Gruvbox acrylic dark
 x11drag=menubar_and_primary_toolbar
 alt_mnemonic=true
 left_tabs=true

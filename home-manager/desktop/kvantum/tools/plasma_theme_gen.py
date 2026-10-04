@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate the gruvbox-acrylic Plasma desktop theme.
+"""Generate the palette's acrylic Plasma desktop theme (THEME["plasma"]).
 
 Emits Breeze-compatible FrameSvg sheets (9-patch body + mask-* + shadow-*
 frames + margin/inset hints) for dialogs, panel, tooltips, and generic widget
@@ -10,14 +10,15 @@ from the active KDE color scheme — so one theme serves light and dark.
 Geometry (matches the Kvantum acrylic design): 4px transparent inset band
 (floating gap, same as Breeze), radius-8 rounded body, 10px soft shadow.
 
-Output: ../../plasma-theme/gruvbox-acrylic/ relative to this script.
+Output: ../../plasma-theme/<id>/ relative to this script.
 """
 import json
 from pathlib import Path
 
 import palette
 
-OUT = Path(__file__).resolve().parent.parent.parent / "plasma-theme" / "gruvbox-acrylic"
+PLASMA_ID, PLASMA_NAME = palette.THEME["plasma"]
+OUT = Path(__file__).resolve().parent.parent.parent / "plasma-theme" / PLASMA_ID
 
 INSET = 0      # body fills the window: KWin's blur region is the full
                # window rect, so any transparent inset band shows it as a
@@ -291,10 +292,10 @@ for rel, (t_alpha, n_alpha), is_panel in TARGETS:
     "KPlugin": {
         "Authors": [{"Email": "rezarajan@gmail.com", "Name": "cascadura"}],
         "Category": "",
-        "Description": "Gruvbox acrylic Plasma style — follows the system color scheme",
-        "Id": "gruvbox-acrylic",
+        "Description": f"{palette.THEME['title']} acrylic Plasma style — follows the system color scheme",
+        "Id": PLASMA_ID,
         "License": "LGPL",
-        "Name": "Gruvbox Acrylic",
+        "Name": PLASMA_NAME,
         "Version": "1.0",
     },
     "X-Plasma-API": "5.0",
