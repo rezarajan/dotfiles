@@ -74,7 +74,7 @@
   #   "gruvbox-dragon" (Gruvbox Dragon / Light) or "rose-pine" (Rosé Pine / Dawn).
   # Every theme stays installed (System Settings → Global Theme lists them);
   # changing this applies the new one on the next switch, keeping the mode.
-  dotfiles.kde.theme = "gruvbox-dragon";
+  dotfiles.kde.theme = "rose-pine";
 
   dotfiles.hyprland.enable = false;
   dotfiles.hyprland.packages = false;

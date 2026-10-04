@@ -1,4 +1,5 @@
-theme = light:Gruvbox Material Light,dark:Gruvbox Material Dark
+# theme = light:Gruvbox Material Light,dark:Gruvbox Material Dark
+theme = dark:Rose Pine,light:Rose Pine Dawn
 # theme = Gruvbox Material Dark
 
 # ------------------------------------------------------------

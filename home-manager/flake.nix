@@ -42,7 +42,7 @@
           ./home.nix
           ./nixgl.nix
           ./pkgs.nix
-          ./desktop/kde-gruvbox.nix
+          ./desktop/kde.nix
           ./desktop/hyprland.nix
           ./desktop/browser.nix
           ./desktop/fonts.nix
