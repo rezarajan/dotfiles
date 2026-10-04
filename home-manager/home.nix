@@ -70,6 +70,12 @@
   # Display Manager
   # wayland.windowManager.hyprland.enable = true;
 
+  # KDE desktop theme the Plasma light/dark toggle switches between:
+  #   "gruvbox-dragon" (Gruvbox Dragon / Light) or "rose-pine" (Rosé Pine / Dawn).
+  # Every theme stays installed (System Settings → Global Theme lists them);
+  # changing this applies the new one on the next switch, keeping the mode.
+  dotfiles.kde.theme = "gruvbox-dragon";
+
   dotfiles.hyprland.enable = false;
   dotfiles.hyprland.packages = false;
 

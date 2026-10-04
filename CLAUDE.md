@@ -18,10 +18,15 @@ symlinks; see `hypr/readme.md` → Install.
 ## Non-negotiable design rules
 
 1. **Single source of truth for color.** Palettes live in
-   `home-manager/desktop/kvantum/tools/palettes/`; `palette.py` selects
-   one via `ACTIVE_PALETTE`. NEVER hardcode a hex value in any themed
-   file — extend `hyprland_gen.py` (or the other `*_gen.py`) instead and
-   run `generate_all.py`.
+   `home-manager/desktop/kvantum/tools/palettes/`, one module per theme
+   (Gruvbox Dragon, Rosé Pine). `generate_all.py` builds the KDE/GTK/
+   Kvantum/cursor/look-and-feel artifacts for EVERY palette in
+   `palette.PALETTES`, side by side under each one's `THEME` names, and
+   writes `home-manager/desktop/themes.json` — kde-gruvbox.nix reads that
+   to deploy them all and resolve `dotfiles.kde.theme`, so names are never
+   restated in Nix. The Hyprland stack follows `ACTIVE_PALETTE` only.
+   NEVER hardcode a hex value in any themed file — extend `hyprland_gen.py`
+   (or the other `*_gen.py`) instead and run `generate_all.py`.
 2. **Light/dark is one switch.** `hypr/scripts/theme-mode.sh` must flip
    *everything* (waybar/rofi/swaync tokens, GTK colors.css +
    settings.ini, kdeglobals color groups, Kvantum, cursor, portal
@@ -121,6 +126,18 @@ symlinks; see `hypr/readme.md` → Install.
   `hyprctl dismissnotify` after every deploy.
 
 **GTK / theming**
+- A non-reference palette's Kvantum pair is RE-SEEDED from the Gruvbox
+  pair on every run (`kvantum_seed.py`): acrylic_gen/patch_kvconfig only
+  rewrite surfaces in place, and the kept glyphs (check/radio marks, mdi
+  buttons) carry baked colors. The recolor maps through palette roles, so
+  a reference color that is in no token table and in no `G` slot survives
+  as Gruvbox — that is how Dawn briefly got brown check marks. Audit new
+  palettes' SVGs for leftover reference hex.
+- Which theme is ACTIVE is read off kdeglobals' ColorScheme (it names
+  theme and variant), never off `dotfiles.kde.theme` — the GTK theme and
+  Kvantum base must follow a global theme picked by hand in System
+  Settings too. The option is applied once per change (state file
+  `~/.local/state/dotfiles/kde-theme`), not on every switch.
 - Breeze-GTK ignores standard named colors: it reads `*_breeze` twins
   plus backdrop/insensitive/titlebar variants — the generator emits both
   sets. Without them GTK apps keep stock Breeze colors. Corollary: because

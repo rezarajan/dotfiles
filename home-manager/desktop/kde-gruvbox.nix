@@ -1,6 +1,11 @@
 { config, lib, pkgs, ... }:
 
-# Custom gruvbox acrylic theme, light + dark.
+# Custom acrylic desktop themes, each light + dark: Gruvbox Dragon and Rosé
+# Pine (main/Dawn). Every theme in ./themes.json is installed side by side;
+# `dotfiles.kde.theme` picks which pair the Plasma light/dark toggle uses.
+# themes.json, like everything below that is palette-derived, is written by
+# ./kvantum/tools/generate_all.py from the palettes/ modules — add a theme
+# there, never by hand here (an icon package is the one thing to add below).
 #
 # The Kvantum themes (./kvantum/Gruvbox, ./kvantum/GruvboxDark) are generated
 # artifacts: edit ./kvantum/tools/acrylic_gen.py (widget art, palettes,
@@ -18,6 +23,30 @@
 # rewrites those files at runtime.
 
 let
+  cfg = config.dotfiles.kde;
+  themes = builtins.fromJSON (builtins.readFile ./themes.json);
+  sel = themes.${cfg.theme};
+  allThemes = lib.attrValues themes;
+  # every theme's (dark, light) pair of some kind, flattened
+  every = kind: lib.concatMap (t: t.${kind}) allThemes;
+
+  # where each theme's icon pair comes from (THEME.icons names the dirs)
+  iconPackages = {
+    gruvbox-dragon = gruvboxPlusIcons;
+    # oomox-built, all SVG (vector-only rule holds), inherits breeze
+    rose-pine = pkgs.rose-pine-icon-theme;
+  };
+
+  # shell `case` arms: active ColorScheme -> what follows it. Whichever way a
+  # global theme was applied (the option below, or by hand in System
+  # Settings), the color scheme name identifies theme AND variant.
+  schemeCase = f: lib.concatMapStrings (t: ''
+    ${lib.elemAt t.scheme 0}) ${f t 0} ;;
+    ${lib.elemAt t.scheme 1}) ${f t 1} ;;
+  '') allThemes;
+  gtkFor = schemeCase (t: i: ''gtk="${lib.elemAt t.gtk i}"; kv="${lib.elemAt t.kvantum 1}"'');
+  variantFor = schemeCase (_: i: ''variant=${toString i}'');
+
   gruvboxPlusIcons = pkgs.stdenvNoCC.mkDerivation {
     pname = "gruvbox-plus-icons";
     version = "6.5.0";
@@ -40,17 +69,29 @@ let
   };
 in
 {
+  options.dotfiles.kde.theme = lib.mkOption {
+    type = lib.types.enum (lib.attrNames themes);
+    default = "gruvbox-dragon";
+    example = "rose-pine";
+    description = ''
+      Desktop theme the Plasma light/dark toggle switches between (each has
+      a dark and a light variant). All themes are installed regardless, so
+      any can still be picked by hand in System Settings → Global Theme.
+      Changing this applies the new theme once, on the next switch, keeping
+      the current light/dark mode.
+    '';
+  };
+
+  config = {
   # Back up pre-existing unmanaged files/dirs before home-manager links over them
   home.activation.moveManualGruvboxThemeDirs =
     lib.hm.dag.entryBefore [ "checkLinkTargets" ] ''
-      for target in \
-        "${config.xdg.configHome}/Kvantum/Gruvbox" \
-        "${config.xdg.configHome}/Kvantum/GruvboxDark" \
-        "${config.xdg.dataHome}/icons/Gruvbox-Plus-Dark" \
-        "${config.xdg.dataHome}/icons/Gruvbox-Plus-Light" \
-        "${config.xdg.dataHome}/plasma/look-and-feel/gruvbox" \
-        "${config.xdg.dataHome}/plasma/look-and-feel/gruvbox-light" \
-        "${config.xdg.dataHome}/plasma/desktoptheme/gruvbox-acrylic"
+      for target in ${lib.escapeShellArgs (
+        map (n: "${config.xdg.configHome}/Kvantum/${n}") (every "kvantum")
+        ++ map (n: "${config.xdg.dataHome}/icons/${n}") (every "icons")
+        ++ map (n: "${config.xdg.dataHome}/plasma/look-and-feel/${n}") (every "lnf")
+        ++ map (t: "${config.xdg.dataHome}/plasma/desktoptheme/${lib.head t.plasma}") allThemes
+      )}
       do
         if [ -e "$target" ] && [ ! -L "$target" ]; then
           backup="$target.hm-backup"
@@ -114,12 +155,19 @@ in
   # active color scheme here and let sync-gnome-portal-settings keep it in
   # step on every later toggle.
   home.activation.gruvboxGtkTheme =
-    lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    lib.hm.dag.entryAfter [ "writeBoundary" "kdeThemeSelect" ] ''
+      gtk="${lib.head sel.gtk}" kv=""
       case "$(/usr/bin/kreadconfig6 --file kdeglobals --group General \
                 --key ColorScheme 2>/dev/null || true)" in
-        *Light) theme="Gruvbox-Dragon-Light" ;;
-        *)      theme="Gruvbox-Dragon" ;;
+${gtkFor}
       esac
+      theme="$gtk"
+      # qt.kde.settings just pinned Kvantum to the SELECTED theme; if the
+      # active scheme is another theme's (picked by hand), follow that
+      if [ -n "$kv" ]; then
+        run /usr/bin/kwriteconfig6 --file "${config.xdg.configHome}/Kvantum/kvantum.kvconfig" \
+          --group General --key theme "$kv"
+      fi
       cur="$(/usr/bin/qdbus6 org.kde.GtkConfig /GtkConfig org.kde.GtkConfig.gtkTheme 2>/dev/null || true)"
       if [ "$cur" = "$theme" ]; then
         : # already selected
@@ -135,6 +183,38 @@ in
         if ! grep -qs "^gtk-theme-name=\"$theme\"\$" "$rc2"; then
           [ -f "$rc2" ] && run sed -i "/^gtk-theme-name=/d" "$rc2"
           run bash -c 'printf "gtk-theme-name=\"%s\"\n" "$0" >> "$1"' "$theme" "$rc2"
+        fi
+      fi
+    '';
+
+  # Apply `dotfiles.kde.theme` when it CHANGES — not on every switch, so a
+  # global theme picked by hand in System Settings survives unrelated
+  # switches. The last applied value lives in a state file; a failed apply
+  # leaves it untouched and is retried next switch. The light/dark mode is
+  # kept: the variant is read off the active color scheme, whichever theme
+  # it belongs to. plasma-apply-lookandfeel writes the package's defaults
+  # (scheme, icons, widget style, cursors, Plasma theme) and inlines the
+  # scheme's colors itself; without --resetLayout it leaves the panels be.
+  # After linkGeneration: a newly selected theme's look-and-feel package and
+  # color schemes are only linked into ~/.local/share there, and applying a
+  # package that is not there yet fails.
+  home.activation.kdeThemeSelect =
+    lib.hm.dag.entryAfter [ "writeBoundary" "kconfig" "linkGeneration" ] ''
+      state="${config.xdg.stateHome}/dotfiles/kde-theme"
+      if [ "$(cat "$state" 2>/dev/null)" != "${cfg.theme}" ] \
+         && [ -x /usr/bin/plasma-apply-lookandfeel ]; then
+        variant=0
+        case "$(/usr/bin/kreadconfig6 --file kdeglobals --group General \
+                  --key ColorScheme 2>/dev/null || true)" in
+${variantFor}
+        esac
+        if [ "$variant" = 1 ]; then lnf="${lib.elemAt sel.lnf 1}"; else lnf="${lib.elemAt sel.lnf 0}"; fi
+        if run timeout 60 /usr/bin/plasma-apply-lookandfeel -a "$lnf"; then
+          run mkdir -p "$(dirname "$state")"
+          run bash -c 'printf "%s\n" "$0" > "$1"' "${cfg.theme}" "$state"
+        else
+          echo "kde-gruvbox: applying global theme $lnf failed; will retry" \
+               "on the next switch (or apply it in System Settings)" >&2
         fi
       fi
     '';
@@ -155,7 +235,7 @@ in
   # since Plasma adds keys of its own (ChangeSelectionColor, Enable) that
   # the scheme file never carries.
   home.activation.gruvboxColorScheme =
-    lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    lib.hm.dag.entryAfter [ "writeBoundary" "kdeThemeSelect" ] ''
       kg="$HOME/.config/kdeglobals"
       scheme="$(/usr/bin/kreadconfig6 --file kdeglobals --group General \
         --key ColorScheme 2>/dev/null || true)"
@@ -290,11 +370,12 @@ in
       # toggle owns them via the kdedefaults layer (the look-and-feel
       # packages' defaults), and user-layer pins would override whichever
       # mode is active at switch time. On a fresh machine, apply once with:
-      #   plasma-apply-lookandfeel -a gruvbox
+      #   plasma-apply-lookandfeel -a gruvbox   (kdeThemeSelect does this on a
+      #   theme change; a fresh machine counts as one)
       kdeglobals = {
         KDE = {
-          DefaultDarkLookAndFeel = "gruvbox";
-          DefaultLightLookAndFeel = "gruvbox-light";
+          DefaultDarkLookAndFeel = lib.elemAt sel.lnf 0;
+          DefaultLightLookAndFeel = lib.elemAt sel.lnf 1;
           # never auto-apply a variant at login/time-of-day; the manually
           # chosen mode persists (KNightTime defaults to "day" without
           # location data, which used to flip sessions to light at login)
@@ -302,8 +383,10 @@ in
         };
       };
 
-      # base theme; the kvantum-dark widget style picks GruvboxDark from it
-      "Kvantum/kvantum.kvconfig".General.theme = "Gruvbox";
+      # base theme; the kvantum-dark widget style picks <base>Dark from it.
+      # sync-gnome-portal-settings re-points it whenever the active color
+      # scheme belongs to another theme (a hand-picked global theme).
+      "Kvantum/kvantum.kvconfig".General.theme = lib.elemAt sel.kvantum 1;
     };
   };
 
@@ -385,9 +468,30 @@ in
           [ -n "$v" ] && /usr/bin/gsettings set org.gnome.desktop.interface "$1" "$v"
         }
         case "$(get gtk-application-prefer-dark-theme)" in
-          true|1) scheme=prefer-dark; want=Gruvbox-Dragon ;;
-          *) scheme=prefer-light; want=Gruvbox-Dragon-Light ;;
+          true|1) scheme=prefer-dark ;;
+          *) scheme=prefer-light ;;
         esac
+
+        # Theme AND variant come from the active color scheme, so a theme
+        # applied by hand in System Settings is followed as faithfully as
+        # one applied via dotfiles.kde.theme. An unknown scheme (a stock
+        # Breeze one) leaves the GTK and Kvantum themes alone.
+        gtk="" kv=""
+        case "$(timeout 5 /usr/bin/kreadconfig6 --file kdeglobals --group General \
+                  --key ColorScheme 2>/dev/null)" in
+${gtkFor}
+        esac
+        want="$gtk"
+
+        # Kvantum has ONE base theme for both variants (kvantum-dark loads
+        # <base>Dark) and reads its own file, which no look-and-feel package
+        # can write — so switching themes has to set it here. Running Qt apps
+        # keep their style until restarted; new ones pick it up.
+        kvc="$HOME/.config/Kvantum/kvantum.kvconfig"
+        if [ -n "$kv" ] && [ "$(timeout 5 /usr/bin/kreadconfig6 --file "$kvc" \
+                                 --group General --key theme 2>/dev/null)" != "$kv" ]; then
+          timeout 5 /usr/bin/kwriteconfig6 --file "$kvc" --group General --key theme "$kv" || true
+        fi
 
         # The GTK theme name has to follow the toggle too, for gtk-2.0's
         # baked palette (see gruvboxGtkTheme). Ask the GtkConfig service
@@ -396,7 +500,7 @@ in
         # re-triggers this unit's path watch — harmless, because the second
         # run finds the theme already correct and changes nothing, so it
         # settles after exactly one extra pass.
-        if [ "$(get gtk-theme-name)" != "$want" ]; then
+        if [ -n "$want" ] && [ "$(get gtk-theme-name)" != "$want" ]; then
           timeout 5 /usr/bin/qdbus6 org.kde.GtkConfig /GtkConfig \
             org.kde.GtkConfig.setGtkTheme "$want" 2>/dev/null || true
         fi
@@ -444,17 +548,9 @@ in
     };
   };
 
+  # Every theme in themes.json is deployed, whichever one is selected —
+  # each artifact under the name its palette's THEME gives it.
   xdg.configFile = {
-    "Kvantum/Gruvbox" = {
-      force = true;
-      source = ./kvantum/Gruvbox;
-    };
-
-    "Kvantum/GruvboxDark" = {
-      force = true;
-      source = ./kvantum/GruvboxDark;
-    };
-
     "gtk-3.0/gruvbox-acrylic.css" = {
       force = true;
       source = ./gtk/gruvbox-acrylic-gtk3.css;
@@ -464,74 +560,38 @@ in
       force = true;
       source = ./gtk/gruvbox-acrylic-gtk4.css;
     };
-  };
+  }
+  // lib.genAttrs' (every "kvantum") (n: lib.nameValuePair "Kvantum/${n}" {
+    force = true;
+    source = ./kvantum + "/${n}";
+  });
 
-  xdg.dataFile = {
-    "color-schemes/GruvboxDragon.colors" = {
-      force = true;
-      source = ./color-schemes/GruvboxDragon.colors;
-    };
-
-    "color-schemes/GruvboxDragonLight.colors" = {
-      force = true;
-      source = ./color-schemes/GruvboxDragonLight.colors;
-    };
-
-    "icons/Gruvbox-Plus-Dark" = {
-      force = true;
-      source = "${gruvboxPlusIcons}/share/icons/Gruvbox-Plus-Dark";
-    };
-
-    "icons/Gruvbox-Plus-Light" = {
-      force = true;
-      source = "${gruvboxPlusIcons}/share/icons/Gruvbox-Plus-Light";
-    };
-
-    "plasma/look-and-feel/gruvbox" = {
-      force = true;
-      source = ./look-and-feel/gruvbox;
-    };
-
-    "plasma/look-and-feel/gruvbox-light" = {
-      force = true;
-      source = ./look-and-feel/gruvbox-light;
-    };
-
-    # generated by ./kvantum/tools/plasma_theme_gen.py — acrylic plasmashell
-    # dialogs/panel/tooltips; selected via [plasmarc][Theme] in the
-    # look-and-feel defaults and follows the active color scheme
-    "plasma/desktoptheme/gruvbox-acrylic" = {
-      force = true;
-      source = ./plasma-theme/gruvbox-acrylic;
-    };
-
-    # generated by ./kvantum/tools/gtk_theme_gen.py — gtk2 carries baked
-    # palette colors (no runtime sync exists for gtk2); gtk3/4 import
-    # Breeze's widget css and take colors from kde-gtk-config's runtime
-    # colors.css sync, so one theme follows the light/dark toggle.
-    # Selected via kde-gtk-config (GtkConfig dbus / Application Style KCM).
-    "themes/Gruvbox-Dragon" = {
-      force = true;
-      source = ./gtk/themes/Gruvbox-Dragon;
-    };
-
-    "themes/Gruvbox-Dragon-Light" = {
-      force = true;
-      source = ./gtk/themes/Gruvbox-Dragon-Light;
-    };
-
-    # generated by ./kvantum/tools/cursor_gen.py — palette-driven cursor
-    # pair (xcursor format, animated wait/progress); each look-and-feel
-    # package selects its variant via [kcminputrc][Mouse] cursorTheme,
-    # so the light/dark toggle switches cursors through kdedefaults
-    "icons/Gruvbox-Dragon-Cursors" = {
-      force = true;
-      source = ./cursors/Gruvbox-Dragon-Cursors;
-    };
-
-    "icons/Gruvbox-Dragon-Cursors-Light" = {
-      force = true;
-      source = ./cursors/Gruvbox-Dragon-Cursors-Light;
-    };
+  xdg.dataFile =
+    let
+      deploy = dir: src: names: lib.genAttrs' names (n: lib.nameValuePair "${dir}/${n}" {
+        force = true;
+        source = src n;
+      });
+    in
+    # palette-generated KDE color schemes (colorscheme_gen.py)
+    deploy "color-schemes" (n: ./color-schemes + "/${n}") (map (n: "${n}.colors") (every "scheme"))
+    // lib.concatMapAttrs (id: t: deploy "icons"
+         (n: "${iconPackages.${id}}/share/icons/${n}") t.icons) themes
+    # look-and-feel packages (lookandfeel_gen.py) — the light/dark toggle
+    // deploy "plasma/look-and-feel" (n: ./look-and-feel + "/${n}") (every "lnf")
+    # acrylic plasmashell dialogs/panel/tooltips (plasma_theme_gen.py);
+    # selected via [plasmarc][Theme] in the look-and-feel defaults and
+    # follows the active color scheme
+    // deploy "plasma/desktoptheme" (n: ./plasma-theme + "/${n}") (map lib.head (map (t: t.plasma) allThemes))
+    # GTK theme pairs (gtk_theme_gen.py) — gtk2 carries baked palette colors
+    # (no runtime sync exists for gtk2); gtk3/4 import Breeze's widget css
+    # and take colors from kde-gtk-config's runtime colors.css sync. Selected
+    # via kde-gtk-config (GtkConfig dbus) from gruvboxGtkTheme and
+    # sync-gnome-portal-settings, by active color scheme.
+    // deploy "themes" (n: ./gtk/themes + "/${n}") (every "gtk")
+    # palette-driven cursor pairs (cursor_gen.py; xcursor format, animated
+    # wait/progress); each look-and-feel package selects its variant via
+    # [kcminputrc][Mouse] cursorTheme
+    // deploy "icons" (n: ./cursors + "/${n}") (every "cursors");
   };
 }
