@@ -53,8 +53,8 @@
       "Rose-Pine-Cursors-Dawn"
     ],
     "icons": [
-      "rose-pine",
-      "rose-pine-dawn"
+      "Rose-Pine-Papirus-Dark",
+      "Rose-Pine-Papirus-Light"
     ],
     "plasma": [
       "rose-pine-acrylic",
@@ -67,6 +67,11 @@
     "lnf_names": [
       "Rosé Pine",
       "Rosé Pine Dawn"
-    ]
+    ],
+    "papirus_folders": {
+      "front": "#31748f",
+      "back": "#286983",
+      "glyph": "#191724"
+    }
   }
 }

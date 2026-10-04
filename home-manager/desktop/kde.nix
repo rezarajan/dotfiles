@@ -33,9 +33,72 @@ let
   # where each theme's icon pair comes from (THEME.icons names the dirs)
   iconPackages = {
     gruvbox-dragon = gruvboxPlusIcons;
-    # oomox-built, all SVG (vector-only rule holds), inherits breeze
-    rose-pine = pkgs.rose-pine-icon-theme;
+    rose-pine = papirusOverlay themes.rose-pine;
   };
+
+  # A palette-colored folder overlay on CURRENT Papirus, for themes without
+  # a maintained icon pack of their own. Rosé Pine's (rose-pine-icon-theme)
+  # is a 2022 oomox snapshot: every app newer than that — ghostty, zed,
+  # lutris, heroic, btop... — fell through to breeze/hicolor art. The
+  # overlay holds only folder art: Papirus' teal folder set with its three
+  # hexes swapped for THEME.papirus_folders, plus the generic names
+  # (folder, folder-documents, user-home, ...) that papirus-folders would
+  # point at a color, pointed at it. Everything else — every app icon — is
+  # inherited from Papirus-Dark / Papirus-Light, deployed alongside. A
+  # theme's own dir wins over its parents for any icon it has at ANY size,
+  # so the overlay's folders beat Papirus' blue ones at every scale.
+  papirusOverlay = t:
+    let
+      f = t.papirus_folders;
+      papirus = "${pkgs.papirus-icon-theme}/share/icons";
+    in
+    pkgs.runCommand "papirus-overlay-${lib.head t.icons}" { } ''
+      mk() {
+        name=$1 base=$2 fallback=$3
+        out_t="$out/share/icons/$name"
+        dirs=""
+        for d in ${papirus}/Papirus/*/places; do
+          [ -L "$(dirname "$d")" ] && continue
+          rel="''${d#${papirus}/Papirus/}"
+          ls "$d" | grep -q -- '-teal' || continue
+          mkdir -p "$out_t/$rel"
+          for src in "$d"/*-teal*; do
+            dst="$out_t/$rel/$(basename "$src")"
+            if [ -L "$src" ]; then
+              cp -P "$src" "$dst"
+            else
+              sed -e 's/#16a085/${f.front}/gI' -e 's/#12806a/${f.back}/gI' \
+                  -e 's/#08382e/${f.glyph}/gI' "$src" > "$dst"
+            fi
+          done
+          # the generic names papirus-folders retargets. Some alias in two
+          # hops (folder-downloads -> folder-download -> folder-blue-download),
+          # so copy EVERY generic link with blue swapped for teal, then drop
+          # whatever does not resolve inside the overlay: what is left is
+          # exactly the chains that end in teal art.
+          for src in "$d"/*; do
+            [ -L "$src" ] || continue
+            case "$(basename "$src")" in *-blue*|*-teal*) continue ;; esac
+            tgt="$(readlink "$src")"
+            ln -sf "''${tgt//-blue/-teal}" "$out_t/$rel/$(basename "$src")"
+          done
+          find -L "$out_t/$rel" -type l -delete
+          dirs="$dirs''${dirs:+,}$rel"
+        done
+        {
+          printf '[Icon Theme]\nName=%s\nComment=%s\nInherits=%s,%s,hicolor\n' \
+            "$name" "${t.title} folders on Papirus" "$base" "$fallback"
+          printf 'Example=folder\nFollowsColorScheme=true\nDirectories=%s\n\n' "$dirs"
+          for rel in ''${dirs//,/ }; do
+            awk -v sec="[$rel]" '$0 == sec {p=1} p && /^$/ {exit} p' \
+              ${papirus}/Papirus/index.theme
+            echo
+          done
+        } > "$out_t/index.theme"
+      }
+      mk ${lib.elemAt t.icons 0} Papirus-Dark breeze-dark
+      mk ${lib.elemAt t.icons 1} Papirus-Light breeze
+    '';
 
   # shell `case` arms: active ColorScheme -> what follows it. Whichever way a
   # global theme was applied (the option below, or by hand in System
@@ -198,10 +261,19 @@ ${gtkFor}
   # After linkGeneration: a newly selected theme's look-and-feel package and
   # color schemes are only linked into ~/.local/share there, and applying a
   # package that is not there yet fails.
+  #
+  # "Changes" includes the selected packages' CONTENTS: the state records
+  # the theme name plus a hash of both look-and-feel defaults files, so a
+  # regenerated package (a palette's icon pack swapped, say) is re-applied
+  # too — otherwise kdeglobals would keep naming the old icons forever.
   home.activation.kdeThemeSelect =
+    let
+      stamp = "${cfg.theme} " + builtins.hashString "sha256" (lib.concatMapStrings
+        (id: builtins.readFile (./look-and-feel + "/${id}/contents/defaults")) sel.lnf);
+    in
     lib.hm.dag.entryAfter [ "writeBoundary" "kconfig" "linkGeneration" ] ''
       state="${config.xdg.stateHome}/dotfiles/kde-theme"
-      if [ "$(cat "$state" 2>/dev/null)" != "${cfg.theme}" ] \
+      if [ "$(cat "$state" 2>/dev/null)" != "${stamp}" ] \
          && [ -x /usr/bin/plasma-apply-lookandfeel ]; then
         variant=0
         case "$(/usr/bin/kreadconfig6 --file kdeglobals --group General \
@@ -211,7 +283,7 @@ ${variantFor}
         if [ "$variant" = 1 ]; then lnf="${lib.elemAt sel.lnf 1}"; else lnf="${lib.elemAt sel.lnf 0}"; fi
         if run timeout 60 /usr/bin/plasma-apply-lookandfeel -a "$lnf"; then
           run mkdir -p "$(dirname "$state")"
-          run bash -c 'printf "%s\n" "$0" > "$1"' "${cfg.theme}" "$state"
+          run bash -c 'printf "%s\n" "$0" > "$1"' "${stamp}" "$state"
         else
           echo "kde-gruvbox: applying global theme $lnf failed; will retry" \
                "on the next switch (or apply it in System Settings)" >&2
@@ -577,6 +649,8 @@ ${gtkFor}
     deploy "color-schemes" (n: ./color-schemes + "/${n}") (map (n: "${n}.colors") (every "scheme"))
     // lib.concatMapAttrs (id: t: deploy "icons"
          (n: "${iconPackages.${id}}/share/icons/${n}") t.icons) themes
+    # the Papirus themes the overlays inherit every non-folder icon from
+    // deploy "icons" (n: "${pkgs.papirus-icon-theme}/share/icons/${n}") [ "Papirus" "Papirus-Dark" "Papirus-Light" ]
     # look-and-feel packages (lookandfeel_gen.py) — the light/dark toggle
     // deploy "plasma/look-and-feel" (n: ./look-and-feel + "/${n}") (every "lnf")
     # acrylic plasmashell dialogs/panel/tooltips (plasma_theme_gen.py);

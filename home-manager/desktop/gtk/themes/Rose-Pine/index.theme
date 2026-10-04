@@ -7,5 +7,5 @@ Encoding=UTF-8
 [X-GNOME-Metatheme]
 GtkTheme=Rose-Pine
 MetacityTheme=Rose-Pine
-IconTheme=rose-pine
+IconTheme=Rose-Pine-Papirus-Dark
 CursorTheme=breeze_cursors

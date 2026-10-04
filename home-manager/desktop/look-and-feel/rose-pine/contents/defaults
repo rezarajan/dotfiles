@@ -5,7 +5,7 @@ cursorTheme=Rose-Pine-Cursors
 ColorScheme=RosePine
 
 [kdeglobals][Icons]
-Theme=rose-pine
+Theme=Rose-Pine-Papirus-Dark
 
 [kdeglobals][KDE]
 widgetStyle=kvantum-dark

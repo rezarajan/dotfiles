@@ -137,7 +137,14 @@ symlinks; see `hypr/readme.md` → Install.
   theme and variant), never off `dotfiles.kde.theme` — the GTK theme and
   Kvantum base must follow a global theme picked by hand in System
   Settings too. The option is applied once per change (state file
-  `~/.local/state/dotfiles/kde-theme`), not on every switch.
+  `~/.local/state/dotfiles/kde-theme`: theme name + hash of its
+  look-and-feel defaults, so regenerated packages re-apply), not on every
+  switch.
+- A theme without a maintained icon pack gets a Papirus folder OVERLAY
+  (kde.nix `papirusOverlay`, colors from `THEME.papirus_folders`) that
+  inherits all app icons from current Papirus. Never ship a one-off icon
+  snapshot (rose-pine-icon-theme was 2022 oomox): every newer app — ghostty,
+  zed, lutris — silently falls through to breeze/hicolor art.
 - Breeze-GTK ignores standard named colors: it reads `*_breeze` twins
   plus backdrop/insensitive/titlebar variants — the generator emits both
   sets. Without them GTK apps keep stock Breeze colors. Corollary: because

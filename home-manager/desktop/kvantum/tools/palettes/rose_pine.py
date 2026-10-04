@@ -17,8 +17,10 @@ THEME = dict(
     scheme=("RosePine", "RosePineDawn"),
     gtk=("Rose-Pine", "Rose-Pine-Dawn"),
     cursors=("Rose-Pine-Cursors", "Rose-Pine-Cursors-Dawn"),
-    # rose-pine-icon-theme (nixpkgs): oomox-built, all-SVG, inherits breeze
-    icons=("rose-pine", "rose-pine-dawn"),
+    # Papirus overlays built by kde-gruvbox.nix: current Papirus app icons
+    # (the 2022 oomox rose-pine-icon-theme lacked ghostty, zed, lutris...)
+    # with the folder art recolored to `papirus_folders` below
+    icons=("Rose-Pine-Papirus-Dark", "Rose-Pine-Papirus-Light"),
     plasma=("rose-pine-acrylic", "Rosé Pine Acrylic"),
     lnf=("rose-pine", "rose-pine-dawn"),
     lnf_names=("Rosé Pine", "Rosé Pine Dawn"),
@@ -63,6 +65,13 @@ G = dict(
     yellow_bright=MAIN["gold"], yellow_faded=DAWN["gold"],
     sel_link=MAIN["gold"], sel_active=DAWN["surface"], sel_visited=MAIN["rose"],
     white="#ffffff", black="#000000",
+)
+
+# Papirus folder recolor (kde-gruvbox.nix swaps Papirus' teal folder set
+# onto these): body, back flap, and the darker emblem tone on special
+# folders (downloads, music, ...). Pine, like the accent.
+THEME["papirus_folders"] = dict(
+    front=MAIN["pine"], back=DAWN["pine"], glyph=MAIN["base"],
 )
 
 # text on the pine accent: main text reads on both pines (5.0:1 on dawn
