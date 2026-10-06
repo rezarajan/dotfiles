@@ -673,8 +673,13 @@ ${gtkFor}
          (n: "${iconPackages.${id}}/share/icons/${n}") t.icons) themes
     # the Papirus themes the overlays inherit every non-folder icon from
     // deploy "icons" (n: "${pkgs.papirus-icon-theme}/share/icons/${n}") [ "Papirus" "Papirus-Dark" "Papirus-Light" ]
-    # look-and-feel packages (lookandfeel_gen.py) — the light/dark toggle
-    // deploy "plasma/look-and-feel" (n: ./look-and-feel + "/${n}") (every "lnf")
+    # look-and-feel packages (lookandfeel_gen.py) — the light/dark toggle.
+    # Each is joined over look-and-feel/.base (the shared panel layout);
+    # the first path wins a conflict, so a package's own file overrides.
+    // deploy "plasma/look-and-feel" (n: pkgs.symlinkJoin {
+         name = "look-and-feel-${n}";
+         paths = [ (./look-and-feel + "/${n}") ./look-and-feel/.base ];
+       }) (every "lnf")
     # acrylic plasmashell dialogs/panel/tooltips (plasma_theme_gen.py);
     # selected via [plasmarc][Theme] in the look-and-feel defaults and
     # follows the active color scheme
