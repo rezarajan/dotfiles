@@ -374,10 +374,10 @@ def build_nodes(P):
     ninepatch(s, "slider-toggled", 2, P["sl_fill"], None)
     ninepatch(s, "focus", 3, None, P["focus"], interior=False)
 
+    # nine-patch, not one rounded rect: Kvantum stretches a frameless
+    # interior whole, so rx=3 ends drew as long points on a tall slider
     for st, key in (("normal", "sb_n"), ("focused", "sb_f"), ("pressed", "sb_p")):
-        c, o = P[key]
-        single(s, f"scrollbarslider-{st}", 6, 24,
-               lambda g, c=c, o=o: add_rect(g, 0, 0, 6, 24, c, o, rx=3))
+        ninepatch(s, f"scrollbarslider-{st}", 3, P[key], None)
     single(s, "scrollbargroove-normal", 6, 24,
            lambda g: add_rect(g, 0, 0, 6, 24, "#000000", 0.0))
 

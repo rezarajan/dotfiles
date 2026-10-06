@@ -367,9 +367,14 @@ indicator.size=8
 inherits=PanelButtonCommand
 interior.element=scrollbarslider
 interior=true
-frame=false
+frame=true
 frame.expansion=48
 
+frame.top=3
+frame.bottom=3
+frame.left=3
+frame.right=3
+frame.element=scrollbarslider
 [ScrollbarGroove]
 inherits=PanelButtonCommand
 interior.element=scrollbargroove

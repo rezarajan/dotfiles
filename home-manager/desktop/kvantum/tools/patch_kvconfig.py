@@ -45,6 +45,8 @@ COMMON = {
     "MenuBarItem": frames(5),
     "ItemView": frames(int(M["itemview_frame"])),
     "Slider": frames(2),
+    "ScrollbarSlider": frames(3, {"frame": "true",
+                                  "frame.element": "scrollbarslider"}),
     "Progressbar": frames(3),
     "ProgressbarContents": frames(3),
     "Dock": frames(8),
