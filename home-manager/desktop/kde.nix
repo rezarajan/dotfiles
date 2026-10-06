@@ -83,15 +83,37 @@ let
             ln -sf "''${tgt//-blue/-teal}" "$out_t/$rel/$(basename "$src")"
           done
           find -L "$out_t/$rel" -type l -delete
-          dirs="$dirs''${dirs:+,}$rel"
         done
+        # Close over dash-fallback shadowing. KIconLoader (and GTK) walk the
+        # theme chain OUTSIDE the dash-stripping loop: network-wireless-100
+        # is tried as itself, network-wireless, then network IN THIS THEME
+        # before the base is ever asked — and Papirus aliases "network" to
+        # folder art, so wifi and bluetooth rendered as folders (likewise
+        # folder-new, desktop-effects, ...). So every base icon one of ours
+        # would shadow that way is linked in here, and its full name hits.
+        ( cd ${papirus}/$base
+          for rel in $(sed -n 's/^Directories=//p' index.theme | tr , ' '); do
+            [ -d "$rel" ] && ls "$rel" | sed -n "s|^.*\.svg\$|$rel &|p"
+          done ) > base.lst
+        find "$out_t" -name '*.svg' -printf '%f\n' | sort -u > own.lst
+        awk 'NR == FNR { own[$1] = 1; next }
+             !($2 in own) {
+               s = $2; sub(/\.svg$/, "", s)
+               while (sub(/-[^-]*$/, "", s)) if ((s ".svg") in own) { print; next }
+             }' own.lst base.lst |
+          while read -r rel f; do
+            mkdir -p "$out_t/$rel"
+            ln -s "${papirus}/$base/$rel/$f" "$out_t/$rel/$f"
+          done
+        dirs=$(sed -n 's/^Directories=//p' ${papirus}/$base/index.theme | tr , '\n' |
+          while read -r rel; do [ -d "$out_t/$rel" ] && echo "$rel"; done | paste -sd,)
         {
           printf '[Icon Theme]\nName=%s\nComment=%s\nInherits=%s,%s,hicolor\n' \
             "$name" "${t.title} folders on Papirus" "$base" "$fallback"
           printf 'Example=folder\nFollowsColorScheme=true\nDirectories=%s\n\n' "$dirs"
           for rel in ''${dirs//,/ }; do
             awk -v sec="[$rel]" '$0 == sec {p=1} p && /^$/ {exit} p' \
-              ${papirus}/Papirus/index.theme
+              ${papirus}/$base/index.theme
             echo
           done
         } > "$out_t/index.theme"
