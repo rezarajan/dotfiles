@@ -25,9 +25,7 @@ M.plugins = {
     name = 'tokyonight',
     priority = 1000,
     lazy = true,
-    config = function()
-      require('tokyonight').setup {}
-    end,
+    config = function() require('tokyonight').setup {} end,
   },
 
   {
@@ -35,6 +33,11 @@ M.plugins = {
     name = 'gruvbox',
     priority = 1000,
     lazy = true,
+  },
+  {
+    'rose-pine/neovim',
+    name = 'rose-pine',
+    config = function() require('catppuccin').setup {} end,
   },
 }
 
@@ -76,9 +79,7 @@ vim.o.guicursor = 'n-v-c-sm:block-Cursor/lCursor,i-ci-ve:ver25-Cursor/lCursor,r-
 -- Safely apply a colorscheme
 function M.apply(name)
   local ok = pcall(vim.cmd.colorscheme, name)
-  if not ok then
-    vim.notify('Colorscheme not found: ' .. name, vim.log.levels.ERROR)
-  end
+  if not ok then vim.notify('Colorscheme not found: ' .. name, vim.log.levels.ERROR) end
 end
 
 -- Convenience loader: vendor + variant
