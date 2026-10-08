@@ -199,6 +199,18 @@ symlinks; see `hypr/readme.md` → Install.
   `ContrastAmount=0.65` puts this palette at 1.9:1 (light) / 2.5:1 (dark).
   That is the "unreadable greyed-out text" bug, not a per-app problem;
   colorscheme_gen.py's `DISABLED_FADE` owns it.
+- **Look-and-feel packages must be built from real files, never
+  `symlinkJoin`.** KPackage rejects any file whose real path leaves the
+  package root, so a `contents/defaults` symlinked into another store path
+  is silently ignored. `plasma-apply-lookandfeel` still exits 0 and records
+  the package name in `~/.config/kdedefaults/package`, but writes Breeze's
+  defaults (BreezeLight, breeze icons, breeze_cursors) beside it. The
+  breakage hides on any machine that applied the theme earlier and only
+  shows on the next re-apply, so one host "works" and another doesn't.
+  kde.nix `lnfPackage` copies the files instead. Reproduce in isolation:
+  `XDG_DATA_HOME=<dir with the package> XDG_CONFIG_HOME=<scratch>
+   dbus-run-session -- plasma-apply-lookandfeel -a <id>`, then read
+  `<scratch>/kdedefaults/kdeglobals`.
 - Deploying an edited `.colors` file changes NOTHING by itself: Plasma
   inlines `[Colors:*]`/`[ColorEffects:*]`/`[WM]` into kdeglobals on apply,
   and those inlined values are what apps read. `plasma-apply-colorscheme
