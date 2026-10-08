@@ -132,6 +132,18 @@ let
   gtkFor = schemeCase (t: i: ''gtk="${lib.elemAt t.gtk i}"; kv="${lib.elemAt t.kvantum 1}"'');
   variantFor = schemeCase (_: i: ''variant=${toString i}'');
 
+  # A look-and-feel package: its generated files merged over
+  # look-and-feel/.base (the shared panel layout); a package's own file
+  # wins. COPIED, never symlinkJoin'd: KPackage rejects any file whose real
+  # path leaves the package root, so a symlinked contents/defaults is
+  # silently ignored and applying the package writes Breeze's defaults
+  # (scheme, icons, cursor) instead.
+  lnfPackage = n: pkgs.runCommand "look-and-feel-${n}" { } ''
+    mkdir -p $out
+    cp -rL --no-preserve=mode ${./look-and-feel/.base}/. $out/
+    cp -rL --no-preserve=mode ${./look-and-feel + "/${n}"}/. $out/
+  '';
+
   gruvboxPlusIcons = pkgs.stdenvNoCC.mkDerivation {
     pname = "gruvbox-plus-icons";
     version = "6.5.0";
@@ -285,13 +297,14 @@ ${gtkFor}
   # package that is not there yet fails.
   #
   # "Changes" includes the selected packages' CONTENTS: the state records
-  # the theme name plus a hash of both look-and-feel defaults files, so a
-  # regenerated package (a palette's icon pack swapped, say) is re-applied
-  # too — otherwise kdeglobals would keep naming the old icons forever.
+  # the theme name plus a hash of both built look-and-feel packages' store
+  # paths, so a regenerated package (a palette's icon pack swapped, say) or
+  # a change to how packages are built is re-applied too — otherwise
+  # kdeglobals would keep naming the old icons forever.
   home.activation.kdeThemeSelect =
     let
-      stamp = "${cfg.theme} " + builtins.hashString "sha256" (lib.concatMapStrings
-        (id: builtins.readFile (./look-and-feel + "/${id}/contents/defaults")) sel.lnf);
+      stamp = "${cfg.theme} " + builtins.hashString "sha256"
+        (lib.concatMapStrings (id: "${lnfPackage id}") sel.lnf);
     in
     lib.hm.dag.entryAfter [ "writeBoundary" "kconfig" "linkGeneration" ] ''
       state="${config.xdg.stateHome}/dotfiles/kde-theme"
@@ -674,12 +687,8 @@ ${gtkFor}
     # the Papirus themes the overlays inherit every non-folder icon from
     // deploy "icons" (n: "${pkgs.papirus-icon-theme}/share/icons/${n}") [ "Papirus" "Papirus-Dark" "Papirus-Light" ]
     # look-and-feel packages (lookandfeel_gen.py) — the light/dark toggle.
-    # Each is joined over look-and-feel/.base (the shared panel layout);
-    # the first path wins a conflict, so a package's own file overrides.
-    // deploy "plasma/look-and-feel" (n: pkgs.symlinkJoin {
-         name = "look-and-feel-${n}";
-         paths = [ (./look-and-feel + "/${n}") ./look-and-feel/.base ];
-       }) (every "lnf")
+    # Each is merged over look-and-feel/.base (see lnfPackage).
+    // deploy "plasma/look-and-feel" lnfPackage (every "lnf")
     # acrylic plasmashell dialogs/panel/tooltips (plasma_theme_gen.py);
     # selected via [plasmarc][Theme] in the look-and-feel defaults and
     # follows the active color scheme
