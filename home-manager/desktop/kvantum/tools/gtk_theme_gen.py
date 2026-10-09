@@ -129,6 +129,94 @@ gen_theme(NAMES[0], palette.DARK, "dark")
 gen_theme(NAMES[1], palette.LIGHT, "light")
 
 
+# ------------------------------------------------------- GTK4 live palette
+# GTK4 reads ~/.config/gtk-4.0/gtk.css — and the colors.css it imports —
+# ONCE per process and never again (GTK3 has kde-gtk-config's colorreload
+# module; GTK4 has nothing). A long-lived GTK4 app (ghostty runs as one
+# systemd service for the whole session) keeps the colors of the mode it
+# started in, while libadwaita and ghostty restyle the rest of the window
+# live: after one toggle, menus are the old mode's background under the new
+# mode's text. GTK >= 4.20 evaluates `@media (prefers-color-scheme)` live,
+# so this file carries BOTH variants and the toggle needs no reload. Each
+# variant sits in its own block (none unconditional), so a GTK that does
+# not know the media query skips both and keeps colors.css as before.
+#
+# Names map 1:1 onto KDE color roles the way kde-gtk-config maps them
+# (checked against its colors.css). The few it DERIVES through
+# [ColorEffects:*] are approximated by mixing bg into fg — close, and what
+# matters here is that they follow the mode.
+PALETTES = BASE / "gtk" / "palettes"
+
+
+def mix(a, b, t):
+    """a blended toward b by t, both '#rrggbb'."""
+    pa, pb = (tuple(int(c.lstrip("#")[i:i + 2], 16) for i in (0, 2, 4))
+              for c in (a, b))
+    return "#" + "".join(f"{round(x + (y - x) * t):02x}" for x, y in zip(pa, pb))
+
+
+def breeze_colors(P):
+    c, S = P["colors"], P["scheme"]
+    bg, fg = c["bg"], c["fg"]
+    exact = [
+        (bg, ("theme_bg_color", "theme_base_color", "content_view_bg",
+              "theme_button_background_normal", "theme_header_background",
+              "theme_header_background_light", "theme_titlebar_background",
+              "theme_titlebar_background_light",
+              "theme_titlebar_background_backdrop", "tooltip_background")),
+        (fg, ("theme_fg_color", "theme_text_color",
+              "theme_button_foreground_normal", "theme_button_foreground_active",
+              "theme_header_foreground", "theme_titlebar_foreground",
+              "tooltip_text")),
+        (c["accent"], ("theme_selected_bg_color", "theme_button_decoration_focus")),
+        (S["selection_fg"], ("theme_selected_fg_color",)),
+        (S["accent_hover"], ("theme_hovering_selected_bg_color",
+                             "theme_view_hover_decoration_color",
+                             "theme_view_active_decoration_color",
+                             "theme_button_decoration_hover")),
+        (S["wm_inactive_fg"], ("theme_titlebar_foreground_backdrop",
+                               "theme_titlebar_foreground_insensitive",
+                               "theme_titlebar_foreground_insensitive_backdrop")),
+        (S["link"], ("link_color",)),
+        (S["visited"], ("link_visited_color",)),
+        (S["negative"], ("error_color",)),
+        (S["neutral"], ("warning_color",)),
+        (S["positive"], ("success_color",)),
+    ]
+    derived = [
+        (bg, ("theme_unfocused_bg_color", "theme_unfocused_base_color",
+              "theme_header_background_backdrop",
+              "theme_button_background_backdrop", "insensitive_bg_color",
+              "insensitive_base_color")),
+        (fg, ("theme_unfocused_fg_color", "theme_unfocused_text_color",
+              "theme_header_foreground_backdrop",
+              "theme_button_foreground_backdrop")),
+        (mix(bg, fg, 0.2), ("borders", "unfocused_borders", "tooltip_border")),
+        (mix(bg, fg, 0.13), ("insensitive_borders",)),
+        (mix(bg, fg, 0.66), ("insensitive_fg_color", "insensitive_base_fg_color",
+                            "theme_button_foreground_insensitive")),
+    ]
+    out = {}
+    for value, names in exact + derived:
+        out.update((f"{n}_breeze", value) for n in names)
+    return dict(sorted(out.items()))
+
+
+def media_block(mode, P):
+    body = "\n".join(f"  @define-color {n} {v};"
+                     for n, v in breeze_colors(P).items())
+    return f"@media (prefers-color-scheme: {mode}) {{\n{body}\n}}\n"
+
+
+write(PALETTES / f"{NAMES[0]}.css", f"""/* {palette.THEME['title']} — generated from palette.py, do not edit by hand.
+ * GTK4 live light/dark palette: overrides kde-gtk-config's colors.css
+ * names for whichever mode is current, re-evaluated on every toggle in
+ * running apps (see gtk_theme_gen.py). ~/.config/gtk-4.0/gruvbox-palette.css
+ * links here while this theme is active. */
+{media_block("light", palette.LIGHT)}
+{media_block("dark", palette.DARK)}""")
+
+
 # ------------------------------------------------------------------ verify
 # A dead @import is SILENT: GTK logs nothing a user sees and just renders the
 # unstyled default, so both light/dark sheets of both themes get walked here,

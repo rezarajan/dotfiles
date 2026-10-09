@@ -129,8 +129,23 @@ let
     ${lib.elemAt t.scheme 0}) ${f t 0} ;;
     ${lib.elemAt t.scheme 1}) ${f t 1} ;;
   '') allThemes;
-  gtkFor = schemeCase (t: i: ''gtk="${lib.elemAt t.gtk i}"; kv="${lib.elemAt t.kvantum 1}"'');
+  gtkFor = schemeCase (t: i:
+    ''gtk="${lib.elemAt t.gtk i}"; kv="${lib.elemAt t.kvantum 1}"; pal="${lib.head t.gtk}"'');
   variantFor = schemeCase (_: i: ''variant=${toString i}'');
+
+  # GTK4 loads its user css once per process, so the light/dark toggle has
+  # to reach running apps through prefers-color-scheme instead: each theme's
+  # generated palette (gtk_theme_gen.py) carries both modes, and
+  # gruvbox-acrylic.css imports whichever one this link names. $pal is the
+  # active theme's (empty for a scheme that is not ours: none.css, so stock
+  # Breeze keeps kde-gtk-config's colors). `run` prefixes the ln: home-manager's
+  # dry-run-aware `run` in activation, nothing in a service.
+  gtkPaletteLink = run: ''
+    pal_link="${config.xdg.configHome}/gtk-4.0/gruvbox-palette.css"
+    pal_want="gruvbox-palettes/''${pal:-none}.css"
+    [ "$(readlink "$pal_link" 2>/dev/null)" = "$pal_want" ] || \
+      ${run} ln -sfn "$pal_want" "$pal_link"
+  '';
 
   # A look-and-feel package: its generated files merged over
   # look-and-feel/.base (the shared panel layout); a package's own file
@@ -253,12 +268,13 @@ in
   # step on every later toggle.
   home.activation.gruvboxGtkTheme =
     lib.hm.dag.entryAfter [ "writeBoundary" "kdeThemeSelect" ] ''
-      gtk="${lib.head sel.gtk}" kv=""
+      gtk="${lib.head sel.gtk}" kv="" pal="${lib.head sel.gtk}"
       case "$(/usr/bin/kreadconfig6 --file kdeglobals --group General \
                 --key ColorScheme 2>/dev/null || true)" in
 ${gtkFor}
       esac
       theme="$gtk"
+${gtkPaletteLink "run"}
       # qt.kde.settings just pinned Kvantum to the SELECTED theme; if the
       # active scheme is another theme's (picked by hand), follow that
       if [ -n "$kv" ]; then
@@ -583,13 +599,13 @@ ${variantFor}
         # applied by hand in System Settings is followed as faithfully as
         # one applied via dotfiles.kde.theme. An unknown scheme (a stock
         # Breeze one) leaves the GTK and Kvantum themes alone.
-        gtk="" kv=""
+        gtk="" kv="" pal=""
         case "$(timeout 5 /usr/bin/kreadconfig6 --file kdeglobals --group General \
                   --key ColorScheme 2>/dev/null)" in
 ${gtkFor}
         esac
         want="$gtk"
-
+${gtkPaletteLink ""}
         # Kvantum has ONE base theme for both variants (kvantum-dark loads
         # <base>Dark) and reads its own file, which no look-and-feel package
         # can write — so switching themes has to set it here. Running Qt apps
@@ -667,7 +683,17 @@ ${gtkFor}
       force = true;
       source = ./gtk/gruvbox-acrylic-gtk4.css;
     };
+
+    # the link target for a color scheme that is no theme of ours
+    "gtk-4.0/gruvbox-palettes/none.css" = {
+      force = true;
+      text = "/* no dotfiles theme active: kde-gtk-config's colors.css stands */\n";
+    };
   }
+  // lib.genAttrs' (map (t: lib.head t.gtk) allThemes) (n: lib.nameValuePair "gtk-4.0/gruvbox-palettes/${n}.css" {
+    force = true;
+    source = ./gtk/palettes + "/${n}.css";
+  })
   // lib.genAttrs' (every "kvantum") (n: lib.nameValuePair "Kvantum/${n}" {
     force = true;
     source = ./kvantum + "/${n}";

@@ -77,6 +77,12 @@ for v in 3 4; do
         printf "@import 'gruvbox-tweaks.css';\n" >> "$gtkcss"
 done
 
+# GTK4 never re-reads its user css, so running GTK4 apps take the toggle from
+# prefers-color-scheme in the palette gruvbox-acrylic.css imports. Under KDE
+# that link follows the active theme; this session is always Gruvbox Dragon.
+pal="$CONF/gtk-4.0/gruvbox-palettes/Gruvbox-Dragon.css"
+[ -f "$pal" ] && ln -sfn "gruvbox-palettes/Gruvbox-Dragon.css" "$CONF/gtk-4.0/gruvbox-palette.css"
+
 # GTK settings.ini — what kde-gtk-config writes under KDE. Chromium and
 # plain GTK3 apps read the theme name and dark preference from here.
 if [ "$MODE" = light ]; then GTK_DARK=false; else GTK_DARK=true; fi

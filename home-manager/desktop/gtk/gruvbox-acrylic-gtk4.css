@@ -1,6 +1,13 @@
 /* Gruvbox for GTK4/libadwaita — maps the KDE-generated @*_breeze colors
    (colors.css, regenerated on every scheme switch) onto libadwaita's named
-   colors, then applies the acrylic/rounded refinements. */
+   colors, then applies the acrylic/rounded refinements.
+
+   GTK4 reads this file and colors.css once per process, so a running app
+   would keep the mode it started in. gruvbox-palette.css (a link to the
+   active theme's generated palette, re-pointed on every toggle) redefines
+   the same @*_breeze names for both modes under prefers-color-scheme,
+   which GTK re-evaluates live. */
+@import 'gruvbox-palette.css';
 
 /* libadwaita palette */
 @define-color window_bg_color @theme_bg_color_breeze;
