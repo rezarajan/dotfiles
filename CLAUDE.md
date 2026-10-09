@@ -225,6 +225,19 @@ symlinks; see `hypr/readme.md` → Install.
   `org.kde.KGlobalSettings.notifyChange` does not trigger it, and neither
   does `org.kde.GtkConfig.setGtkTheme` (that rewrites settings.ini only,
   and short-circuits when the theme name is unchanged).
+- **GTK4 reads `~/.config/gtk-4.0/gtk.css` (and the colors.css it
+  imports) ONCE per process.** GTK3 has kde-gtk-config's colorreload
+  module; GTK4 has nothing. libadwaita and ghostty restyle the window
+  live on a toggle, but every rule that reads `@*_breeze` keeps the
+  start-up mode, so a long-lived app (ghostty runs as ONE systemd service
+  all session) showed menus "inverted": old mode's background, new mode's
+  text. Fix: GTK >= 4.20 evaluates `@media (prefers-color-scheme)` live,
+  so `gtk_theme_gen.py` emits per-theme `gtk/palettes/<theme>.css` with
+  both modes, and `gruvbox-acrylic.css` imports `gruvbox-palette.css`, a
+  link that sync-gnome-portal-settings / theme-mode.sh point at the active
+  theme. Reproduce without touching the session: a libadwaita app that
+  calls `Adw.StyleManager.set_color_scheme(FORCE_LIGHT)` after start-up
+  is exactly a dark-started app after a toggle.
 - The user gtk.css loads at USER priority (800) which BEATS application
   CSS (600). App-level styling that must win needs
   `Gtk.STYLE_PROVIDER_PRIORITY_USER + 100`.
