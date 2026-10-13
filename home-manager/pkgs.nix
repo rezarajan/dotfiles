@@ -34,6 +34,7 @@
         pkgs.phpPackages.composer
         pkgs.codex
         pkgs.crane
+        pkgs.databricks-cli
         pkgs.dive
         pkgs.charm-freeze
         pkgs.fluxcd
