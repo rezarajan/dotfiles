@@ -12,8 +12,15 @@
     #   url = "github:nix-community/nixGL";
     # };
     # NOTE: Use this PR for compat with new nvidia-open drivers
+    # nixGL must follow OUR nixpkgs: its own pin is 2022 (Mesa 22.1.4,
+    # libglvnd 1.4.0), and the wrapper PREPENDS those libs to
+    # LD_LIBRARY_PATH, so every wrapped app ran a 2022 GL stack under its
+    # 2026 libraries. Harmless on an NVIDIA-only box (Mesa finds no device
+    # and falls back to llvmpipe), but on an Intel iGPU it drives real
+    # hardware with an ancient iris and hung the GPU, taking KWin down.
     nixgl = {
       url = "github:nix-community/nixGL/pull/187/head";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
