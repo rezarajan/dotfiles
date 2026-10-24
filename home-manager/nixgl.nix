@@ -36,12 +36,26 @@ let
   selectedNixGLPackages =
     if cfg.pureNvidia then nixGLPackages else nixgl.packages.${pkgs.stdenv.hostPlatform.system};
 
+  # The Mesa wrappers come from OUR nixpkgs, never nixGL's. nixGL's pin is
+  # 2022 (Mesa 22.1.4, libglvnd 1.4.0) and the wrapper PREPENDS those libs to
+  # LD_LIBRARY_PATH, so wrapped apps ran a 2022 GL stack under their current
+  # libraries: harmless on an NVIDIA-only box (Mesa falls back to llvmpipe),
+  # but on an Intel iGPU it drove the hardware with an ancient iris, and
+  # opening calibre took KWin down. The Nvidia side has to stay on nixGL's
+  # pin: its `override { kernel = null; }` is rejected by current nixpkgs'
+  # nvidia-x11, so `nixgl.inputs.nixpkgs.follows` breaks every build.
+  mesaNixGLPackages = import nixgl.outPath {
+    inherit pkgs;
+    enable32bits = pkgs.stdenv.hostPlatform.isx86_64;
+    enableIntelX86Extensions = pkgs.stdenv.hostPlatform.isx86_64;
+  };
+
   patchedNixGLPackages = nixgl.packages // {
     ${pkgs.stdenv.hostPlatform.system} = selectedNixGLPackages // {
-      nixGLIntel = withMainProgram selectedNixGLPackages.nixGLIntel "nixGLIntel";
+      nixGLIntel = withMainProgram mesaNixGLPackages.nixGLIntel "nixGLIntel";
       nixGLNvidia =
         withMainProgram selectedNixGLPackages.nixGLNvidia selectedNixGLPackages.nixGLNvidia.name;
-      nixVulkanIntel = withMainProgram selectedNixGLPackages.nixVulkanIntel "nixVulkanIntel";
+      nixVulkanIntel = withMainProgram mesaNixGLPackages.nixVulkanIntel "nixVulkanIntel";
       nixVulkanNvidia =
         withMainProgram selectedNixGLPackages.nixVulkanNvidia selectedNixGLPackages.nixVulkanNvidia.name;
     };
