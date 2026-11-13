@@ -59,6 +59,8 @@
         pkgs.nodejs_24
         # pkgs.pandoc
         pkgs.php
+        pkgs.playwright-test
+        pkgs.playwright-mcp
         pkgs.postgresql_18
         pkgs.ripgrep
         # pkgs.tailscale
